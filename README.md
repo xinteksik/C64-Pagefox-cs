@@ -3,11 +3,12 @@ This project is based on Pagefox by scanntronik.de
 
 ## Pagefox CS - verze 1
 - obsahuje češtinu a původní rozložení kláves, např.: CBM + a = á
-- součástí jsou české fonty ZS1, ZS10 a ZS 40
+- součástí jsou české fonty ZS1, ZS10 a ZS40
 
 ## Pagefox CS - verze 2
 - obsahuje češtinu a nové rozložení kláves např.: 8 = á, SHIFT + 8 = 8, CBM + 8 = (
-- součástí jsou české fonty ZS1, ZS10 a ZS 40
+- součástí jsou české fonty ZS1, ZS3, ZS10, ZS30, ZS31 a ZS40
+- oprava dvojteček (> na :) 
 
 ## Tools
 Ve složce tools jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík.
