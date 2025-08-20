@@ -1,8 +1,6 @@
 # C64-Pagefox-cs
 This project is based on Pagefox by scanntronik.de
 
-![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
-
 ## Pagefox CS - verze 1
 - obsahuje češtinu a původní rozložení kláves, např.: CBM + a = á
 - součástí jsou české fonty ZS1, ZS10 a ZS 40
@@ -24,3 +22,6 @@ Upraví ZS soubory tak, aby byly zpětně kompatibilní a tedy bez komprese.
 Pospojuje vybrané ZS soubory zpět do BIN souboru, který je možné spojit se souborem 79.BIN a vytvořit si tak vlastní Pagefox s vlastními fonty.
 
 Příklad ověření: Vyextrahuji všechny fonty. Otevřu například zs1.prg v CFOX a jen uložím. Vznikne zabalený zs1.prg, který rozbalím. Pokud porovnám originál a uložený a rozbalený, měl by být obsahově totožný.
+
+
+![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
