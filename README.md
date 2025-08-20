@@ -7,7 +7,7 @@ This project is based on Pagefox by scanntronik.de
 
 ## Pagefox CS - verze 2
 - obsahuje češtinu a nové rozložení kláves např.: 8 = á, SHIFT + 8 = 8, CBM + 8 = (
-- součástí jsou české fonty ZS1, ZS3, ZS10, ZS30, ZS31 a ZS40
+- součástí jsou české fonty ZS1, ZS2, ZS3, ZS4, ZS10, ZS30, ZS31 a ZS40
 - oprava dvojteček (> na :) 
 
 ## Tools
