@@ -1,6 +1,8 @@
 # C64-Pagefox-cs
 This project is based on Pagefox by scanntronik.de
 
+![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
+
 ## Pagefox CS - verze 1
 - obsahuje češtinu a původní rozložení kláves, např.: CBM + a = á
 - součástí jsou české fonty ZS1, ZS10 a ZS 40
