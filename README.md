@@ -19,7 +19,7 @@ Rozbalí ze souboru ZS3.BIN uložené fonty a pojmenuje je podle uložené hlavi
 Upraví ZS soubory tak, aby byly zpětně kompatibilní a tedy bez komprese.
 
 ### joinzs.py
-Pospojuje vybrané ZS soubory zpět do BIN souboru, který je možné spojit se souborem 79.BIN a vytvořit si tak vlastní Pagefox s vlastními fonty.
+Pospojuje vybrané ZS soubory zpět do BIN souboru, který je možné spojit se souborem 79.BIN a vytvořit si tak vlastní Pagefox s vlastními fonty. Pozor - soubor s fonty jsou vlastně dvě banky dat. Sloučení je tedy nutné dělat do max 16kb. Script není na to upraven.
 
 Příklad ověření: Vyextrahuji všechny fonty. Otevřu například zs1.prg v CFOX a jen uložím. Vznikne zabalený zs1.prg, který rozbalím. Pokud porovnám originál a uložený a rozbalený, měl by být obsahově totožný.
 
