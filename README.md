@@ -12,18 +12,26 @@ This project is based on Pagefox by scanntronik.de
 - překlad aplikace do češtiny (kde to šlo)
 
 ## Tools
-Ve složce tools jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík.
+Ve složce tools jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozetup mezi znaky (CBM + H).
+Nová verze CHARACTER FOX se pozná pokud po zadání LIST vypíše řádek s číslem 2 a následně s textem sys(2063). Problém je, že Printfox má výchozí rozestup roven 1 a tak většina českých fontů kolujících po internetu má uložen rozestup 0. S tím má pak problém Pagefox, ale lze to obejít zadáním rozestupu u definice fontu.
+Nicméně pro uložení fontů jako součást Pagefox je dobré tam ten rozetup mít.
 
 ### extract_zs.py 
-Rozbalí ze souboru ZS3.BIN uložené fonty a pojmenuje je podle uložené hlavičky. Takto rozbalené fonty je možné upravit, zobrazit v CHARACTER FOX a uložit. Pozor ale na to, že CFOX ukládá ZS komprimované (je zkráceno tam opakování stejných znaků po sobě).
+Rozbalí ze souboru ZS3.BIN uložené fonty a pojmenuje je podle uložené hlavičky. Takto rozbalené fonty je možné upravit, zobrazit v CHARACTER FOX a uložit. 
+Pozor ale na to, že stará verze CHARACTER FOX ukládá ZS komprimované (je zkráceno tam opakování stejných znaků po sobě).
 
 ### unrle.py
 Upraví ZS soubory tak, aby byly zpětně kompatibilní a tedy bez komprese.
 
 ### joinzs_fix.py
-Pospojuje vybrané ZS soubory zpět do BIN souboru, který je možné spojit se souborem 79.BIN a vytvořit si tak vlastní Pagefox s vlastními fonty. Pozor - soubor s fonty jsou vlastně dvě banky dat. Sloučení se děje do dvou 16k bank.
+Pospojuje vybrané ZS soubory zpět do BIN souboru, který je možné spojit se souborem 79.BIN a vytvořit si tak vlastní Pagefox s vlastními fonty. Pozor - soubor s fonty jsou vlastně dvě banky dat.
+Minimum je mít font ZS1 (základní), ZS2 (Textový popisek o autorovi na hlavní stránce) a ZS40 (tvoří nápis Pagefox na hlavní stránce).
 
-Příklad ověření: Vyextrahuji všechny fonty. Otevřu například zs1.prg v CFOX a jen uložím. Vznikne zabalený zs1.prg, který rozbalím. Pokud porovnám originál a uložený a rozbalený, měl by být obsahově totožný.
+Příklad ověření: Vyextrahuji všechny fonty. Otevřu například zs1.prg v poslední verzí CHARACTER FOX a jen uložím. Vznikne zabalený zs1.prg, který rozbalím. Pokud porovnám originál a uložený a rozbalený, měl by být obsahově totožný.
 
+### To do list
+- Odebrat font ZS31, protože vytvořit stín umí přímo Pagefox. Tím se uvolní místo na jiné fonty.
+- Přidat fonty jako například ZS6, ZS105, ZS111, ZS156 a ZS193.
+- Prověřit, zda ZS3 a ZS4 má smysl. Nekteré byly stejné, jen tam byla řeská abeceda, ale ta když se nezachová, ztrácí font smysl.
 
 ![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
