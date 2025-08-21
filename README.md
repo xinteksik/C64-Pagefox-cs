@@ -12,6 +12,12 @@ This project is based on Pagefox by scanntronik.de
 - oprava fontů (například háčky u ď, ť a ľ, pak třeba vrácena tvrdá mezera SHIFT+SPACE) 
 - překlad aplikace do češtiny
 
+
+<img width="640" height="541" alt="pagefox2" src="https://github.com/user-attachments/assets/befc33b9-fcfd-4a07-821d-9ac510798604" />
+
+<img width="640" height="541" alt="pagefox1" src="https://github.com/user-attachments/assets/dc9d6947-837f-4979-86d1-44bbc7f7ebe8" />
+
+
 ## Tools
 Ve složce tools jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozestup mezi znaky (CBM + H).
 
