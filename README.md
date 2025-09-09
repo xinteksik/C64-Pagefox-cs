@@ -18,10 +18,10 @@ This project is based on Pagefox by scanntronik.de
 <img width="640" height="541" alt="pagefox1" src="https://github.com/user-attachments/assets/dc9d6947-837f-4979-86d1-44bbc7f7ebe8" />
 
 ## Návod
-Ve složce navod jsou obrázky stránek z chystaného návodu. Zatím je kompletní návod pro Textový editor. 
+Ve složce [navod](navod/) jsou obrázky stránek z chystaného návodu. Zatím je kompletní návod pro Textový editor. 
 
 ## Tools
-Ve složce tools jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozestup mezi znaky (CBM + H).
+Ve složce [tools](tools/) jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozestup mezi znaky (CBM + H).
 
 ### cfox-cs.prg
 Nová verze CHARACTER FOX se pozná pokud po zadání LIST vypíše řádek s číslem 2 a následně s textem sys(2063). Problém je, že Printfox má výchozí rozestup roven 1 a tak většina českých fontů kolujících po internetu má uložen rozestup 0. S tím má pak problém Pagefox, ale lze to obejít zadáním rozestupu u definice fontu.
