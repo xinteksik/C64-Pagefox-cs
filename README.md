@@ -44,6 +44,8 @@ Příklad ověření: Vyextrahuji všechny fonty. Otevřu například zs1.prg v 
 ### pagefox_text_editor_cs.py
 Toto je textový editor pro otevření a také pro uložení textu v Pagefox formátu. Program obsahuje mapování na české znaky a lze přemapovat do libovolného jiného jazyku.
 
+<img width="640" height="480" alt="Snímek obrazovky 2025-09-09 v 9 06 28" src="https://github.com/user-attachments/assets/b7021f18-229b-4837-859b-984b0ac91cf1" />
+
 ## To do list
 - Odebrat font ZS31, protože vytvořit stín umí přímo Pagefox. Tím se uvolní místo na jiné fonty. - Hotovo
 - Přidat fonty jako například ZS6, ZS105, ZS111, ZS156 a ZS193. - Hotovo
