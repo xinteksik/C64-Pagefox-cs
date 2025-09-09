@@ -54,7 +54,8 @@ Toto je textový editor pro otevření a také pro uložení textu v Pagefox for
 
 ### Weblinks
 - https://www.c64-wiki.de/wiki/Pagefox (wiki, popis v němčině)
-- https://mega.nz/folder/Q7pRTCbB#sbPZOKwAx27SY4ydrL4KoA (Pagefox Demodiskette, Pagefox Grafiksammlungen, Zeichensätzen, Charakterfox, Pin24 Druckertreiber)
+- https://mega.nz/folder/Q7pRTCbB#sbPZOKwAx27SY4ydrL4KoA (Pagefox Demodiskette, Pagefox Grafiksammlungen, Zeichensätzen, Charakterfox, Eddifox, Pin24 Druckertreiber)
+- https://www.hackup.net/2021/08/pagefox-reverse-engineered-and-replicated/
 
 
 ![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
