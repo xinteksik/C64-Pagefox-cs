@@ -1,4 +1,6 @@
 # C64-Pagefox-cs
+Tento repozitář obsahuje český překlad Pagefox pro Commodore 64/128 včetně návodu a nástrojů pro fonty a editaci.
+
 This project is based on Pagefox by scanntronik.de
 
 ## Pagefox CS - verze 1.0 (Odstraněno)
