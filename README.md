@@ -25,6 +25,12 @@ Ve složce [navod](navod/) jsou obrázky stránek z chystaného návodu. Zatím 
 ## Tools
 Ve složce [tools](tools/) jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozestup mezi znaky (CBM + H).
 
+### zs_viewer.py
+Umí načíst písmo například ze souboru ZS1 a uložit jeho podobu jako obrázek. Umí zpracovat i dávkově soubory ve složkách. Praktické, pro rychlý náhled znakových sad.
+
+<img height="200" alt="zs1" src="https://github.com/user-attachments/assets/f89d02ba-483f-4d21-b1dc-f3632e8d7eeb" /> &nbsp; <img height="200" alt="zs40" src="https://github.com/user-attachments/assets/8e8bce8a-5bf2-412c-8ef7-0211c1d9cb25" />
+
+
 ### cfox-cs.prg
 Nová verze CHARACTER FOX se pozná pokud po zadání LIST vypíše řádek s číslem 2 a následně s textem sys(2063). Problém je, že Printfox má výchozí rozestup roven 1 a tak většina českých fontů kolujících po internetu má uložen rozestup 0. S tím má pak problém Pagefox, ale lze to obejít zadáním rozestupu u definice fontu.
 Nicméně pro uložení fontů jako součást Pagefox je dobré tam ten rozetup mít.
