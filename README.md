@@ -28,7 +28,14 @@ Ve složce [tools](tools/) jsou pomocné nástroje, kdyby chtěl někdo laborova
 ### zs_viewer.py
 Umí načíst písmo například ze souboru ZS1 a uložit jeho podobu jako obrázek. Umí zpracovat i dávkově soubory ve složkách. Praktické, pro rychlý náhled znakových sad.
 
-<img height="200" alt="zs1" src="https://github.com/user-attachments/assets/f89d02ba-483f-4d21-b1dc-f3632e8d7eeb" /> &nbsp; <img height="200" alt="zs40" src="https://github.com/user-attachments/assets/8e8bce8a-5bf2-412c-8ef7-0211c1d9cb25" />
+```cmd
+zs_viewer.py zs70.prg --text "Na pasece se pase kun."
+```
+
+<img width="800" height="560" alt="zs70" src="https://github.com/user-attachments/assets/1a2457f7-4397-4ef7-9864-07eba153012f" />
+<img width="398" height="58" alt="zs70_text" src="https://github.com/user-attachments/assets/ce1caa9b-3a33-4842-b0c7-0113b2d13113" />
+
+
 
 
 ### cfox-cs.prg
