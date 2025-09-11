@@ -61,6 +61,14 @@ Toto je textový editor pro otevření a také pro uložení textu v Pagefox for
 
 <img width="640" height="480" alt="Snímek obrazovky 2025-09-09 v 9 06 28" src="https://github.com/user-attachments/assets/b7021f18-229b-4837-859b-984b0ac91cf1" />
 
+### pagefox_text_editor_cs.py
+Převede PT soubor a v něm uvedený text s použitím znakových sad vypíše do PNG. Takový náhled textu vytvořeného v editoru.
+```cmd
+zs_typesetter.py --editor navod-5-t.pt.prg --font-dir . --out vystup5.png
+```
+
+<img width="640" height="800" alt="vystup4" src="https://github.com/user-attachments/assets/f6374cbc-af42-43ee-82b6-568737f8c426" />
+
 ## To do list
 - Odebrat font ZS31, protože vytvořit stín umí přímo Pagefox. Tím se uvolní místo na jiné fonty. - Hotovo
 - Přidat fonty jako například ZS6, ZS105, ZS111, ZS156 a ZS193. - Hotovo
