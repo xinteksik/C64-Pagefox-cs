@@ -73,7 +73,7 @@ zs_typesetter.py --editor navod-5-t.pt.prg --font-dir . --out vystup5.png
 - Odebrat font ZS31, protože vytvořit stín umí přímo Pagefox. Tím se uvolní místo na jiné fonty. - Hotovo
 - Přidat fonty jako například ZS6, ZS105, ZS111, ZS156 a ZS193. - Hotovo
 - Prověřit, zda ZS3 a ZS4 má smysl. Nekteré byly stejné, jen tam byla řeská abeceda, ale ta když se nezachová, ztrácí font smysl. - Hotovo
-- Nějaký nápad ?? - Český návod :D - Pracuje se na něm...
+- Nějaký nápad ?? - Český návod :D - Hotovo, bez korekce
 
 ### Weblinks
 - https://www.c64-wiki.de/wiki/Pagefox (wiki, popis v němčině)
