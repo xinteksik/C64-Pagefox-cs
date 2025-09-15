@@ -20,7 +20,7 @@ This project is based on Pagefox by scanntronik.de
 <img width="640" height="541" alt="pagefox1" src="https://github.com/user-attachments/assets/dc9d6947-837f-4979-86d1-44bbc7f7ebe8" />
 
 ## Návod
-Ve složce [navod](navod/) jsou obrázky stránek z chystaného návodu. Zatím je kompletní návod pro Textový editor. 
+Ve složce [navod](navod/) jsou obrázky stránek z návodu. Jde o amatérský překlad kompletního návodu. 
 
 ## Tools
 Ve složce [tools](tools/) jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozestup mezi znaky (CBM + H).
