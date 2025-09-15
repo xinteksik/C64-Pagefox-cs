@@ -14,6 +14,12 @@ This project is based on Pagefox by scanntronik.de
 - oprava fontů (například háčky u ď, ť a ľ, pak třeba vrácena tvrdá mezera SHIFT+SPACE) 
 - překlad aplikace do češtiny
 
+## Pagefox CS - verze 2.1
+- obsahuje češtinu a nové rozložení kláves např.: 8 = á, SHIFT + 8 = 8, CBM + 8 = (
+- součástí jsou české fonty ZS1, ZS2, ZS3, ZS4, ZS30, ZS111, ZS105, ZS10 a ZS40 (ZS1 až ZS4 jsou počeštěné podle originál Pagefox písma)
+- oprava dvojteček (> na :)
+- oprava fontů (například háčky u ď, ť a ľ, pak třeba vrácena tvrdá mezera SHIFT+SPACE) 
+- překlad aplikace do češtiny
 
 <img width="640" height="541" alt="pagefox2" src="https://github.com/user-attachments/assets/befc33b9-fcfd-4a07-821d-9ac510798604" />
 
