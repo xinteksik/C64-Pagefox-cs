@@ -51,8 +51,6 @@ zs_viewer.py zs70.prg --text "Na pasece se pase kun."
 <img width="640" height="480" alt="zs70_text" src="https://github.com/user-attachments/assets/ce1caa9b-3a33-4842-b0c7-0113b2d13113" />
 
 
-
-
 ### cfox-cs.prg
 Nová verze CHARACTER FOX se pozná pokud po zadání LIST vypíše řádek s číslem 2 a následně s textem sys(2063). Problém je, že Printfox má výchozí rozestup roven 1 a tak většina českých fontů kolujících po internetu má uložen rozestup 0. S tím má pak problém Pagefox, ale lze to obejít zadáním rozestupu u definice fontu.
 Nicméně pro uložení fontů jako součást Pagefox je dobré tam ten rozetup mít.
@@ -94,6 +92,9 @@ zs_typesetter.py --editor navod-5-t.pt.prg --font-dir . --out vystup5.png
 - https://www.c64-wiki.de/wiki/Pagefox (wiki, popis v němčině)
 - https://mega.nz/folder/Q7pRTCbB#sbPZOKwAx27SY4ydrL4KoA (Pagefox Demodiskette, Pagefox Grafiksammlungen, Zeichensätzen, Charakterfox, Eddifox, Pin24 Druckertreiber)
 - https://www.hackup.net/2021/08/pagefox-reverse-engineered-and-replicated/
+
+---
+**Keywords:** Commodore 64, Commodore 128, C64, C128, Pagefox, Czech translation, desktop publishing, DTP, retro computing, vintage software, character sets, fonts, tools
 
 
 ![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
