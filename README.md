@@ -1,7 +1,15 @@
-# C64-Pagefox-cs
-Tento repozitář obsahuje český překlad Pagefox pro Commodore 64/128 včetně návodu a nástrojů pro fonty a editaci.
+# Pagefox (Czech translation for Commodore 64/128)
 
-This repository contains the Czech translation of Pagefox for the Commodore 64/128, including the user manual and tools for fonts and text editing.
+This repository contains the **Czech translation of Pagefox** for the **Commodore 64 and Commodore 128**.  
+Included are:
+
+- The translated **user manual**  
+- **Font tools** for creating and editing custom fonts  
+- A **basic text editor** adapted for Pagefox  
+
+Pagefox is a classic desktop publishing (DTP) cartridge for the C64/128, originally released in the 1980s.  
+This project makes it more accessible for Czech users, while keeping compatibility with the original software.
+
 The project is based on Pagefox by scanntronik.de
 
 ## Pagefox CS - verze 1.0 (Odstraněno)
