@@ -45,8 +45,9 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 <img width="640" height="541" alt="pagefox1" src="https://github.com/user-attachments/assets/dc9d6947-837f-4979-86d1-44bbc7f7ebe8" />
 
 ## Návod / Manual
-*(English: Folder `navod` contains a draft Czech translation of the full Pagefox manual.)*
-Ve složce [navod](navod/) jsou obrázky stránek z návodu. Jde o amatérský překlad kompletního návodu (draft). 
+*(English: A draft Czech translation of the full Pagefox manual.)*
+
+[pagefox-cs-2.1.pdf](pagefox-cs-2.1.pdf)
 
 ## Tools
 *(English: Folder `tools` includes helper utilities for fonts, Pagefox file handling and a Czech-enabled CHARACTER FOX version.)*
