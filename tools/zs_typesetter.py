@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 ZSx typesetter – zalamování do stránky 640x800, výchozí ZS1, správné 0x0D (nový řádek),

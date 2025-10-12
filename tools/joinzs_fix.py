@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse, struct, sys, re
 from pathlib import Path
 

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 ZSx (Pagefox) font viewer – bílé pozadí, černý tisk, dávkové zpracování,
