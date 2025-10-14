@@ -2,14 +2,15 @@
 # Převod rastrových obrázků -> Pagefox (PG) / Bit-Store (BS) / Graphics Basic (GB)
 # - 8×8 tile layout, MSB-first
 # - Černá = 1, bílá = 0 (lze otočit --invert)
-# - GB/BS RLE: 9B <lo><hi> <v> (LE16)
-# - PG RLE (symetricky k dekodéru):
+# - Vstupní obrázek je omezen na MAX 640×800 px (při překročení se zmenší se zachováním poměru stran)
+# - GB/BS RLE: 9B <lo><hi> <v> (LE16), RLE až od délky 4
+# - PG RLE (symetricky s finálním dekodérem):
 #     * 9B 00 00         -> 256× 0x00
 #     * 9B 00 <v!=00>    -> 1× <v>      (escape, např. pro 0x9B)
-#     * 9B <count> <v> (count!=0) -> <v> × count
+#     * 9B <count> <v>   -> <v> × count (count!=0), ale až od délky 4
 #     * ostatní literály
 #   Strategie:
-#     - běhy nul kóduj po blocích 256 (9B 00 00), zbytek 9B <rem> 00 (pro rem>=3), zbytek literály
+#     - běhy nul v PG kóduj po blocích 256 (9B 00 00), zbytek 9B <rem> 00 jen pokud rem>=4, jinak literály
 #     - literál 0x9B vždy přes escape: 9B 00 9B
 
 from pathlib import Path
@@ -40,16 +41,16 @@ def iter_input_paths(p: Path, recursive: bool=False) -> Iterable[Path]:
 def load_as_bw_bytes(img_path: Path, invert: bool, target_tiles: Tuple[int,int]|None, pad_to_canvas: bool) -> Tuple[bytes,int,int]:
     im = Image.open(img_path).convert("L")
 
-    # --- nový limit rozlišení ---
-    max_w, max_h = 639, 799
+    # --- MAX limit 640×800 (zachovat poměr stran) ---
+    max_w, max_h = 640, 800
     if im.width > max_w or im.height > max_h:
         scale = min(max_w / im.width, max_h / im.height)
-        new_w = int(im.width * scale)
-        new_h = int(im.height * scale)
+        new_w = max(1, int(im.width * scale))
+        new_h = max(1, int(im.height * scale))
         im = im.resize((new_w, new_h), Image.Resampling.LANCZOS)
         print(f"[INFO] {img_path.name}: zmenšeno na {new_w}×{new_h} (max {max_w}×{max_h})")
 
-    # --- stávající logika ---
+    # --- cílové dlaždice (volitelné) ---
     if target_tiles:
         tiles_w, tiles_h = target_tiles
         want_w, want_h = tiles_w*8, tiles_h*8
@@ -64,6 +65,7 @@ def load_as_bw_bytes(img_path: Path, invert: bool, target_tiles: Tuple[int,int]|
             if im.width != want_w or im.height != want_h:
                 raise ValueError(f"Vstup má {im.width}x{im.height}, očekáváno {want_w}x{want_h}. Přidej --pad-to-canvas.")
 
+    # --- zarovnání na násobky 8 ---
     w = (im.width + 7)//8*8
     h = (im.height + 7)//8*8
     if w != im.width or h != im.height:
@@ -82,7 +84,7 @@ def load_as_bw_bytes(img_path: Path, invert: bool, target_tiles: Tuple[int,int]|
                 for bit in range(8):
                     x = tx*8 + bit
                     val = pix[x, y]
-                    on = (val < 128)
+                    on = (val < 128)  # černá=1
                     if invert:
                         on = not on
                     b = (b << 1) | (1 if on else 0)
@@ -92,68 +94,42 @@ def load_as_bw_bytes(img_path: Path, invert: bool, target_tiles: Tuple[int,int]|
 # ---------- ENCODE: GB/BS ----------
 
 def encode_gbbs(data: bytes) -> bytes:
+    """
+    GB/BS: 9B <lo><hi> <v> (LE16).
+    RLE používáme až od délky 4 a výš.
+    Literál 0x9B MUSÍ být escapován (9B 01 00 9B) u krátkých běhů.
+    """
     out = bytearray()
     i = 0
     n = len(data)
+
     while i < n:
         v = data[i]
         # spočti běh
-        j = i+1
+        j = i + 1
         while j < n and data[j] == v and (j - i) < 0xFFFF:
             j += 1
         run = j - i
+
         if v == MARK:
-            out.extend((MARK, 0x01, 0x00, MARK))  # escape 9B
-            i += 1; continue
+            # 0x9B nelze psát literálně
+            if run >= 4:
+                remain = run
+                while remain:
+                    chunk = min(remain, 0xFFFF)
+                    out.extend((MARK, chunk & 0xFF, (chunk >> 8) & 0xFF, MARK))
+                    remain -= chunk
+                i += run
+            else:
+                out.extend((MARK, 0x01, 0x00, MARK))  # 1× 9B
+                i += 1
+            continue
+
         if run >= 4:
             remain = run
             while remain:
                 chunk = min(remain, 0xFFFF)
-                out.extend((MARK, chunk & 0xFF, (chunk>>8)&0xFF, v))
-                remain -= chunk
-            i += run
-        else:
-            out.append(v); i += 1
-    return bytes(out)
-
-# ---------- ENCODE: PG (256-zero blocks + escape) ----------
-
-def encode_pg(data: bytes) -> bytes:
-    out = bytearray()
-    i = 0
-    n = len(data)
-    while i < n:
-        v = data[i]
-        # spočti běh
-        j = i+1
-        while j < n and data[j] == v:
-            j += 1
-        run = j - i
-
-        if v == MARK:
-            # escape pro 0x9B (1× 9B)
-            out.extend((MARK, 0x00, MARK))
-            i += 1
-            continue
-
-        if v == 0x00 and run >= 3:
-            # bloky 256 nul -> 9B 00 00
-            blocks256 = run // 256
-            if blocks256:
-                out.extend((MARK, 0x00, 0x00) * blocks256)
-            rem = run % 256
-            if rem >= 3:
-                out.extend((MARK, rem & 0xFF, 0x00))
-            else:
-                out.extend(b"\x00" * rem)
-            i += run
-            continue
-
-        if run >= 3:
-            remain = run
-            while remain:
-                chunk = min(remain, 255)
-                out.extend((MARK, chunk & 0xFF, v))
+                out.extend((MARK, chunk & 0xFF, (chunk >> 8) & 0xFF, v))
                 remain -= chunk
             i += run
         else:
@@ -161,6 +137,63 @@ def encode_pg(data: bytes) -> bytes:
             i += 1
 
     return bytes(out)
+
+# ---------- ENCODE: PG (RLE od 4 + 256×00 bloky + escape) ----------
+
+def encode_pg(data: bytes) -> bytes:
+    """
+    PG ENCODE (symetricky k dekodéru):
+      - 9B <count> <val> -> <val> × count
+      - count == 0x00 znamená 256× <val> (speciální blok)
+      - RLE používáme od délky 4 výš (kvůli efektivitě),
+        ale pro hodnotu 0x9B MUSÍME použít RLE vždy (i pro 1..3),
+        protože 0x9B nelze uložit jako čistý literál.
+    """
+    MARK = 0x9B
+    out = bytearray()
+    i = 0
+    n = len(data)
+
+    while i < n:
+        v = data[i]
+        # spočítat délku běhu v
+        j = i + 1
+        while j < n and data[j] == v:
+            j += 1
+        run = j - i
+
+        if v == MARK:
+            # 9B vždy RLE (i pro 1..3)
+            remain = run
+            while remain >= 256:
+                out.extend((MARK, 0x00, MARK))   # 256× 0x9B
+                remain -= 256
+            if remain > 0:
+                out.extend((MARK, remain & 0xFF, MARK))
+            i += run
+            continue
+
+        # běžné hodnoty
+        if run >= 256:
+            # nejdřív celé 256-bloky
+            blocks = run // 256
+            for _ in range(blocks):
+                out.extend((MARK, 0x00, v))      # 256× v
+            rem = run % 256
+            if rem >= 4:
+                out.extend((MARK, rem & 0xFF, v))
+            else:
+                out.extend([v] * rem)
+            i += run
+        elif run >= 4:
+            out.extend((MARK, run & 0xFF, v))
+            i += run
+        else:
+            out.extend([v] * run)
+            i += run
+
+    return bytes(out)
+
 
 # ---------- Zápis formátů ----------
 

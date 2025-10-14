@@ -60,33 +60,30 @@ def parse_pg_header_and_bounds(buf: bytes) -> Tuple[int,int,bytes]:
 
 def decode_pg(payload: bytes) -> bytes:
     """
-    PG RLE (finální):
-      - 9B 00 00         -> 256× 0x00
-      - 9B 00 <v!=00>    -> 1× <v>
-      - 9B <count!=0> <v>-> <v> × count
-      - ostatní jsou literály
+    PG RLE:
+      - 9B <count> <val> -> <val> × count
+      - výjimka: count == 0x00 -> 256× <val>
+      - ostatní bajty jsou literály
     """
+    MARK = 0x9B
     out = bytearray()
     i = 0
     n = len(payload)
+
     while i < n:
         b = payload[i]; i += 1
         if b != MARK:
-            out.append(b); continue
-        if i >= n: break
-        count = payload[i]; i += 1
-        if count == 0:
-            if i >= n: break
-            val = payload[i]; i += 1
-            if val == 0x00:
-                out.extend([0x00]*256)
-            else:
-                out.append(val)
+            out.append(b)
             continue
-        if i >= n: break
+        if i + 1 >= n:
+            break
+        count = payload[i]; i += 1
         val = payload[i]; i += 1
-        out.extend([val]*count)
+        reps = 256 if count == 0 else count
+        out.extend([val] * reps)
+
     return bytes(out)
+
 
 # ---------- Vykreslení ----------
 
