@@ -24,7 +24,7 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 *(English: Version 1.0 with Czech fonts and original keyboard layout. Removed in later releases.)*
 - součástí jsou české fonty ZS1, ZS10 a ZS40
 
-## Pagefox CS - verze 2.0
+## Pagefox CS - verze 2.0 (Odstraněno)
 *(English: New keyboard mapping, extended Czech font support, font and diacritic fixes, and full Czech translation.)*
 - obsahuje češtinu a nové rozložení kláves např.: 8 = á, SHIFT + 8 = 8, CBM + 8 = (
 - součástí jsou české fonty ZS1, ZS2, ZS3, ZS105, ZS30, ZS10, ZS111 a ZS40
