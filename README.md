@@ -117,6 +117,18 @@ zs_typesetter.py --editor navod-5-t.pt.prg --font-dir . --out vystup5.png
 
 <img width="640" height="800" alt="vystup4" src="https://github.com/user-attachments/assets/f6374cbc-af42-43ee-82b6-568737f8c426" />
 
+### convert_prg_to_png.py
+*(English: Auto-detects Pagefox PG / Printfox BS/GB image files and converts them to PNG.)*
+
+Automaticky rozpozná formát PG (Pagefox), BS (320×200) a GB (640×400), dekóduje RLE a vykreslí 1bpp obraz do PNG.
+
+### convert_png_to_prg.py
+
+(English: Encodes PNG (1bpp thresholded) into Pagefox PG / Printfox BS/GB with correct RLE.)
+
+Převede rastrový PNG (případně dávku ve složce) do PG / BS / GB. Vstup převádí na 1bpp (černá=1, bílá=0; lze invertovat). Pro BS/GB používá standardní RLE 9B <lo><hi> <v> (od délky 4), pro PG používá symetrické RLE včetně speciálních bloků 256× a escape literálu 0x9B.
+
+
 ## To do list
 - Odebrat font ZS31, protože vytvořit stín umí přímo Pagefox. Tím se uvolní místo na jiné fonty. - Hotovo
 - Přidat fonty jako například ZS6, ZS105, ZS111, ZS156 a ZS193. - Hotovo
