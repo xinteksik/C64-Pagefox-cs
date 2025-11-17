@@ -57,6 +57,13 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 
 [pagefox-cs-2.2.pdf](pagefox-cs-2.2.pdf)
 
+## Písmna / Fonts
+*(English:Fonts with preview.)*
+
+Písma s náhledem.
+
+[Písma/Fonts](fonts/README.md)
+
 ## Tools
 *(English: Folder `tools` includes helper utilities for fonts, Pagefox file handling and a Czech-enabled CHARACTER FOX version.)*
 Ve složce [tools](tools/) jsou pomocné nástroje, kdyby chtěl někdo laborovat třeba s fonty a vytvořit si tak vlastní balík. Přiložil jsem i počeštěnou novou verzi CHARACTER FOXu, která už umí správně uložit rozestup mezi znaky (CBM + H).
