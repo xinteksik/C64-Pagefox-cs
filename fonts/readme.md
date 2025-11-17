@@ -5,7 +5,7 @@ Níže je seznam všech PNG souborů seřazený **podle čísel za prefixem `zs`
 ## Přehled obrázků
 
 ### zs1
-![](zs1.png)
+![](png/zs1.png)
 
 ### zs2
 ![](zs2.png)
