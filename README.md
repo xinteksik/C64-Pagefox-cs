@@ -57,7 +57,7 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 
 [pagefox-cs-2.2.pdf](pagefox-cs-2.2.pdf)
 
-## Písmna / Fonts
+## Písma / Fonts
 *(English:Fonts with preview.)*
 
 Písma s náhledem.
