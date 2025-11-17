@@ -62,7 +62,7 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 
 Písma s náhledem.
 
-[Písma/Fonts](fonts/README.md)
+[Písma/Fonts](fonts/)
 
 ## Tools
 *(English: Folder `tools` includes helper utilities for fonts, Pagefox file handling and a Czech-enabled CHARACTER FOX version.)*
