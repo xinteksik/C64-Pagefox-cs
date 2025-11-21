@@ -1,4 +1,7 @@
 # Pagefox (Czech translation for Commodore 64/128)
+![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
+![GitHub last commit](https://img.shields.io/github/last-commit/xinteksik/C64-Pagefox-cs)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xinteksik/C64-Pagefox-cs/total)
 
 This repository contains the **Czech translation of Pagefox** for the **Commodore 64 and Commodore 128**.  
 Included are:
@@ -151,4 +154,3 @@ Převede rastrový PNG (případně dávku ve složce) do PG / BS / GB. Vstup p�
 **Keywords:** Commodore 64, Commodore 128, C64, C128, Pagefox, Czech translation, desktop publishing, DTP, retro computing, vintage software, character sets, fonts, tools
 
 
-![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
