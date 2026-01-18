@@ -3435,9 +3435,9 @@ rom0_texts_265a:
     !tx "RETURN=D", $82, "le", $1F, $1F, $0D
     !tx "RETURN=Nahradit,", $1F, "SPACE=P", $8F, "esko", $8A, "it", $1F, $1F, $1F, $0D
     !tx "ZS", $0D
-    !tx "Pagefox", $0D
-    !tx "(C) Scanntronik", $0D
-    !tx "V. Haberl  T. Kakul", $84, ">ek", $0D
+    !tx "Pagefox", $0D	;$11
+	!tx "H. Haberl ", $26," T. Kakul", $84, ">ek", $0D	;$12
+    !tx "(C) 1987 by Scanntronik", $0D	;$13
     !tx $1F, $1F, $1F, "Low", $1F, $1F, $1F, "Medium", $1F, $1F, $1F, "High", $1F, $1F, $1F, "Shinwa", $1F, $1F, $1F, "MPS", $0D
     !tx $1F, $1F, $1F, $1F, $1F, $1F, $1F, $1F, "Auto-Linefeed", $1F, $1F, $1F, "Linefeed", $0D
     !tx $1F, $1F, $1F, $1F, $1F, $1F, $1F, $1F, $1F, $1F, "Vlevo", $1F, $1F, "St", $8F, "ed", $1F, $1F, "Vpravo", $0D
@@ -3829,7 +3829,23 @@ rom0cs_Call0FFA_Jmp0FDC:
 ;   $BF01 = $03  editor text color
 ;   $BF02 = $00  editor background
 ;   $BF03 = $01  menu color
-;   $BF04 = $0F  graphics editor background
+;   $BF04 = $0F  graphics editor on and off color 0F means 0 - on = black, F - off - light gray (backgroud)
+;   00 = black
+;   01 = white
+;   02 = red
+;   03 = cyan
+;   04 = purple
+;   05 = green
+;   06 = blue
+;   07 = yellow
+;   08 = orange
+;   09 = brown
+;   0A = pink
+;   0B = dark grey
+;   0C = grey
+;   0D = light green
+;   0E = light blue
+;   0F = light grey
 ; -------------------------------------------------------------
 rom0cs_colors_table_bf00:
     !by $00
