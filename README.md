@@ -55,7 +55,11 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 *(English: Same as version 2.4 and improved punctuation handling, diacritic corrections, and application translated into Czech. Partially completed disassembly, which makes it easier to edit the known sections.)*
 - částečně dissassemblovaný zdroják ve složce src
 - díky popisu asm v ACME formátu lze lépe řešit překlad
-- zdokumentovány sekce pro výchozí změnu barev, písma, textů, klávesnice 
+- zdokumentovány sekce pro výchozí změnu barev aplikace 
+- popsané písma
+- přeložené texty
+- mapování české klávesnice
+- zmapován výpis textů na úvodní stránce
  
 <img width="640" height="541" alt="pagefox2" src="https://github.com/user-attachments/assets/befc33b9-fcfd-4a07-821d-9ac510798604" />
 
