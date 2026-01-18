@@ -2555,7 +2555,7 @@ L8F7B:
     jsr $FF5B
 
     ; --- Confirmed VIC border/sprite init ---
-    lda #$00
+    lda #$0B
     sta $D020
     lda #$00
     sta $D01C
