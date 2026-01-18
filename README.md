@@ -51,6 +51,12 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 - oprava fontů (například háčky u ď, ť a ľ, pak třeba vrácena tvrdá mezera SHIFT+SPACE) 
 - překlad aplikace do češtiny
 
+## Pagefox CS - verze 2.5
+*(English: Same as version 2.4 and improved punctuation handling, diacritic corrections, and application translated into Czech. Partially completed disassembly, which makes it easier to edit the known sections.)*
+- částečně dissassemblovaný zdroják ve složce src
+- díky popisu asm v ACME formátu lze lépe řešit překlad
+- zdokumentovány sekce pro výchozí změnu barev, písma, textů, klávesnice 
+ 
 <img width="640" height="541" alt="pagefox2" src="https://github.com/user-attachments/assets/befc33b9-fcfd-4a07-821d-9ac510798604" />
 
 <img width="640" height="541" alt="pagefox1" src="https://github.com/user-attachments/assets/dc9d6947-837f-4979-86d1-44bbc7f7ebe8" />
