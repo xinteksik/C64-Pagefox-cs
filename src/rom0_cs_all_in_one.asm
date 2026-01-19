@@ -1321,10 +1321,7 @@ L8831:
     ldx #$03
     jsr $8482
     jmp $83A5
-    ora $0401,x
-    brk
-    !by $07,$12,$22    ; 8845
-    plp
+    !by $1D, $01, $04, $00, $07, $12, $22, $28    ; 8845 oddělení pro například viza věta 1D
 
 L8849:
     bit $1F
