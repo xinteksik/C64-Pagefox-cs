@@ -1,5 +1,6 @@
 ; Re-disassembled (readable) from all-in-one bytes
 ; Source: rom1_cs_readable_disasm.asm
+!initmem $ff
 !to "2-rom-1-cs.rebuilt.bin", plain
 * = $8000
 

@@ -1,4 +1,5 @@
 ; All-in-one ACME source for 1-rom-0-de.bin
+!initmem $ff
 !to "1-rom-0-de.rebuilt.bin", plain
 * = 0
 

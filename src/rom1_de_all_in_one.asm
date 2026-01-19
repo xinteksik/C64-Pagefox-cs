@@ -1,5 +1,6 @@
 ; Auto-generated ACME source (all-in-one) for 2-rom-1-cs.bin
 ; Rebuilds 1:1 to the original binary when assembled.
+!initmem $ff
 !to "2-rom-1-cs.rebuilt.bin", plain
 * = $8000
 
