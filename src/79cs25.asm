@@ -1433,14 +1433,14 @@ L88E3:
     beq L8920
     cpx #$04
     bne L88FB
-    ldy #$12
+    ldy #$22
 
 L88ED:
     dey
     bmi L88FA
-    cmp $8932,y
+    cmp viza_in_table_8932,y
     bne L88ED
-    lda $8944,y
+    lda viza_out_table_8944,y
     bcs L8920
 
 L88FA:
@@ -1482,39 +1482,31 @@ L8920:
 
 L8921:
     rts
-    brk
-    rts
-    jsr $6020
-    rti
-    brk
-    brk
-    brk
-    brk
-    brk
-    brk
-    rti
-    brk
-    brk
-    brk
-    sbc ($E6),y
-    sbc $DFEE
-    !by $DB,$EB,$EF    ; 8937
-    cpx $DDDC
-    adc $7B7A,y
-    adc $76
-    sei
-    !by $7C    ; 8943
-    ora ($02,x)
-    !by $04    ; 8946
-    ora $06
-    !by $07    ; 8949
-    php
-    !by $0B,$0C    ; 894B
-    ora $5B10
-    !by $5C    ; 8950
-    eor $7C7B,x
-    adc $207E,x
-    !by $CF,$FF    ; 8957
+ 
+; -------------------------------------------------------------
+; Data table used by L88FB: ORA $8922,Y
+; CPU $8922..$8931  (file $0922..$0931)
+; -------------------------------------------------------------
+tbl_8922:
+    !by $00,$60,$20,$20,$60,$40,$00,$00
+    !by $00,$00,$00,$00,$40,$00,$00,$00
+
+
+    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    !by $FF,$FF
+
+    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    !by $FF,$FF
+
+
+
+; CPU $8957..$8958 (file $0957..$0958) – data bytes before code resumes
+    !by $20,$CF,$FF
+
+; CPU $8959 continues with real code (AA = TAX)
+ 
     tax
     beq $8956
     cmp #$4C
@@ -3305,6 +3297,86 @@ pf_rowdef_start_stranka_skupina:
     !by $60,$A9,$0D,$20,$70,$9B,$AD,$06,$17,$F0,$05,$A9,$0A,$20,$70,$9B
     !by $60,$38,$E5,$51,$F0,$13,$AE,$07,$17,$F0,$0E,$E0,$02,$F0,$01,$4A
     !by $AA,$A9,$20,$20,$70,$9B,$CA,$D0,$F8,$60
+
+
+; -------------------------------------------------------------
+; VIZA import charset translation tables (mode = 4)
+; CPU $8932..$8943 (file $0932..$0943)
+; -------------------------------------------------------------
+viza_in_table_8932:
+!by $F1		; 01 01
+!by $E6		; 02 02
+!by $ED		; 04 04
+!by $EE		; 05 05
+!by $DF		; 06 06
+!by $DB		; 07 07
+!by $EB		; 08 08
+!by $EF		; 0B 11
+!by $EC		; 0C 12
+!by $DC		; 0D 13
+!by $3E		; 3A 58	>
+!by $3C		; 3B 59	<
+!by $3B		; 3E 62	ž
+!by $79		; 5B 91	]
+!by $7A		; 5C 92	[
+!by $7B		; 5D 93	znak CBM
+!by $7D		; 60 96	ú
+!by $3A		; 7C 124	:
+!by $78		; 7D 125	@
+!by $1C		; 7E 126	ý
+!by $1E		; 81 129	ě
+!by $1F		; 82 130	á
+!by $26		; 83 131	é
+!by $27		; 84 132	í
+!by $7F		; 85 133	ó
+!by $7E		; 86 134	ů
+!by $40		; 88 136	ň
+!by $65		; 89 137	ď
+!by $00		; 8A 138	č
+!by $3E		; 8B 139	>>
+!by $3C		; 8C 140	<<
+!by $1B		; 8F 143	ř
+!by $1D		; 90 144	š
+!by $5E		; 91 145	ť
+
+; CPU $8944..$8956 (file $0944..$0956)
+viza_out_table_8944:
+!by $01	; 01
+!by $02	; 02
+!by $04	; 04
+!by $05	; 05
+!by $06	; 06
+!by $07	; 07
+!by $08	; 08
+!by $0B	; 11
+!by $0C	; 12
+!by $0D	; 13
+!by $3A	; 58	>
+!by $3B	; 59	<
+!by $3E	; 62	ž
+!by $5B	; 91	]
+!by $5C	; 92	[
+!by $5D	; 93	znak CBM
+!by $60	; 96	ú
+!by $7C	; 124	:
+!by $7D	; 125	@
+!by $7E	; 126	ý
+!by $81	; 129	ě
+!by $82	; 130	á
+!by $83	; 131	é
+!by $84	; 132	í
+!by $85	; 133	ó
+!by $86	; 134	ů
+!by $88	; 136	ň
+!by $89	; 137	ď
+!by $8A	; 138	č
+!by $8B	; 139	>>
+!by $8C	; 140	<<
+!by $8F	; 143	ř
+!by $90	; 144	š
+!by $91	; 145	ť
+
+
 }
 
 *=$2000

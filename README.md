@@ -56,7 +56,8 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 ## Pagefox CS - verze 2.5
 *(English: Same as version 2.4 and improved punctuation handling, diacritic corrections, and application translated into Czech. Partially completed disassembly, which makes it easier to edit the known sections.)*
 - částečně dissassemblovaný zdroják ve složce [src](src/)
-- díky popisu asm v ACME formátu lze lépe řešit překlad
+- !!! Pagefox umí otevřít české texty ve formátu Vizawrite !!!
+- díky popisu asm v ACME formátu lze lépe řešit modifikace
 - zdokumentovány sekce pro výchozí změnu barev aplikace 
 - popsané písma
 - přeložené texty
