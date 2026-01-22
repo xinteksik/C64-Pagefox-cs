@@ -1,27 +1,30 @@
 !initmem $ff
+!source "c64symb.asm"
 !to "79cs25.bin", plain
+
 * = 0
 !pseudopc $8000 {
 
 L_8000:
     ;  header / signature
-    !by $31,$80,$BB,$0E,$C3,$C2,$CD,$38
+    !by $31, $80
+    !by $BB, $0E, $C3, $C2, $CD, $38
     !by $30,$50,$46,$20,$56,$31,$2E,$30
-    jmp $8045
-    jmp $92BA
-    jmp $9039
-    jmp $9747
-    jmp $957C
-    jmp $915D
-    jmp $9258
-    jmp $977F
-    jmp $98A2
-    jmp $8ECC
-    jmp $9474
-    sei
-    jsr $FDA3
-    lda $DC01
-    and #$10
+    JMP $8045
+    JMP $92BA
+    JMP $9039
+    JMP $9747
+    JMP $957C
+    JMP $915D
+    JMP $9258
+    JMP $977F
+    JMP $98A2
+    JMP $8ECC
+    JMP $9474
+    SEI
+    JSR $FDA3
+    LDA $DC01
+    AND #$10
     BEQ L_8042
     JSR L_8F6A
     JMP $0DA8
@@ -48,51 +51,31 @@ L_8060:
 L_8064:
     CMP #$A0
     BCS L_806B
-    !byte $4C
-    !byte $C0
-    !byte $80
+    JMP $80C0
 L_806B:
-    !byte $E9
-    !byte $A0
-    !byte $0A
-    !byte $AA
-    !byte $BD
-    !byte $79
-    !byte $80
-    !byte $48
-    !byte $BD
-    !byte $78
-    !byte $80
-    !byte $48
+    SBC #$A0
+    ASL
+    TAX
+    LDA $8079,X
+    PHA
+    LDA $8078,X
+    PHA
 L_8077:
-    !byte $60
-    !byte $60
-    !byte $82
-    !byte $10
-    !byte $82
-    !byte $52
-    !byte $82
-    !byte $FA
-    !byte $81
-    !byte $7E
-    !byte $82
-    !byte $AF
-    !byte $82
-    !byte $DD
-    !byte $82
-    !byte $02
-    !byte $83
-    !byte $B7
-    !byte $82
-    !byte $D2
-    !byte $82
-    !byte $12
-    !byte $83
-    !byte $1D
-    !byte $83
-    !byte $2B
-    !byte $83
-    !byte $EF
+    RTS
+    RTS
+    !word $1082
+    !word $5282
+    !word $FA82
+    !word $7E81
+    !word $AF82
+    !word $DD82
+    !word $0282
+    !word $B783
+    !word $D282
+    !word $1282
+    !word $1D83
+    !word $2B83
+    !word $EF83
     !byte $80
 L_8094:
     !byte $EF
@@ -1220,7 +1203,7 @@ L_87D6:
     BCS L_882C
     LDY #$02
     JSR L_9297
-    !by $20,$CF,$FF
+    JSR $FFCF
     LDX #$00
     CMP #$54
     BEQ L_880D
@@ -1372,9 +1355,9 @@ L_88E3:
 L_88ED:
     DEY 
     BMI L_88FA
-    CMP L_9BF5,Y
+    CMP VIZA_CS_IN,Y
     BNE L_88ED
-    LDA $9C17,Y
+    LDA VIZA_CS_OUT,Y
     BCS L_8920
 L_88FA:
     DEX 
@@ -1414,25 +1397,27 @@ L_8921:
 L_8922:
     !by $00,$60,$20,$20,$60,$40,$00,$00
     !by $00,$00,$00,$00,$40,$00,$00,$00
-    ; Puvodní definice mapovani VIZA
-    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    !by $FF,$FF
-    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    !by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    !by $FF,$FF
+; VIZA_DE map change in L_88DE
+VIZA_DE_IN:
+    !by $F1,$E6,$ED,$EE,$DF,$DB,$EB,$EF
+    !by $EC,$DC,$DD,$79,$7A,$7B,$65,$76
+    !by $78,$7C
+VIZA_DE_OUT:
+    !by 01,$02,$04,$05,$06,$07,$08,$0B
+    !by $0C,$0D,$10,$5B,$5C,$5D,$7B,$7C
+    !by $7D,$7E
 L_8956:
-    JSR $FFCF
+    JSR CBM_CHRIN
     TAX 
     BEQ L_8956
     CMP #$4C
     SEC 
     BNE L_8979
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1700
     LDY #$00
 L_8969:
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1800,Y
     INY 
     CPY $1700
@@ -1445,7 +1430,7 @@ L_8979:
 L_897A:
     LDY #$00
 L_897C:
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1701,Y
     INY 
     LDA $90
@@ -2891,7 +2876,8 @@ L_930E:
     !byte $93
     !byte $DA
     !byte $93
-    ; Mapovani klavesnice 4 blocks x 65 bytes
+
+; Mapovani klavesnice 4 blocks x 65 bytes
     !by $AF,$AD,$A2,$B1,$A6,$A8,$AA,$A0
     !by $90,$77,$61,$8A,$79,$73,$65,$00
     !by $8F,$72,$64,$3E,$63,$66,$74,$78
@@ -3638,43 +3624,36 @@ L_9863:
     STA $02,X
     DEX 
     BPL L_9863
-    ; Menu row definitions (text + row + tab stops)
+; Menu row definitions (text + row + tab stops)
     lda #$00
     sta $D015
     rts
 pf_menu_rowdef_ptr_table:        ; pointer table (little-endian)
     !word $9879,$9882,$9888,$988F,$9895
-    ; msg $14 on row $08: "Low Medium High Shinwa MPS" (5 items)
-pf_rowdef_printer_quality:
+; msg $14 on row $08: "Low Medium High Shinwa MPS" (5 items)
     !by $14,$08,$05
     !by $00,$08,$11,$18,$21,$28
-    ; msg $15 on row $0A: "Auto-Linefeed  Linefeed" (2 items)
-pf_rowdef_autolf_linefeed:
+; msg $15 on row $0A: "Auto-Linefeed  Linefeed" (2 items)
     !by $15,$0A,$02
     !by $00,$16,$28
-    ; msg $16 on row $0C: "Vlevo  Střed  Vpravo" (3 items)
-pf_rowdef_align_left_center_right:
+; msg $16 on row $0C: "Vlevo  Střed  Vpravo" (3 items)
     !by $16,$0C,$03
     !by $00,$10,$17,$28
-    ; msg $20 on row $0E: "Standard  Tabela..." (2 items)
-pf_rowdef_standard_tabela:
+; msg $20 on row $0E: "Standard  Tabela..." (2 items)
     !by $20,$0E,$02
     !by $00,$12,$28
-    ; msg $17 on row $10: "Start  Stránka  Skupina" (3 items)
-pf_rowdef_start_stranka_skupina:
+; msg $17 on row $10: "Start  Stránka  Skupina" (3 items)
     !by $17,$10,$03
     !by $00,$09,$18,$28
-    !byte $1C
-    ORA ($02,X)
-    BRK 
-    !byte $0B
-    !byte $14
-    LDA #$00
+; msg $1C on row $01: "Pokracovat Zrusit" (2 items)  
+    !byte $1C,$01,$02
+    !by $00,$0B,$14
+    !by $A9, $00
     STA L_D015
     JSR L_9AF8
     BCS L_98CE
-    LDA $1709
-    STA $0344
+    !by $AD, $09, $17
+    !by $8D, $44, $03
 L_98B2:
     LDX $1705
     LDA $1710,X
@@ -4162,8 +4141,7 @@ L_9BEB:
     !byte $F8
 L_9BF4:
     !byte $60
-L_9BF5:
-viza_in_table_8932:
+VIZA_CS_IN:
     !by $F1		; 01 01
     !by $E6		; 02 02
     !by $ED		; 04 04
@@ -4198,7 +4176,7 @@ viza_in_table_8932:
     !by $1B		; 8F 143	ř
     !by $1D		; 90 144	š
     !by $5E		; 91 145	ť
-viza_out_table_8944:
+VIZA_CS_OUT:
     !by $01	; 01
     !by $02	; 02
     !by $04	; 04
@@ -4239,32 +4217,19 @@ viza_out_table_8944:
 
 !pseudopc $A000 {
 L_A000:
-    !byte $04
-    !byte $A0
-    !byte $04
-    !byte $A0
-    !byte $A2
-    !byte $08
-    !byte $BD
-    !byte $12
-    !byte $A0
-    !byte $9D
-    !byte $40
-    !byte $03
-    !byte $CA
-    !byte $10
-    !byte $F7
-    !byte $4C
-    !byte $40
-    !byte $03
-    !byte $A9
-    !byte $FF
-    !byte $8D
-    !byte $80
-    !byte $DE
-    !byte $4C
-    !byte $E2
-    !byte $FC
+    !word $A004
+    !word $A004
+    LDX #$08
+PF_INIT_LOOP:
+    LDA L_A012,X
+    STA $0340,X
+    DEX
+    BPL PF_INIT_LOOP
+    JMP $0340
+L_A012:
+    LDA #$FF
+    STA $DE80    ; disable cartridge / reset bank switching
+    JMP CBM_START    ; KERNAL RESET
     ; Grafiga pro nabidku volby pisma 
     !by $FF,$80,$80,$80,$80,$80,$80,$80
     !by $FF,$00,$00,$00,$00,$00,$00,$00
@@ -5997,38 +5962,38 @@ L_BE02:
     !byte $00
     !byte $FF
     !byte $FF
-    BRK 
-    BRK 
+    !by $00
+    !by $00
     !byte $FF
     !byte $FF
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
-    BRK 
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
+    !by $00
     BRK 
     BRK 
     BRK 
@@ -6143,8 +6108,8 @@ L_BE02:
     !by $00
     !by $01
     !by $0F
-    BRK 
-    BRK 
+    !by $00
+    !by $00
     ORA ($00,X)
     !byte $00
     !byte $00
@@ -6201,198 +6166,11 @@ L_BE02:
     !byte $1B
     !byte $43
     !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $FF
+}
+
+* = $4000
+
+!pseudopc $C000 {
     LDX #$FE
     TXS 
     !byte $20
