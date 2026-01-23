@@ -43,7 +43,7 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 - oprava fontů (například háčky u ď, ť a ľ, pak třeba vrácena tvrdá mezera SHIFT+SPACE) 
 - překlad aplikace do češtiny
 
-## Pagefox CS - verze 2.4 (Odstraněno)
+## Pagefox CS - verze 2.4 (Deprecated)
 *(English: Extended font collection ZS1–ZS5, improved punctuation handling, diacritic corrections, and application translated into Czech.)*
 - obsahuje češtinu a nové rozložení kláves např.: 8 = á, SHIFT + 8 = 8, CBM + 8 = (
 - součástí jsou české fonty ZS1, ZS161, ZS2, ZS3, ZS4, ZS30, ZS111, ZS5, ZS10 a ZS40 (ZS1 až ZS4 jsou počeštěné podle originál Pagefox písma, ZS5 je ZS3 z verze 2.0 a ZS161)
