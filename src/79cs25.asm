@@ -1,5 +1,6 @@
 !initmem $ff
-!source "c64symb.asm"
+!source "pg_kernal.asm"
+!source "pg_colors.asm"
 !to "79cs25.bin", plain
 
 * = 0
@@ -1147,13 +1148,13 @@ L_8770:
     JSR L_9297
     BCS L_87CE
     LDA #$54
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDY $5D
     LDA #$00
     STA $5D
 L_8789:
     LDA ($5D),Y
-    JSR $FFD2
+    JSR CBM_CHROUT
 L_878E:
     LDA $90
     BNE L_87CE
@@ -1169,22 +1170,22 @@ L_879C:
     BNE L_8789
 L_87A3:
     LDA #$00
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$4C
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $1700
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDY #$00
 L_87B5:
     LDA $1800,Y
-    JSR $FFD2
+    JSR CBM_CHROUT
     INY 
     CPY $1700
     BCC L_87B5
     LDY #$00
 L_87C3:
     LDA $1701,Y
-    JSR $FFD2
+    JSR CBM_CHROUT
     INY 
     CPY #$0C
     BCC L_87C3
@@ -1203,11 +1204,11 @@ L_87D6:
     BCS L_882C
     LDY #$02
     JSR L_9297
-    JSR $FFCF
+    JSR CBM_CHRIN
     LDX #$00
     CMP #$54
     BEQ L_880D
-    JSR $FFCC
+    JSR CBM_CLRCHN
     LDX #$41
     LDY #$88
     STX $04
@@ -1216,7 +1217,7 @@ L_87D6:
     BCS L_8824
     PHA 
     LDX #$08
-    JSR $FFC6
+    JSR CBM_CHKIN
     PLA 
     TAX 
     INX 
@@ -1270,7 +1271,7 @@ L_8857:
     STX $02
     STY $03
 L_8867:
-    JSR $FFCF
+    JSR CBM_CHRIN
     JSR L_88E3
     BCS L_8894
 L_886F:
@@ -1757,7 +1758,7 @@ L_8BA1:
     JSR L_8E0A
     JSR L_8EAA
 L_8BB7:
-    JSR $FFE4
+    JSR CBM_GETIN
     CMP #$B3
     BEQ L_8BDD
     BIT $36
@@ -2374,7 +2375,8 @@ L_8F7B:
     LDA #$04
     STA $0288
     JSR $FF5B
-    LDA #$0B
+;Border color
+    LDA #COLOR_BORDER
     STA L_D020
     LDA #$00
     STA L_D01C
@@ -2621,7 +2623,7 @@ L_915D:
     LDX #$0B
     LDY #$92
     LDA #$02
-    JSR $FFBD
+    JSR CBM_SETNAM
     LDY #$00
 L_916F:
     JSR L_9297
@@ -2629,13 +2631,13 @@ L_916F:
     LDA #$04
     STA $26
 L_9178:
-    JSR $FFCF
+    JSR CBM_CHRIN
     DEC $26
     BNE L_9178
     LDA $90
     SEC 
     BNE L_91D7
-    JSR $FFCC
+    JSR CBM_CLRCHN
 L_9187:
     JSR L_9213
     BCS L_91D7
@@ -2696,7 +2698,7 @@ L_91E7:
     TYA 
     LDX $02
     LDY $03
-    JSR $FFBD
+    JSR CBM_SETNAM
     CLC 
     BIT $1F
     BMI L_9205
@@ -2723,11 +2725,11 @@ L_9213:
     STX $26
     JSR L_964F
     LDX #$08
-    JSR $FFC6
+    JSR CBM_CHKIN
 L_921F:
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1A
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1B
     LDX $26
     LDY #$07
@@ -2737,9 +2739,9 @@ L_9232:
     LDX $26
     JSR L_94E1
     BCS L_9250
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1C
-    JSR $FFCF
+    JSR CBM_CHRIN
     ORA $1C
     BEQ L_924F
     LDA $26
@@ -2752,22 +2754,22 @@ L_924F:
 L_9250:
     PHA 
     PHP 
-    JSR $FFCC
+    JSR CBM_CLRCHN
     PLP 
     PLA 
     RTS 
 L_9258:
     LDX #$30
     LDY #$04
-    JSR $FFBD
+    JSR CBM_SETNAM
     LDA #$0F
     TAY 
     LDX #$08
-    JSR $FFBA
-    JSR $FFC0
+    JSR CBM_SETLFS
+    JSR CBM_OPEN
     BCS L_928C
     LDX #$0F
-    JSR $FFC6
+    JSR CBM_CHKIN
     BCS L_928C
     JSR L_973E
     LDA #$FF
@@ -2782,9 +2784,9 @@ L_9258:
     CLC 
 L_928C:
     PHP 
-    JSR $FFCC
+    JSR CBM_CLRCHN
     LDA #$0F
-    JSR $FFC3
+    JSR CBM_CLOSE
     PLP 
     RTS 
 L_9297:
@@ -2793,8 +2795,8 @@ L_9297:
     PHA 
     LDA #$08
     TAX 
-    JSR $FFBA
-    JSR $FFC0
+    JSR CBM_SETLFS
+    JSR CBM_OPEN
     LDX #$08
     PLA 
     BCS L_92B1
@@ -2802,11 +2804,11 @@ L_92A9:
     BNE L_92AE
     JMP $FFC6
 L_92AE:
-    JSR $FFC9
+    JSR CBM_CHKOUT
 L_92B1:
     RTS 
 L_92B2:
-    JSR $FFCC
+    JSR CBM_CLRCHN
     LDA #$08
     JMP $FFC3
     LDA $C6
@@ -2839,7 +2841,7 @@ L_92E9:
     TAY 
     LDA L_930D,Y
     STA $F5
-    LDA L_930E,Y
+    LDA L_930D+1,Y
     STA $F6
     LDY $CB
     LDA ($F5),Y
@@ -2863,21 +2865,16 @@ L_92E9:
     !byte $1B
     !byte $94
 L_930C:
-    !byte $60
+    !by $60
 L_930D:
-    !byte $17
-L_930E:
-    !byte $93
-    !byte $58
-    !byte $93
-    !byte $99
-    !byte $93
-    !byte $99
-    !byte $93
-    !byte $DA
-    !byte $93
+    !word L_9317
+    !word L_9358
+    !word L_9399
+    !word L_9399
+    !word L_93DA
 
 ; Mapovani klavesnice 4 blocks x 65 bytes
+L_9317:
     !by $AF,$AD,$A2,$B1,$A6,$A8,$AA,$A0
     !by $90,$77,$61,$8A,$79,$73,$65,$00
     !by $8F,$72,$64,$3E,$63,$66,$74,$78
@@ -2887,6 +2884,7 @@ L_930E:
     !by $00,$2A,$7B,$A4,$00,$3D,$5E,$2F
     !by $21,$5F,$00,$81,$20,$00,$71,$B3
     !by $00
+L_9358:
     !by $B0,$AC,$A3,$B2,$A7,$A9,$AB,$A1
     !by $33,$57,$41,$34,$59,$53,$45,$00
     !by $35,$52,$44,$36,$43,$46,$54,$58
@@ -2896,6 +2894,7 @@ L_930E:
     !by $91,$40,$5B,$A5,$00,$3C,$8E,$3F
     !by $31,$8D,$00,$32,$7F,$00,$51,$B3
     !by $00
+L_9399:
     !by $00,$00,$00,$C0,$C0,$C0,$C0,$00
     !by $23,$00,$00,$24,$00,$B6,$00,$00
     !by $25,$BF,$BA,$26,$BB,$BE,$C3,$00
@@ -2905,6 +2904,7 @@ L_930E:
     !by $00,$00,$00,$C1,$00,$36,$BD,$89
     !by $00,$B4,$00,$22,$C1,$00,$B8,$B3
     !by $00
+L_93DA:
     !by $00,$AE,$00,$00,$00,$00,$00,$00
     !by $00,$19,$00,$00,$00,$0C,$04,$00
     !by $00,$1A,$00,$00,$06,$02,$07,$00
@@ -3037,7 +3037,7 @@ L_94D3:
     TXA 
     BNE L_94D9
 L_94D6:
-    JSR $FFE4
+    JSR CBM_GETIN
 L_94D9:
     CLI 
     RTS 
@@ -3154,7 +3154,7 @@ L_957C:
     PHP 
     LDX #$30
     LDY #$04
-    JSR $FFBD
+    JSR CBM_SETNAM
     LDA #$00
     JSR L_9437
     PLP 
@@ -3734,7 +3734,7 @@ L_9940:
     LDA $4E
     CMP $22
     BCC L_9956
-    JSR $FFE4
+    JSR CBM_GETIN
     CMP #$B3
     BNE L_9900
     JSR L_9841
@@ -3955,7 +3955,7 @@ L_9AB7:
     LDA $4E
     CMP $22
     BCC L_9AC9
-    JSR $FFE4
+    JSR CBM_GETIN
     CMP #$B3
     BNE L_9A4E
     JSR L_9841
@@ -4028,7 +4028,7 @@ L_9B37:
     CLI 
     LDA #$80
     STA $170F
-    JSR $FFCC
+    JSR CBM_CLRCHN
     LDY #$00
     LDA $1705
     CMP #$04
@@ -4037,19 +4037,19 @@ L_9B37:
 L_9B4C:
     LDA #$04
     LDX $170D
-    JSR $FFBA
+    JSR CBM_SETLFS
     LDA #$00
-    JSR $FFBD
-    JSR $FFC0
+    JSR CBM_SETNAM
+    JSR CBM_OPEN
     BCS L_9B66
     LDX #$04
-    JSR $FFC9
+    JSR CBM_CHKOUT
     BCS L_9B66
     RTS 
 L_9B66:
-    JSR $FFCC
+    JSR CBM_CLRCHN
     LDA #$04
-    JSR $FFC3
+    JSR CBM_CLOSE
     SEC 
     RTS 
 L_9B70:
@@ -5238,12 +5238,12 @@ L_B999:
     INC $26
     LDA #$37
     STA $01
-    JSR $FFCF
+    JSR CBM_CHRIN
     CMP #$9B
     BNE L_B9D0
     BIT $1F
     BVS L_B9D0
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $26
     LDA $1F
     AND #$02
@@ -5256,10 +5256,10 @@ L_B9C4:
     LDA #$01
     BNE L_B9CB
 L_B9C8:
-    JSR $FFCF
+    JSR CBM_CHRIN
 L_B9CB:
     STA $27
-    JSR $FFCF
+    JSR CBM_CHRIN
 L_B9D0:
     STA $24
 L_B9D2:
@@ -5341,7 +5341,7 @@ L_BA40:
     AND #$03
     STA $24
     LDA #$4B
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $50
     STA $27
 L_BA5A:
@@ -5412,7 +5412,7 @@ L_BAB5:
     SBC $0200,Y
 L_BACB:
     EOR #$FF
-    JSR $FFD2
+    JSR CBM_CHROUT
     DEX 
     BPL L_BAB5
     JSR L_82C7
@@ -5683,7 +5683,7 @@ L_BC8B:
     STA L_D015
     STA $0C
     LDA #$93
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA L_DD00
     AND #$FB
     STA L_DD00
@@ -5708,13 +5708,13 @@ L_BCC6:
     LSR 
     BCS L_BCF2
     LDA #$3D
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $07
     JSR $1640
     LDA $06
     JSR $1640
     LDA #$0D
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$00
     STA $06
     STA $07
@@ -5869,26 +5869,26 @@ L_BE02:
     BNE L_BDE2
     RTS 
     LDA #$0D
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $0B
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$20
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $08
     ORA #$30
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$20
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $03
     JSR $1640
     TYA 
     JSR $1640
     LDA #$20
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $09
     JSR $1640
     LDA #$20
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $0A
     PHA 
     LSR 
@@ -6080,34 +6080,11 @@ L_BE02:
     BRK 
     BRK 
     BRK 
-    ; Default UI/Editor colors table (identified by Tomas)
-    ; CPU $BF00 (file $3F00). Bytes: 00,03,00,01,0F,...
-    ;   $BF01 = $03  editor text color
-    ;   $BF02 = $00  editor background
-    ;   $BF03 = $01  menu color
-    ;   $BF04 = $0F  graphics editor on and off color 0F means 0 - on = black, F - off - light gray (backgroud)
-    ;   00 = black
-    ;   01 = white
-    ;   02 = red
-    ;   03 = cyan
-    ;   04 = purple
-    ;   05 = green
-    ;   06 = blue
-    ;   07 = yellow
-    ;   08 = orange
-    ;   09 = brown
-    ;   0A = pink
-    ;   0B = dark grey
-    ;   0C = grey
-    ;   0D = light green
-    ;   0E = light blue
-    ;   0F = light grey
-    ; -------------------------------------------------------------
     !by $00
-    !by $03
-    !by $00
-    !by $01
-    !by $0F
+    !by COLOR_TEXT_TEXT
+    !by COLOR_TEXT_BACKGROUND
+    !by COLOR_TEXT_MENU
+    !by COLOR_GRAPHIC_TEXT+COLOR_GRAPHIC_BACKGROUND
     !by $00
     !by $00
     ORA ($00,X)
@@ -6275,7 +6252,7 @@ L_BE02:
     !byte $1A
     STY $B7
     TXA 
-    JSR $FFE4
+    JSR CBM_GETIN
     BEQ L_C0A6
     LDX $28
     CPX #$08
@@ -6851,14 +6828,14 @@ L_C431:
     JSR L_8467
     BCS L_C461
     PHA 
-    JSR $FFCC
+    JSR CBM_CLRCHN
     JSR $AF0D
     JSR L_8AEC
     PLA 
     BCS L_C461
     STA $1F
     LDX #$08
-    JSR $FFC6
+    JSR CBM_CHKIN
     JSR $1134
 L_C461:
     JSR L_8658
@@ -6871,7 +6848,7 @@ L_C461:
     LDY #$00
     JSR $B209
     BCS L_C4CC
-    JSR $FFCF
+    JSR CBM_CHRIN
     LDY $90
     BNE L_C4A9
     LDY #$00
@@ -6881,15 +6858,15 @@ L_C461:
     CMP #$42
     BEQ L_C4AE
     TAX 
-    JSR $FFCF
+    JSR CBM_CHRIN
     CPX #$50
     BNE L_C4A6
     STA $22
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $23
     JSR $B156
 L_C49C:
-    JSR $FFCF
+    JSR CBM_CHRIN
     TAX 
     BNE L_C49C
     LDY #$02
@@ -6946,23 +6923,23 @@ L_C4CC:
     ORA #$40
     STA $1F
     LDA #$00
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$20
     BNE L_C522
 L_C508:
     TAX 
     LDA $8547,X
-    JSR $FFD2
+    JSR CBM_CHROUT
     CPX #$02
     BCC L_C525
     LDA $50
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $51
-    JSR $FFD2
+    JSR CBM_CHROUT
     JSR $1238
     LDA #$00
 L_C522:
-    JSR $FFD2
+    JSR CBM_CHROUT
 L_C525:
     JSR $11DD
     BIT $1F
@@ -6973,7 +6950,7 @@ L_C525:
     LDX #$07
 L_C534:
     LDA $854A,X
-    JSR $FFD2
+    JSR CBM_CHROUT
     DEX 
     BPL L_C534
 L_C53D:
@@ -7001,7 +6978,7 @@ L_C557:
     JSR $B285
 L_C569:
     JSR L_8674
-    JSR $FFE4
+    JSR CBM_GETIN
     CMP #$B3
     BEQ L_C5BB
     LDA $3F
@@ -7061,11 +7038,11 @@ L_C5C4:
     BEQ L_C5E2
 L_C5CF:
     LDA #$9B
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$00
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $24
-    JSR $FFD2
+    JSR CBM_CHROUT
     DEC $27
     BNE L_C5CF
 L_C5E2:
@@ -7078,7 +7055,7 @@ L_C5E2:
     BNE L_C62C
 L_C5F0:
     LDA #$9B
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $26
     BNE L_C621
 L_C5F9:
@@ -7099,19 +7076,19 @@ L_C603:
     BNE L_C62C
 L_C615:
     LDA #$9B
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $26
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA $27
 L_C621:
-    JSR $FFD2
+    JSR CBM_CHROUT
     LDA #$01
     STA $26
     LDA #$00
     STA $27
 L_C62C:
     LDA $24
-    JSR $FFD2
+    JSR CBM_CHROUT
     DEC $26
     BNE L_C62C
     LDA $27
@@ -7843,7 +7820,7 @@ L_CB1F:
     JSR $B285
 L_CB30:
     JSR $8793
-    JSR $FFE4
+    JSR CBM_GETIN
     CMP #$B3
     BEQ L_CB95
     CMP #$30
@@ -11141,7 +11118,7 @@ L_E177:
 L_E17E:
     LDA $71
     BNE L_E18B
-    JSR $FFE4
+    JSR CBM_GETIN
     CMP #$B3
     BNE L_E147
     LDA #$1B
@@ -12055,7 +12032,7 @@ L_E747:
     TYA 
     LDX $58
     LDY $59
-    JSR $FFBD
+    JSR CBM_SETNAM
     JSR $B0A8
 L_E752:
     RTS 
@@ -13461,13 +13438,13 @@ L_F012:
     TYA 
     LDX #$28
     LDY #$04
-    JSR $FFBD
+    JSR CBM_SETNAM
     LDA #$5A
     JSR $B1C8
     BCS L_F0A7
     LDY #$00
 L_F060:
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $3C00,Y
     INY 
     CPY #$78
@@ -13516,7 +13493,7 @@ L_F0A7:
     STX $58
     STY $59
 L_F0BB:
-    JSR $FFCF
+    JSR CBM_CHRIN
     LDY #$00
     STA ($5A),Y
     TAX 
@@ -13537,18 +13514,18 @@ L_F0BB:
 L_F0DE:
     STA $1700
 L_F0E1:
-    JSR $FFCF
+    JSR CBM_CHRIN
     TAX 
     BEQ L_F0E1
     LDA #$18
     CPX #$4C
     SEC 
     BNE L_F103
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1700
     LDY #$00
 L_F0F6:
-    JSR $FFCF
+    JSR CBM_CHRIN
     STA $1800,Y
     INY 
     CPY $1700
@@ -13605,7 +13582,7 @@ L_F155:
     LDA $1F
     AND #$20
     BEQ L_F1B8
-    JSR $FFCF
+    JSR CBM_CHRIN
     CMP #$4B
     BNE L_F1B8
     LDX #$07
@@ -13645,7 +13622,7 @@ L_F16E:
     LDA #$00
     STA $02
 L_F1A4:
-    JSR $FFCF
+    JSR CBM_CHRIN
     EOR #$FF
     STA ($02),Y
     INY 
@@ -13684,7 +13661,7 @@ L_F1E1:
     LDY #$00
     JSR $B209
     BCS L_F1F2
-    JSR $FFCF
+    JSR CBM_CHRIN
     CMP $24
     BNE L_F1F2
     PLA 
@@ -13709,18 +13686,18 @@ L_F203:
     PHA 
     LDA #$08
     TAX 
-    JSR $FFBA
-    JSR $FFC0
+    JSR CBM_SETLFS
+    JSR CBM_OPEN
     LDX #$08
     PLA 
     BCS L_F221
     BNE L_F21E
     JMP $FFC6
 L_F21E:
-    JSR $FFC9
+    JSR CBM_CHKOUT
 L_F221:
     RTS 
-    JSR $FFCC
+    JSR CBM_CLRCHN
     LDA #$08
     JMP $FFC3
     JSR $0DE9
