@@ -58,7 +58,7 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 - částečně dissassemblovaný zdroják ve složce [src](src/)
 
 - !!! Pagefox umí otevřít české texty ve formátu Vizawrite !!!
-- !!! Pagefox s nativní podporou pro 24 jehličkové tiskárny (integrován pg-24.prg) - experimental!!!
+- !!! Pagefox pagefox-cs-2.5-24pin.crt s nativní podporou pro 24 jehličkové tiskárny (integrován pg-24.prg) - experimental!!!
 
 - díky popisu asm v ACME formátu lze lépe řešit modifikace
 - zdokumentovány sekce pro výchozí změnu barev aplikace 
