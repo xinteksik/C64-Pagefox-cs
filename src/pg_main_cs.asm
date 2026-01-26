@@ -2618,8 +2618,9 @@ L_9147:
     RTS 
 L_915D:
     STA $1F
-    LDA #$01
-    JSR L_9747
+;read dir
+    LDA #$01    ;msg. No.
+    JSR L_9747    ;print "SPACE=...
     LDX #$0B
     LDY #$92
     LDA #$02
@@ -2790,11 +2791,13 @@ L_928C:
     PLP 
     RTS 
 L_9297:
-    TYA 
-    AND #$01
-    PHA 
-    LDA #$08
-    TAX 
+    !by $98
+    !by $29
+    !by $01
+    !by $48
+    !by $A9
+    !by $08
+    !by $AA
     JSR CBM_SETLFS
     JSR CBM_OPEN
     LDX #$08
@@ -3451,28 +3454,38 @@ L_973E:
     STA $55
     LDX #$01
     JMP L_9716
+
+; print a text into the second line on screen
+; the text part No. must be in accu
 L_9747:
     LDX #$FF
     STX $55
-    LDX #$01
+    LDX #$01     ; line No.
+; print a text into a line on screen
+; the line No. must be in X,
+; the text part No. must be in accu
 L_974D:
     TAY 
     TXA 
     PHA 
     TYA 
     BMI L_975B
-    LDX #$5A
-    LDY #$A6
+    LDX #<MSG_TABLE
+    LDY #>MSG_TABLE
     STX $02
     STY $03
 L_975B:
-    AND #$7F
-    TAX 
+    AND #$7F    ; delete bit 7
+    TAX    ; set masg. No as counter 
+
+; find msg. address pointer
+; the msg. address will be in $03/$04
 L_975E:
-    LDY #$00
+    LDY #$00    ;pointer
+;find $0D for msg. end
 L_9760:
     INY 
-    LDA ($02),Y
+    LDA ($02),Y    ;load char fom msg_table
     CMP #$0D
     BNE L_9760
     DEX 
@@ -4432,6 +4445,7 @@ L_A012:
     !by $94,$94,$98,$9F,$91,$E2,$84,$FF
     !by $15,$25,$45,$FD,$01,$01,$01,$FF
     ; Texty a hlasky
+MSG_TABLE:
     !tx $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1C, $1B, $92, $93, $94, $95, $96, $97, $98, $99, $9A, $9B, $9C, $9D, $9E, $9F, $1B, $1D, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $1E, $0D
     !tx "SPACE=D", $82, "le, CRSR/RETURN=Na", $8A, $84, "st", $0D
     !tx "P", $8F, $84, "kaz|", $0D
@@ -13692,7 +13706,7 @@ L_F203:
     PLA 
     BCS L_F221
     BNE L_F21E
-    JMP $FFC6
+    JMP CBM_CHKIN
 L_F21E:
     JSR CBM_CHKOUT
 L_F221:
