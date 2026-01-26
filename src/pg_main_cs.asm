@@ -1352,7 +1352,7 @@ L_88E3:
     BEQ L_8920
     CPX #$04
     BNE L_88FB
-    LDY #$22
+    LDY #(VIZA_CS_OUT-VIZA_CS_IN)
 L_88ED:
     DEY 
     BMI L_88FA
@@ -1404,7 +1404,7 @@ VIZA_DE_IN:
     !by $EC,$DC,$DD,$79,$7A,$7B,$65,$76
     !by $78,$7C
 VIZA_DE_OUT:
-    !by 01,$02,$04,$05,$06,$07,$08,$0B
+    !by $01,$02,$04,$05,$06,$07,$08,$0B
     !by $0C,$0D,$10,$5B,$5C,$5D,$7B,$7C
     !by $7D,$7E
 L_8956:
