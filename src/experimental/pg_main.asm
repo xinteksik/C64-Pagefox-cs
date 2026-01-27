@@ -2715,7 +2715,7 @@ L_9205:
     JSR L_92B2
     PLP 
     RTS 
-    BIT $30
+    !pet "$:"
     !byte $04
     ORA ($02,X)
     BRK 
