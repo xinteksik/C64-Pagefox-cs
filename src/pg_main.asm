@@ -102,57 +102,39 @@ L_8077:
 ; Text address table
 ; ---------------------------------
 
-    RTS
-    !word $1082
-    !word $5282
-    !word $FA82
-    !word $7E81
-    !word $AF82
-    !word $DD82
-    !word $0282
-    !word $B783
-    !word $D282
-    !word $1282
-    !word $1D83
-    !word $2B83
-    !word $EF83
-    !byte $80
+    !word $8260
+    !word $8210
+    !word $8252
+    !word $81FA
+    !word $827E
+    !word $82AF
+    !word $82DD
+    !word $8302
+    !word $82B7
+    !word $82D2
+    !word $8312
+    !word $831D
+    !word $832B
+    !word $80EF
 L_8094:
-    !byte $EF
-    !byte $80
-    !byte $03
-    !byte $81
-    !byte $FE
-    !byte $80
-    !byte $1C
-    !byte $81
-    !byte $18
-    !byte $85
+    !word $80EF
+    !word $8103
+    !word $80FE
+    !word $811C
+    !word $8518
     !word L_8077-1					; RUN/STOP
-    !byte $2F
-    !byte $85
-    !byte $DE
-    !byte $87
-    !byte $48
-    !byte $87
-    !byte $A7
-    !byte $0D
-    !byte $A7
-    !byte $0D
-    !byte $AD
-    !byte $0D
-    !byte $89
-    !byte $89
-    !byte $40
-    !byte $85
-    !byte $28
-    !byte $85
-    !byte $32
-    !byte $94
-    !byte $96
-    !byte $89
-    !byte $BD
-    !byte $89
+    !word $852F
+    !word $87DE
+    !word $8748
+    !word $0DA7
+    !word $0DA7
+    !word $0DAD
+    !word $8989
+    !word $8540
+    !word $8528
+    !word $9432
+    !word $8996
+    !word $89BD
     !word L_8B45-1					; Text C= F1-F8
     !word L_8B83-1					; Text C= CLR/HOME
 L_80BC:
