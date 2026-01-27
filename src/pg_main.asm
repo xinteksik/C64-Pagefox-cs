@@ -91,8 +91,17 @@ L_806B:
     PHA
     LDA $8078,X
     PHA
+
+; ---------------------------------
+; Text command RUN/STOP
+; ---------------------------------
 L_8077:
     RTS
+
+; ---------------------------------
+; Text address table
+; ---------------------------------
+
     RTS
     !word $1082
     !word $5282
@@ -119,8 +128,7 @@ L_8094:
     !byte $81
     !byte $18
     !byte $85
-    !byte $76
-    !byte $80
+    !word L_8077-1					; RUN/STOP
     !byte $2F
     !byte $85
     !byte $DE
@@ -145,13 +153,10 @@ L_8094:
     !byte $89
     !byte $BD
     !byte $89
-    !byte $45
-    !byte $8B
-    !byte $82
-    !byte $8B
+    !word L_8B45-1					; Text C= F1-F8
+    !word L_8B83-1					; Text C= CLR/HOME
 L_80BC:
-    !byte $9B
-    !byte $8B
+    !word L_8B9B-1					; Text C= V
     ROR $80,X
     CMP #$20
     BCC L_80E6
@@ -170,7 +175,7 @@ L_80BC:
     LDX $22
 L_80DE:
     LDA $66
-    JSR L_9716
+    JSR print_msg
     JMP L_8253
 L_80E6:
     CMP #$03
@@ -261,7 +266,7 @@ L_8164:
     STY $03
     LDX $22
 L_817F:
-    JSR L_9716
+    JSR print_msg
     CLC 
     RTS 
 L_8184:
@@ -269,8 +274,8 @@ L_8184:
     CLC 
     RTS 
 L_8189:
-    LDA #$05
-    JSR L_9747
+    LDA #$05						; msg. no.
+    JSR L_9747						; print "Preteceni pameti"
     SEC 
 L_818F:
     RTS 
@@ -312,7 +317,7 @@ L_81BA:
     STY $03
     LDX $22
     LDA $66
-    JSR L_9716
+    JSR print_msg
     RTS 
 L_81D5:
     JMP L_83A5
@@ -724,7 +729,7 @@ L_8482:
     JSR L_84A8
     BCC L_849F
     PHA 
-    JSR L_9716
+    JSR print_msg
     PLA 
     CLC 
     ADC $02
@@ -739,7 +744,7 @@ L_8497:
     BCC L_8482
     RTS 
 L_849F:
-    JSR L_9716
+    JSR print_msg
     PLA 
     TAX 
     INX 
@@ -870,8 +875,8 @@ L_854E:
 L_8572:
     RTS 
 L_8573:
-    LDA #$05
-    JMP L_9747
+    LDA #$05						; msg. no.
+    JMP L_9747						; print "Preteceni pameti" 
 L_8578:
     LDX $5D
     LDY $5E
@@ -963,8 +968,8 @@ L_85E1:
     STA $5B
     RTS 
 L_860E:
-    LDA #$07
-    JSR L_9747
+    LDA #$07						; msg. no.
+    JSR L_9747						; print "Označ cil a potvrd ..."
 L_8613:
     JSR $9474
     CMP #$A0
@@ -1003,8 +1008,8 @@ L_8643:
     LDA ($58),Y
     SEC 
     BEQ L_8642
-    LDA #$06
-    JSR L_9747
+    LDA #$06						; msg. no.
+    JSR L_9747						; print "Oznac konec a potvrd"
     JSR L_8382
     LDA $56
     PHA 
@@ -1320,8 +1325,8 @@ L_887C:
     INY 
     CPY #$3C
     BCC L_8890
-    LDA #$05
-    JSR L_9747
+    LDA #$05						; msg. no.
+    JSR L_9747						; print "Preteceni pameti"
     SEC 
     BCS L_8899
 L_8890:
@@ -1480,8 +1485,8 @@ L_8994:
 L_89A0:
     JSR L_8A6F
     BCS L_89B8
-    LDA #$0E
-    JSR L_9747
+    LDA #$0E						; msg. no.
+    JSR L_9747						; print "RETURN=Dale"
 L_89AA:
     JSR $9474
     BEQ L_89AA
@@ -1505,8 +1510,8 @@ L_89CA:
 L_89D0:
     JSR L_8A6F
     BCS L_89B8
-    LDA #$0F
-    JSR L_9747
+    LDA #$0F						; msg. no.
+    JSR L_9747						; print "RETURN=Nahradit..."
 L_89DA:
     JSR $9474
     CMP #$B3
@@ -1528,8 +1533,8 @@ L_89FB:
     JSR L_8AD2
     LDA $0376
     BCC L_89D0
-    LDA #$05
-    JMP L_9747
+    LDA #$05						; msg. no.
+    JMP L_9747						; print "Preteceni pameti"
 L_8A08:
     STY $85
     JSR L_8A64
@@ -1591,9 +1596,9 @@ L_8A64:
     LDA #$0C
     LDY $85
     BEQ L_8A6C
-    LDA #$0D
+    LDA #$0D						; msg. no.
 L_8A6C:
-    JMP L_9747
+    JMP L_9747						; print "Novy"
 L_8A6F:
     SEI 
     CLC 
@@ -1643,7 +1648,7 @@ L_8AB3:
     STX $58
     STY $59
 L_8AC1:
-    LDA #$0A
+    LDA #$0A						; msg. no.
     JSR L_8354
     CLC 
 L_8AC7:
@@ -1735,6 +1740,7 @@ L_8B3F:
 ; ---------------------------------
 ; Text command C= F1 - F8
 ; ---------------------------------
+L_8B45:
     LDA #$09                        ; msg. no.
     JSR L_9747                      ; print "F1=Text ...."
 L_8B4B:
@@ -1764,11 +1770,12 @@ L_8B73:
     JMP L_8B4B
 L_8B80:
     JMP L_973E
+
 ; ---------------------------------
-; Text command C= SPACE
+; Text command C= CLR/HOME
 ; ---------------------------------
 L_8B83:
-    LDA #$08                        ; msg. No.
+    LDA #$08                        ; msg. no.
     JSR L_9747                      ; print "Volnych znaku:"
     LDA #$00
     CLC 
@@ -1780,9 +1787,12 @@ L_8B83:
     LDX #$01
     LDY #$0F
     JMP L_9682
-
-    LDA #$1E
-    JMP L_9747
+; ---------------------------------
+; Text command C= V
+; ---------------------------------
+L_8B9B:
+    LDA #$1E						; msg. no.
+    JMP L_9747						; print "Pagefox version"
 L_8BA1:
     LDA $3F
     ASL 
@@ -2106,8 +2116,8 @@ L_8D67:
     AND #$80
     ORA $81
     BEQ L_8DA7
-    LDA #$06
-    JSR L_9747
+    LDA #$06						; msg. no.
+    JSR L_9747						; print "Oznac konec..."
     JSR L_90D3
     JSR L_9660
     JSR L_8613
@@ -2657,9 +2667,9 @@ L_9147:
 L_915D:
     STA $1F
 ;read dir
-    LDA #$01                        ; msg. No.
-    JSR L_9747                      ; print "SPACE=...
-    LDX #<L_920B                    ; "$0" need_fix SoftIEC
+    LDA #$01                        ; msg. no.
+    JSR L_9747                 		; print "SPACE=...
+    LDX #<L_920B                    ; "$0" need_fix for SoftIEC?
     LDY #>L_920B
     LDA #$02
     JSR CBM_SETNAM                  ; Set file name
@@ -2688,7 +2698,7 @@ L_9192:
     LDA #$0C
     JSR L_9664
 L_9199:
-    JSR $9474
+    JSR $9474						; get character from imput device
     LDX $27
     CMP #$A0
     BNE L_91AA
@@ -2752,14 +2762,16 @@ L_91E7:
 L_9205:
     PHP 
     JSR L_92B2
-    PLP 
+    PLP
     !by $60
 L_920B
     !pet "$0"
-    !byte $04
-    ORA ($02,X)
+    !by $04
+    !by $01
+    !by $02
     !by $00
-    !by $06, $0E
+    !by $06
+    !by $0E
 L_9213:
     LDX #$03
     STX $26
@@ -2795,9 +2807,9 @@ L_9250:
     PHA 
     PHP 
     JSR CBM_CLRCHN
-    PLP 
-    PLA 
-    RTS 
+    PLP
+    PLA
+    RTS
 L_9258:
     LDX #$30
     LDY #$04
@@ -2834,9 +2846,8 @@ L_9297:
     !by $29
     !by $01
     !by $48
-    !by $A9
-    !by $08
-    !by $AA
+    LDA #$08
+    TAX
     JSR CBM_SETLFS
     JSR CBM_OPEN
     LDX #$08
@@ -2853,10 +2864,10 @@ L_92B2:
     JSR CBM_CLRCHN
     LDA #$08
     JMP $FFC3
-    LDA $C6
-    PHA 
-    LDA $028D
-    PHA 
+    !by $A5, $C6
+    !by $48
+    !by $AD, $8D, $02
+    !by $48
     JSR L_EA87
     PLA 
     TAX 
@@ -3289,7 +3300,7 @@ L_964F:
     TXA 
     PHA 
     LDA #$00
-    JSR L_9716
+    JSR print_msg
     PLA 
     TAX 
     INX 
@@ -3420,94 +3431,104 @@ L_970F:
     TAX 
     LDY $1D
     RTS 
+; clculate screen position, and copy msg. to screen
+; msg start in ($03)
+; line No. in X
 L_9716:
-    PHA 
-    LDY #$28
-    JSR L_96FB
-    STX $08
+print_msg:
+    PHA 							; save msg. length
+    LDY #$28						; screen line length
+    JSR L_96FB						; multiply X with Y
+    STX $08							; screen position low byte
     TYA 
     ORA #$04
-    STA $09
-    PLA 
-    BEQ L_9731
+    STA $09							; screen position high byte
+    PLA 							; msg. length
+    BEQ L_9731						; if zero, go delete the whole line
     PHA 
     TAY 
     DEY 
+; copy actual msg. to the screen
 L_9729:
     LDA ($02),Y
     STA ($08),Y
     DEY 
     BPL L_9729
     PLA 
+; fill actual line from Y-position to the end with empty spaces
 L_9731:
-    TAY 
-    LDA #$1F
+    TAY 							; position in line
+    LDA #$1F						; empty space
 L_9734:
-    CPY #$28
+    CPY #$28						; compare with line end position
     BCS L_973D
     STA ($08),Y
     INY 
     BNE L_9734
 L_973D:
-    RTS 
+    RTS
+---------------------------------
+; delete line 1
 L_973E:
     LDA #$00
     STA $55
     LDX #$01
-    JMP L_9716
+    JMP print_msg					; L_9716
 
 ; print a text into the second line on screen
 ; the text part No. must be in accu
 L_9747:
     LDX #$FF
     STX $55
-    LDX #$01     ; line No.
+    LDX #$01     					; line No.
 ; print a text into a line on screen
 ; the line No. must be in X,
 ; the text part No. must be in accu
 L_974D:
-    TAY 
-    TXA 
-    PHA 
-    TYA 
+    TAY								; msg. No. 
+    TXA 							; line No.
+    PHA 							; save line No.
+    TYA 							; msg. No
     BMI L_975B
-    LDX #<MSG_TABLE
+    LDX #<MSG_TABLE					; msg. table start
     LDY #>MSG_TABLE
     STX $02
     STY $03
 L_975B:
-    AND #$7F    ; delete bit 7
-    TAX    ; set masg. No as counter 
+    AND #$7F    					; delete bit 7
+    TAX    							; set masg. No as counter 
 
 ; find msg. address pointer
 ; the msg. address will be in $03/$04
-L_975E:
-    LDY #$00    ;pointer
-;find $0D for msg. end
+msg_search:
+    LDY #$00    					; pointer
+; find $0D for msg. end
 L_9760:
     INY 
-    LDA ($02),Y    ;load char fom msg_table
+    LDA ($02),Y    					; load char fom msg_table
     CMP #$0D
     BNE L_9760
-    DEX 
+
+    DEX 							; decrement counter
 L_9768:
-    BMI L_9776
+    BMI msg_found					; msg found
     TYA 
     SEC 
-    ADC $02
-    STA $02
-    BCC L_975E
-    INC $03
-    BCS L_975E
-L_9776:
-    PLA 
-    TAX 
-    TYA 
+    ADC $02							; increment pointer low byte with counter
+    STA $02							; store as new low byte
+    BCC msg_search					; bcc skip
+    INC $03							; else increment high byte
+    BCS msg_search					; (jmp)
+msg_found:
+    PLA 							; line No.
+    TAX 							; move to X
+    TYA 							; msg. length
     PHA 
-    JSR L_9716
+    JSR print_msg					;L_9716
     PLA 
     RTS 
-    JSR L_9039
+ 
+	JSR L_9039
     LDA #$00
     STA $1709
     LDX #$04
@@ -3579,8 +3600,8 @@ L_97E9:
     BNE L_9817
     LDA $1708
     BEQ L_97B0
-    LDA #$21
-    JSR L_9747
+    LDA #$21						; msg. no.
+    JSR L_9747						; print "Radky"
     JSR L_94DB
     LDX #$03
     BCS L_97B0
@@ -3594,8 +3615,8 @@ L_9817:
     BEQ L_97B0
     DEY 
     BEQ L_983C
-    LDA #$1F
-    JSR L_9747
+    LDA #$1F						; msg. no.
+    JSR L_9747						; print "Cislo"
     JSR L_94DB
     LDX #$04
     BCS L_97B0
