@@ -46,7 +46,7 @@ L_8000:
     JMP $9039
     JMP $9747
     JMP $957C
-    JMP $915D
+    JMP $915D                        ; read dir
     JMP $9258
     JMP $977F
     JMP $98A2
@@ -68,11 +68,12 @@ L_804B:
     JSR L_8054
     JSR L_8BA1
     JMP L_804B
+; ----------------------------------
 L_8054:
-    JSR L_949D
+    JSR L_949D                     ; get character from imput device?
 L_8057:
     BEQ L_8077
-    STA $61
+    STA $61                        ; break point
     BIT $55
     BPL L_8064
     PHA 
@@ -83,13 +84,14 @@ L_8064:
     CMP #$A0
     BCS L_806B
     JMP $80C0
+; ----------------------------------
 L_806B:
     SBC #$A0
     ASL
     TAX
-    LDA $8079,X
+    LDA L_8078+1,X
     PHA
-    LDA $8078,X
+    LDA L_8078,X
     PHA
 
 ; ---------------------------------
@@ -101,12 +103,12 @@ L_8077:
 ; ---------------------------------
 ; Text address table
 ; ---------------------------------
-
-    !word $8260
+L_8078:
+    !word L_8261-1
     !word $8210
-    !word $8252
-    !word $81FA
-    !word $827E
+    !word L_8253-1
+    !word L_81FB-1
+    !word L_827F-1
     !word $82AF
     !word $82DD
     !word $8302
@@ -123,7 +125,7 @@ L_8094:
     !word $811C
     !word $8518
     !word L_8077-1					; RUN/STOP
-    !word $852F
+    !word L_8530-1
     !word $87DE
     !word $8748
     !word $0DA7
@@ -374,6 +376,9 @@ L_8234:
     LDX #$03
     JSR L_8482
     JMP L_9660
+; ---------------------------------
+; Text command CURSOR RIGHT
+; ---------------------------------
 L_8253:
     INC $23
     LDA $23
@@ -382,6 +387,10 @@ L_8253:
     JMP L_83A5
 L_825E:
     JMP L_9660
+
+; ---------------------------------
+; Text command CURSOR DOWN
+; ---------------------------------
 L_8261:
     LDA $58
     CLC 
@@ -398,6 +407,7 @@ L_8261:
     ADC $66
     STA $23
     JMP L_83A5
+L_827F:
     LDA $22
     CMP #$03
     BNE L_8291
@@ -2620,11 +2630,10 @@ L_9122:
     JSR L_973E
     LDY #$27
     LDA #$1E
-L_9130:
-    STA $0450,Y
+-   STA $0450,Y
 L_9133:
     DEY 
-    BPL L_9130
+    BPL -
 L_9136:
     LDA $1703
     LDY #$77
@@ -4182,7 +4191,7 @@ L_A012:
     LDA #$FF
     STA $DE80    ; disable cartridge / reset bank switching
     JMP CBM_START    ; KERNAL RESET
-    ; Grafiga pro nabidku volby pisma 
+; Grafiga pro nabidku volby pisma 
     !by $FF,$80,$80,$80,$80,$80,$80,$80
     !by $FF,$00,$00,$00,$00,$00,$00,$00
     !by $FF,$00,$00,$00,$00,$00,$00,$00
@@ -14041,6 +14050,7 @@ L_F3E2:
     !by $00,$00,$00,$00,$E0,$00,$FC,$00
     !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
     !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
-    !byte $FF
+    !by $FF
 }
-* = $8000
+* = $7FFF
+	!by $FF
