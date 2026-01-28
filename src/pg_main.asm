@@ -1,6 +1,7 @@
 !initmem $ff
 !source "pg_kernal.asm"
 !source "pg_colors.asm"
+!source "pg_24.asm"
 
 cs = 0
 de = 1
@@ -8,6 +9,7 @@ en = 2	;not implemented
 
 ;set language
 language = cs
+pg24 = 0	;enable / disable 24 pin mod
 
 !if language = cs {
     !source "pg_cs.asm"
@@ -58,7 +60,7 @@ L_8000:
     AND #$10
     BEQ L_8042
     JSR L_8F6A
-    JMP $0DA8
+!if pg24 = 1 {JMP pg24_boot} else {JMP $0DA8}
 L_8042:
     JMP (L_A000)
     LDX #$FE
@@ -4395,7 +4397,9 @@ L_A012:
     ; Texty a hlasky
 MSG_TABLE:
 +InsertMsgTable
- 
+
+!if pg24 = 1 {+InsertModPG24}
+
 }
 
 *=$3000
