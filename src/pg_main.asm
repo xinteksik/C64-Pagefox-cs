@@ -2861,10 +2861,13 @@ L_92B2:
     JSR CBM_CLRCHN
     LDA #$08
     JMP $FFC3
-    !by $A5, $C6
-    !by $48
-    !by $AD, $8D, $02
-    !by $48
+; ---------------------------------
+; IRQ part
+; ---------------------------------
+    LDA $C6
+    PHA
+    LDA $028D
+    PHA
     JSR L_EA87
     PLA 
     TAX 
@@ -2895,27 +2898,17 @@ L_92E9:
     STA $F6
     LDY $CB
     LDA ($F5),Y
-    !byte $24
-    !byte $54
-    !byte $10
-    !byte $03
-    !byte $20
-    !byte $4B
-    !byte $94
-    !byte $9D
-    !byte $77
-    !byte $02
-    !byte $A5
-    !byte $53
-    !byte $F0
-    !byte $05
-    !byte $A9
-    !byte $00
-    !byte $20
-    !byte $1B
-    !byte $94
+    BIT $54
+    BPL L_9300
+    JSR $944B
+L_9300:
+    STA $0277,X
+    LDA $53
+    BEQ L_930C
+    LDA #$00
+    JSR $941B
 L_930C:
-    !by $60
+    RTS
 L_930D:
     !word L_9317
     !word L_9358
@@ -2972,10 +2965,8 @@ L_944B:
     CMP #$7E
     BCS L_9455
     CMP #$61
-    !byte $90
-    !byte $02
-    !byte $E9
-    !byte $20
+    BCC L_9455
+    SBC #$20
 L_9455:
     RTS
 L_9456:
@@ -3406,21 +3397,22 @@ L_96F7:
 L_96FA:
     RTS 
 L_96FB:
-    STX $1C
-    STY $1D
+; multiply X with Y
+; result in X = low byte, and Y = high byte
+multiply_x_y
+    STX $1C						; line No. (multiplier)
+    STY $1D						; value to multiply
     LDA #$00
     LDY #$08
-L_9703:
-    ASL 
+-    ASL 
     ROL $1D
-    BCC L_970F
+    BCC +
     CLC 
     ADC $1C
-    BCC L_970F
+    BCC +
     INC $1D
-L_970F:
-    DEY 
-    BNE L_9703
++   DEY 
+    BNE -
     TAX 
     LDY $1D
     RTS 
