@@ -108,46 +108,55 @@ L_8077:
 
 ; ---------------------------------
 ; Text address table
+; Values $A0–$C3 from macro InsertKeybMap
 ; ---------------------------------
 L_8078:
-    !word L_8261-1
-    !word $8210
-    !word L_8253-1
-    !word L_81FB-1
-    !word L_827F-1
-    !word $82AF
-    !word $82DD
-    !word $8302
-    !word $82B7
-    !word $82D2
-    !word $8312
-    !word $831D
-    !word $832B
-    !word $80EF
+    !word L_8261-1					; CURSOR DOWN
+    !word $8210						; CURSOR UP
+    !word L_8253-1					; CURSOR RIGHT
+    !word L_81FB-1					; CURSOR LEFT
+
+    !word L_827F-1					; CLR/HOME
+    !word $82AF						; SHIFT-CLR/HOME
+    !word $82DD						; F1
+    !word $8302						; F2
+
+    !word $82B7						; F3
+    !word $82D2						; F4
+    !word $8312						; F5
+    !word $831D						; F6
+
+    !word L_832C-1					; SHIFT RETURN
+    !word L_80F0-1					; RETURN
 L_8094:
-    !word $80EF
-    !word $8103
-    !word $80FE
-    !word $811C
-    !word $8518
-    !word L_8077-1					; RUN/STOP
-    !word L_8530-1
-    !word $87DE
-    !word $8748
-    !word $0DA7
-    !word $0DA7
-    !word $0DAD
-    !word $8989
-    !word $8540
-    !word $8528
-    !word $9432
-    !word $8996
-    !word $89BD
-    !word L_8B45-1					; Text C= F1-F8
-    !word L_8B83-1					; Text C= CLR/HOME
+    !word L_80F0-1					; CTRL RETURN
+    !word $8103						; INST/DEL
+
+    !word L_80FF-1					; SHIFT-INST/DEL
+    !word L_811D-1					; F7
+    !word L_8519-1					; F8
+    !word L_8077-1					; RUN/STOP (points to RTS only)
+ 
+	!word L_8530-1					; C= ARROW LEFT
+    !word L_87DF-1					; C= L
+    !word L_8749-1					; C= S
+    !word $0DA7						; C= P
+
+    !word $0DA7						; C= Q
+    !word $0DAD						; C= G
+    !word $8989						; C= D
+    !word L_8541-1					; C= C
+
+    !word L_8529-1					; C= M
+    !word L_9433-1					; C= ARROW UP
+    !word L_8997-1					; C= F
+    !word L_89BD-1					; C= R
+
+    !word L_8B45-1					; C= F1-F8
+    !word L_8B83-1					; C= CLR/HOME
 L_80BC:
-    !word L_8B9B-1					; Text C= V
-    ROR $80,X
+    !word L_8B9B-1					; C= V
+    !word $8076						; C= T
     CMP #$20
     BCC L_80E6
     LDY $23
@@ -173,6 +182,10 @@ L_80E6:
 L_80EA:
     JSR L_8132
     JMP L_8253
+; ---------------------------------
+; Text command SHIFT RETURN
+; ---------------------------------
+L_80F0:
     LDA #$0D
 L_80F2:
     JSR L_8130
@@ -182,6 +195,10 @@ L_80F2:
     JSR L_8253
 L_80FE:
     RTS 
+; ---------------------------------
+; Text command SHIFT INST/DEL
+; ---------------------------------
+L_80FF:
     LDA #$20
     JMP L_8130
     LDY $23
@@ -199,6 +216,10 @@ L_8119:
     JSR L_8190
 L_811C:
     RTS 
+; ---------------------------------
+; Text command F7
+; ---------------------------------
+L_811D:
     LDY $23
     LDA ($58),Y
     CMP #$0D
@@ -505,6 +526,10 @@ L_8322:
     LDA #$00
     STA $23
     JMP L_9660
+; ---------------------------------
+; Text command SHIFT RETURN
+; ---------------------------------
+L_832C:
     JSR L_8322
     JMP L_8261
 L_8332:
@@ -820,6 +845,9 @@ L_8514:
     LDX $26
     LDA $1C
     RTS 
+; ---------------------------------
+; Text command F8
+; ---------------------------------
 L_8519:
     JSR L_8643
     BCS L_8528
@@ -829,9 +857,16 @@ L_8519:
     CLC 
 L_8528:
     RTS 
+; ---------------------------------
+; Text command C= M
+; ---------------------------------
+L_8529:
     JSR L_8519
     BCS L_8528
     BCC L_8549
+; ---------------------------------
+; Text command C= ARROW LEFT
+; ---------------------------------
 L_8530:
     BIT $5C
     BPL L_8572
@@ -843,6 +878,10 @@ L_8530:
     ADC #$00
     TAY 
     BCC L_854E
+; ---------------------------------
+; Text command C= C
+; ---------------------------------
+L_8541:
     JSR L_8643
     BCS L_8572
     JSR L_8578
@@ -880,7 +919,7 @@ L_8578:
     LDY $5E
     STX $02
     STY $03
-    LDX #$00
+    LDX #$00						;$3F00
     LDY #$3F
     STX $08
     STY $09
@@ -890,7 +929,7 @@ L_8578:
 L_858E:
     LDY #$00
     STY $02
-    LDA #$3F
+    LDA #$3F						;$3F00
     STA $03
     LDX $6C
     LDA $6D
@@ -969,7 +1008,7 @@ L_860E:
     LDA #$07						; msg. no.
     JSR L_9747						; print "Označ cil a potvrd ..."
 L_8613:
-    JSR $9474
+    JSR $9474						; get character from imput device?
     CMP #$A0
     BCC L_8613
     CMP #$B3
@@ -1029,7 +1068,7 @@ L_865D:
 L_866C:
     JSR L_86EF
 L_866F:
-    JSR $9474
+    JSR $9474						; get character from imput device?
     CMP #$A0
 L_8674:
     BCC L_866F
@@ -1145,7 +1184,7 @@ L_8734:
     JSR L_84D7
     PHA 
     LDY #$28
-    JSR L_96FB
+    JSR multiply_x_y				; multiply X with Y
     STX $1C
     PLA 
     CLC 
@@ -1155,6 +1194,10 @@ L_8734:
     ADC #$D8
     TAY 
     RTS 
+; ---------------------------------
+; Text command C= S 
+; ---------------------------------
+L_8749:
     LDX #$01
     LDY #$19
     STX $5D
@@ -1174,20 +1217,20 @@ L_8734:
     JSR L_8643
     BCS L_87D6
 L_8770:
-    LDA #$03
-    JSR L_957C
+    LDA #$03						; msg. no. 03
+    JSR L_957C						; print "Nazev"
     BCS L_87D6
     LDY #$01
-    JSR L_9297
+    JSR L_9297						; set file prameter and open
     BCS L_87CE
     LDA #$54
-    JSR CBM_CHROUT
+    JSR CBM_CHROUT					; Output vetor
     LDY $5D
     LDA #$00
     STA $5D
 L_8789:
     LDA ($5D),Y
-    JSR CBM_CHROUT
+    JSR CBM_CHROUT					; Output vector
 L_878E:
     LDA $90
     BNE L_87CE
@@ -1203,7 +1246,7 @@ L_879C:
     BNE L_8789
 L_87A3:
     LDA #$00
-    JSR CBM_CHROUT
+    JSR CBM_CHROUT					; Output Vector
     LDA #$4C
     JSR CBM_CHROUT
     LDA $1700
@@ -1223,7 +1266,7 @@ L_87C3:
     CPY #$0C
     BCC L_87C3
 L_87CE:
-    JSR L_92B2
+    JSR L_92B2						; restore i/o and close?
     LDA #$00
     JSR L_9258
 L_87D6:
@@ -1232,8 +1275,12 @@ L_87D6:
     ORA ($02,X)
     BRK 
     ASL $0E
+; ---------------------------------
+; Text command C= L
+; ---------------------------------
+L_87DF:
     LDA #$00
-    JSR L_915D
+    JSR L_915D				;read dir
     BCS L_882C
     LDY #$02
     JSR L_9297
@@ -1476,6 +1523,10 @@ L_897C:
     JSR L_9258
 L_8994:
     JMP L_9660
+; ---------------------------------
+; Text command C= F
+; ---------------------------------
+L_8997:
     LDY #$00
     JSR L_8A08
     BCS L_89B8
@@ -1496,6 +1547,10 @@ L_89B3:
 L_89B8:
     JSR L_9660
     JMP L_973E
+; ---------------------------------
+; Text command C= R
+; ---------------------------------
+L_89BD:
     LDY #$00
     JSR L_8A08
     BCS L_89B8
