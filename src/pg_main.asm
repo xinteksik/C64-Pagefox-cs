@@ -60,7 +60,11 @@ L_8000:
     AND #$10
     BEQ L_8042
     JSR L_8F6A
-!if pg24 = 1 {JMP pg24_boot} else {JMP $0DA8}
+!if pg24 = 1 {
+    JMP pg24_boot
+	} else {
+    JMP $0DA8
+	}
 L_8042:
     JMP (L_A000)
     LDX #$FE
@@ -2922,11 +2926,15 @@ L_930D:
 ; Keyboard map 4 blocks x 65 bytes
 +InsertKeybMap
 
+; print CTRL or C= or an empty string
+; 0 => empty, to delete C= or CTRL in front of CAPS
+; 2 => print C=
+; 4 => print CTRL
 L_941B:
     STA $53
-    CMP #$06
+    CMP #$06	; 0 = empty, 2 = C=
     BCC L_9423
-    LDA #$04
+    LDA #$04	; for CTRL
 L_9423:
     ASL 
     ASL 
@@ -2938,7 +2946,10 @@ L_9428:
     INX 
     DEY 
     BPL L_9428
-    RTS 
+    RTS
+; ---------------------------------
+; handle 'CAPS'
+; #$00 > switch off, #$FF > switch on
 L_9433:
     LDA #$FF
     EOR $54
@@ -2955,7 +2966,8 @@ L_9446:
     INX 
     DEY 
     BPL L_9440
-    RTS 
+    RTS
+; ---------------------------------
 L_944B:
     CMP #$7E
     BCS L_9455
@@ -2965,28 +2977,16 @@ L_944B:
     !byte $E9
     !byte $20
 L_9455:
-    !byte $60
+    RTS
 L_9456:
-    !byte $1D
-    !byte $53
-    !byte $50
-    !byte $41
-    !byte $43
-    !byte $1C
+    !by $1D,$53,$50,$41,$43,$1C         ; "<caps>"
 L_945C:
-    !byte $1E
-    ASL $1E1E,X
-    ASL $1E1E,X
-    ASL $1D1E,X
-    AND $1C43,X
-    ASL $1E1E,X
-    ORA $524C,X
-    !byte $54
-    !byte $43
-    !byte $1C
-    ASL $A51E,X
-    STA $5ED0,Y
-    SEI 
+    !by $1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E
+    !by $1E,$1D,$3D,$43,$1C,$1E,$1E,$1E
+    !by $1D,$4C,$52,$54,$43,$1C,$1E,$1E
+    LDA $99
+    BNE L_94D6
+    SEI
     LDA $3F
     ASL 
     ASL 
@@ -14041,8 +14041,9 @@ L_F3E2:
     !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
     !by $3F,$20,$20,$20,$20,$20,$20,$20
     !by $9E,$80,$9C,$80,$9F,$80,$9C,$80
-    !by $3F,$20,$20,$20,$20,$20,$20,$20
-    !by $8F,$80,$9F,$80,$87,$80,$8F,$80
+    !by $3F,$20,$20,$20
+    !by $20,$20,$20,$20,$8F,$80,$9F,$80
+    !by $87,$80,$8F,$80
     !by $3F,$20,$20,$20,$20,$20,$20,$20
     !by $FE,$82,$82,$82,$82,$82,$82,$82
     !by $7C,$00,$7C,$00,$7C,$00,$7C,$00
