@@ -1,0 +1,5 @@
+src/*.bin
+src/*.ref
+src/*.exe
+src/*.py
+src/*.report
