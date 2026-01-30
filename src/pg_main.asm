@@ -1231,23 +1231,24 @@ L_8734:
 ; Text command C= S 
 ; ---------------------------------
 L_8749:
+; Nastavení rozsahu textu k uložení
     LDX #$01
     LDY #$19
-    STX $5D
+    STX $5D							; $5D/$5E = začátek textu ($1901)
     STY $5E
     LDX $5A
     LDY $5B
-    STX $5F
+    STX $5F							; $5F/$60 = konec textu (z $5A/$5B)
     STY $60
-    LDX #$D9
+    LDX #$D9						; Dialog - výběr rozsahu? (pointer na $87D9)
     LDY #$87
     STX $04
     STY $05
-    JSR L_9598
-    BCS L_87D6
-    BEQ L_8770
+    JSR L_9598						; Zobraz dialog
+    BCS L_87D6						; Zrušeno -> konec
+    BEQ L_8770						; OK bez výběru -> pokračuj
     JSR L_9660
-    JSR L_8643
+    JSR L_8643						; Označ blok textu
     BCS L_87D6
 L_8770:
     LDA #$03						; msg. no. 03
@@ -1256,47 +1257,59 @@ L_8770:
     LDY #$01
     JSR L_9297						; set file prameter and open
     BCS L_87CE
-    LDA #$54
+; === Zápis 'T' (signatura textu) ===
+    LDA #$54						; 'T'
     JSR CBM_CHROUT					; Output vetor
+; === Zápis textových dat ===
     LDY $5D
     LDA #$00
     STA $5D
 L_8789:
-    LDA ($5D),Y
-    JSR CBM_CHROUT					; Output vector
+    LDA ($5D),Y						; Čti bajt textu
+    JSR CBM_CHROUT					; Zapiš na disk
 L_878E:
     LDA $90
-    BNE L_87CE
-    CPY $5F
+    BNE L_87CE						; Chyba I/O
+    CPY $5F							; Konec textu
     BNE L_879C
     LDA $5E
     CMP $60
-    BEQ L_87A3
+    BEQ L_87A3						; Ano -> pokračuj na layout
 L_879C:
     INY 
     BNE L_8789
     INC $5E
     BNE L_8789
 L_87A3:
+; === Zápis $00 (ukončení textu) ===
     LDA #$00
     JSR CBM_CHROUT					; Output Vector
-    LDA #$4C
+; === Zápis 'L' (signatura layout) ===
+    LDA #$4C						; 'L'
     JSR CBM_CHROUT
-    LDA $1700
+; === Zápis délky layout dat ===
+    LDA $1700						; Počet bajtů layoutu (n × 5)
     JSR CBM_CHROUT
+; === Zápis layout dat (rámečky + obrázky) ===
+; Formát záznamu:
+; $40,X1/4,Y1/4,X2/4,Y2/4 = textový rámeček (5 bajtů)
+; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = obrázek (5+n bajtů)
+; kde n = délka názvu souboru (dolní nibble flags)
+; Souřadnice jsou v jednotkách 4 bodů 
     LDY #$00
 L_87B5:
-    LDA $1800,Y
+    LDA $1800,Y						; Layout data z $1800
     JSR CBM_CHROUT
     INY 
     CPY $1700
     BCC L_87B5
-    LDY #$00
+; === Zápis barev ($1701-$170C) === 
+	LDY #$00
 L_87C3:
-    LDA $1701,Y
+    LDA $1701,Y						; Barvy a další nastavení
     JSR CBM_CHROUT
     INY 
-    CPY #$0C
+    CPY #$0C						; 12 bajtů
     BCC L_87C3
 L_87CE:
     JSR L_92B2						; restore i/o and close?
@@ -1310,14 +1323,16 @@ L_87D6:
 ; ---------------------------------
 L_87DF:
     LDA #$00
-    JSR L_915D				;read dir
+    JSR L_915D						;read dir
     BCS L_882C
     LDY #$02
-    JSR L_9297
-    JSR CBM_CHRIN
+    JSR L_9297						; Otevři soubor pro čtení
+; === Kontrola signatury 'T' ===
+    JSR CBM_CHRIN					; Přečti první bajt
     LDX #$00
-    CMP #$54
-    BEQ L_880D
+    CMP #$54						; Je to 'T'?
+    BEQ L_880D						; Ano -> nativní PageFox formát
+; Není 'T' -> dialog pro výběr formátu (ASCII, atd.)
     JSR CBM_CLRCHN
     LDX #$41
     LDY #$88
@@ -1332,27 +1347,29 @@ L_87DF:
     TAX 
     INX 
 L_880D:
-    STX $24
-    JSR L_8849
+    STX $24							; $24 = typ formátu (0=PageFox, 1-4=jiné)
+    JSR L_8849						; Načti textová data
     BCS L_8825
     BIT $1F
-    BPL L_8824
+    BPL L_8824						
     LDA $24
-    BNE L_8824
-    JSR L_8956
+    BNE L_8824						; Pokud není PageFox, přeskoč layout
+; === Načtení layout sekce (jen pro PageFox) ===
+    JSR L_8956						; Načti 'L' + layout data
     BCS L_8824
-    JSR L_897A
+    JSR L_897A						; Načti barvy
 L_8824:
     CLC 
 L_8825:
     PHP 
-    JSR L_92B2
+    JSR L_92B2						; Zavři soubor
     PLP 
     BCS L_8831
 L_882C:
     LDA #$00
     JSR L_9258
 L_8831:
+; Překresli obrazovku
     LDX $56
     LDY $57
     STX $02
@@ -1517,36 +1534,48 @@ VIZA_DE_OUT:
     !by $01,$02,$04,$05,$06,$07,$08,$0B
     !by $0C,$0D,$10,$5B,$5C,$5D,$7B,$7C
     !by $7D,$7E
+
+; ---------------------------------
+; Načtení layout sekce ze souboru
+; ---------------------------------
+; Čte 'L' signaturu, délku a layout data
+; Layout data obsahují textové rámečky a pozice obrázků:
+; $40,X1/4,Y1/4,X2/4,Y2/4 = textový rámeček (5 bajtů)
+; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = obrázek (5+n bajtů)
+; kde n = délka názvu souboru (dolní nibble flags)
+; ---------------------------------
 L_8956:
-    JSR CBM_CHRIN
+    JSR CBM_CHRIN					; Čti bajt
     TAX 
-    BEQ L_8956
-    CMP #$4C
+    BEQ L_8956						; Přeskoč $00
+    CMP #$4C						; Je to 'L'?
     SEC 
-    BNE L_8979
+    BNE L_8979						; Ne -> chyba
+; === Načti délku layoutu ===
     JSR CBM_CHRIN
-    STA $1700
+    STA $1700						; Ulož délku (počet bajtů)
+; === Načti layout data (rámečky) ===
     LDY #$00
 L_8969:
     JSR CBM_CHRIN
-    STA $1800,Y
+    STA $1800,Y						; Ulož do $1800+
     INY 
     CPY $1700
     BCC L_8969
 L_8975:
-    JSR L_907B
+    JSR L_907B						; Zpracuj layout data?
     CLC 
 L_8979:
     RTS 
 L_897A:
     LDY #$00
 L_897C:
-    JSR CBM_CHRIN
-    STA $1701,Y
+    JSR CBM_CHRIN					; Čti bajt
+    STA $1701,Y						; Ulož do $1701+ (barvy)
     INY 
-    LDA $90
-    BEQ L_897C
-    JMP L_9142
+    LDA $90							; Kontrola konce souboru
+    BEQ L_897C						; Pokračuj dokud není EOF
+    JMP L_9142						; Aplikuj barvy na obrazovku
     LDA #$02
     JSR L_957C
     BCS L_8994
