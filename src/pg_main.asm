@@ -1304,10 +1304,7 @@ L_87CE:
     JSR L_9258
 L_87D6:
     JMP L_9660
-    ASL 
-    ORA ($02,X)
-    BRK 
-    ASL $0E
+    !by $0A,$01,$02,$00,$06,$0E
 ; ---------------------------------
 ; Text command C= L
 ; ---------------------------------
@@ -1976,29 +1973,29 @@ L_8C38:
     SEC 
     RTS 
 L_8C3A:
-    BRK 
-    BRK 
-    BRK 
+    !by $00
+    !by $00
+    !by $00
 L_8C3D:
-    BRK 
+    !by $00
     !byte $00
     !byte $00
     !byte $00
     !byte $01
     !byte $02
     !byte $9F
-    BRK 
-    BRK 
-    BRK 
-    BRK 
+    !by $00
+    !by $00
+    !by $00
+    !by $00
     !byte $00
     !byte $00
     !byte $00
     !byte $03
     !byte $04
     !byte $9F
-    BRK 
-    BRK 
+    !by $00
+    !by $00
     !byte $00
     !byte $00
 L_8C52:
@@ -2008,19 +2005,19 @@ L_8C53:
     !byte $00
 L_8C55:
     !byte $05
-    ASL $9F
-    ORA ($09),Y
-    PHP 
+    !by $06, $9F
+    !by $11, $09
+    !by $08
     !byte $0F
-    ASL 
-    BPL $8C6C
-    ASL $0C0B
+    !by $0A 
+    !by $10,$0D
+    !by $0E, $0B, $0C
     !byte $B2
     !byte $BB
-    LDY $BFBE,X
-    LDA $B6,X
-    TSX 
-    CLV 
+    !by $BC, $BE, $BF
+    !by $B5, $B6
+    !by $BA
+    !by $B8
     LDA $08C9,Y
     BCC L_8C90
     PHA 
@@ -2071,22 +2068,17 @@ L_8CA1:
 L_8CAD:
     LDA $77,X
     CMP #$08
-    !byte $B0
-    !byte $0D
-    !byte $F6
-    !byte $77
-    !byte $90
-    !byte $06
+    BCS L_8CBF+1
+    INC $77,X
+    BCC L_8CBD
 L_8CB7:
-    !byte $B5
-    !byte $77
-    !byte $F0
-    !byte $05
-    !byte $D6
-    !byte $77
+    LDA $77,X
+    BEQ L_8CBF+1
+    DEC $77,X
 L_8CBD:
     !byte $20
     TAX 
+L_8CBF:
     STX L_8060
     RTI 
     JSR $0810
@@ -4247,21 +4239,16 @@ L_9BDD:
     LDX $1707
     BEQ L_9BF4
     CPX #$02
-    !byte $F0
-    !byte $01
-    !byte $4A
+    BEQ L_9BEB
+    LSR
 L_9BEB:
-    !byte $AA
-    !byte $A9
-    !byte $20
-    !byte $20
-    !byte $70
-    !byte $9B
-    !byte $CA
-    !byte $D0
-    !byte $F8
+    TAX
+    LDA #$20
+    JSR $9B70
+    DEX
+    BNE L_9BEB+1
 L_9BF4:
-    !byte $60
+    RTS
 VIZA_CS_IN:
 +InsertVizaIn
 
