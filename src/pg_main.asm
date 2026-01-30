@@ -59,11 +59,11 @@ L_8000:
     LDA $DC01
     AND #$10
     BEQ L_8042
-    JSR L_8F6A
+    JSR L_8F6A						; cold start init
 !if pg24 = 1 {
     JMP pg24_boot
 	} else {
-    JMP $0DA8
+    JMP $0DA8						; go to main menu
 	}
 L_8042:
     JMP (L_A000)
@@ -101,7 +101,7 @@ L_806B:
     PHA
 
 ; ---------------------------------
-; Text command RUN/STOP
+; Text command RUN/STOP - C= + T
 ; ---------------------------------
 L_8077:
     RTS
@@ -112,25 +112,25 @@ L_8077:
 ; ---------------------------------
 L_8078:
     !word L_8261-1					; CURSOR DOWN
-    !word $8210						; CURSOR UP
+    !word L_8211-1					; CURSOR UP
     !word L_8253-1					; CURSOR RIGHT
     !word L_81FB-1					; CURSOR LEFT
 
     !word L_827F-1					; CLR/HOME
-    !word $82AF						; SHIFT-CLR/HOME
-    !word $82DD						; F1
-    !word $8302						; F2
+    !word L_82B0-1					; SHIFT-CLR/HOME
+    !word L_82DE-1					; F1
+    !word L_8303-1					; F2
 
-    !word $82B7						; F3
-    !word $82D2						; F4
-    !word $8312						; F5
-    !word $831D						; F6
+    !word L_82B8-1					; F3
+    !word L_82D3-1					; F4
+    !word L_8313-1					; F5
+    !word L_831E-1					; F6
 
     !word L_832C-1					; SHIFT RETURN
     !word L_80F0-1					; RETURN
 L_8094:
     !word L_80F0-1					; CTRL RETURN
-    !word $8103						; INST/DEL
+    !word L_8104-1					; INST/DEL
 
     !word L_80FF-1					; SHIFT-INST/DEL
     !word L_811D-1					; F7
@@ -140,10 +140,10 @@ L_8094:
 	!word L_8530-1					; C= ARROW LEFT
     !word L_87DF-1					; C= L
     !word L_8749-1					; C= S
-    !word $0DA7						; C= P
+    !word $0DA7						; C= P - go to main menu
 
-    !word $0DA7						; C= Q
-    !word $0DAD						; C= G
+    !word $0DA7						; C= Q - go to main menu
+    !word $0DAD						; C= G - go to graphic editor
     !word $8989						; C= D
     !word L_8541-1					; C= C
 
@@ -156,7 +156,7 @@ L_8094:
     !word L_8B83-1					; C= CLR/HOME
 L_80BC:
     !word L_8B9B-1					; C= V
-    !word $8076						; C= T
+    !word L_8077-1					; C= T
     CMP #$20
     BCC L_80E6
     LDY $23
@@ -201,6 +201,10 @@ L_80FE:
 L_80FF:
     LDA #$20
     JMP L_8130
+; ---------------------------------
+; Text command INST/DEL
+; ---------------------------------
+L_8104:
     LDY $23
     LDA ($58),Y
     CMP #$0D
@@ -371,6 +375,10 @@ L_820B:
     LDA #$27
     STA $23
     BNE L_8214
+; ---------------------------------
+; Text command CURSOR UP
+; ---------------------------------
+L_8211:
     JSR L_8382
 L_8214:
     LDA $22
@@ -459,10 +467,17 @@ L_8291:
     STX $22
     JSR L_8482
     JMP L_9660
+; ---------------------------------
+; Text command SHIFT-CLR/HOME
+; ---------------------------------
 L_82B0:
     JSR L_833C
     LDA #$12
     JMP L_8354
+; ---------------------------------
+; Text command F3
+; ---------------------------------
+L_82B8:
     LDA $5A
     CMP $0342
     LDA $5B
@@ -475,12 +490,19 @@ L_82C7:
     STY $59
     LDA #$0A
     JMP L_8354
+; ---------------------------------
+; Text command F4
+; ---------------------------------
 L_82D3:
     LDX $58
     LDY $59
     STX $0342
     STY $0343
     RTS 
+; ---------------------------------
+; Text command F1
+; ---------------------------------
+L_82DE:
     LDX $56
     LDY $57
     STX $02
@@ -502,6 +524,10 @@ L_82FC:
     BNE L_82EA
 L_8300:
     JMP L_8291
+; ---------------------------------
+; Text command F2
+; ---------------------------------
+L_8303:
     LDA #$12
     STA $26
 L_8307:
@@ -512,6 +538,9 @@ L_830C:
     BNE L_8307
 L_8310:
     JMP L_8291
+; ---------------------------------
+; Text command F5
+; ---------------------------------
 L_8313:
     JSR L_8382
     LDY $66
@@ -519,6 +548,10 @@ L_8318:
     DEY 
     STY $23
     JMP L_9660
+; ---------------------------------
+; Text command F6
+; ---------------------------------
+L_831E:
     LDA $23
     BEQ L_8313
 L_8322:
@@ -2458,9 +2491,11 @@ L_8F65:
     DEX 
     BPL L_8F52
     RTS 
+; cold start init
 L_8F6A:
     LDA #$00
     TAY 
+; clear ram $0002..$00FF, $0200..$02FF, $0300..$03FF
 L_8F6D:
     STA $0002,Y
     STA $0200,Y
@@ -2468,15 +2503,17 @@ L_8F6D:
     INY 
     BNE L_8F6D
     LDY #$1F
+; copy KERNAL ROM to RAM: $FD30..$FD4F → $0314..$0333
 L_8F7B:
     LDA $FD30,Y
     STA $0314,Y
     DEY 
     BPL L_8F7B
+; set colors and sprites
     LDA #$04
     STA $0288
     JSR $FF5B
-;Border color
+; Border color
     LDA #COLOR_BORDER
     STA L_D020
     LDA #$00
@@ -2484,29 +2521,36 @@ L_8F7B:
     STA $D01D
     STA L_D017
     JSR L_9070
+; set pointer / buffer on $1900
     LDX #$01
     LDY #$19
     STX $58
     STY $59
     STX $0342
     STY $0343
+; NMI vector
     LDX #$BB
     LDY #$0E
     STX $FFFA
     STY $FFFB
     STX $0318
     STY $0319
+; IRQ/BRK vector
     LDX #$45
     LDY #$0E
     STX $FFFE
     STY $FFFF
+; RAM IRQ vector (KERNAL)
     LDX #$4A
     LDY #$0E
     STX $0314
     STY $0315
+; CIA timer
     LDA #$1C
     STA $DC04
     STA L_DC05
+; ---------------------------
+; ram upload check
     LDX #$10
     LDY #$7F
 L_8FDD:
@@ -2516,6 +2560,7 @@ L_8FDD:
     DEY 
     BPL L_8FDD
     DEX 
+; copy data from $B000 to $0800, X pages by 256B (10)
 L_8FE9:
     TYA 
     PHA 
@@ -2591,6 +2636,7 @@ L_9042:
     LDX #$FE
     STX $5FF9
     RTS 
+; clear $7F40..$7F7F (64B)
 L_9070:
     LDA #$00
     LDY #$3F
@@ -4618,7 +4664,7 @@ L_B6AD:
 L_B6D5:
     JSR $0FDC
     JSR L_83F9
-    JMP $0DAE
+    JMP $0DAE						; go to graphic menu
 L_B6DE:
     JMP $148E
 L_B6E1:
@@ -13055,6 +13101,8 @@ L_EEEB:
     CMP #$05
     BNE L_EF4B
     LDX #$40
+; --------------------
+; RLE?
 L_EF4B:
     LDA $AF78,Y
     STA $02
@@ -13078,100 +13126,22 @@ L_EF52:
     BNE L_EF4B
 L_EF71:
     RTS 
-    BRK 
-    BRK 
-    ORA $2B,X
-    !byte $22
-    CLI 
-    PHP 
-    BRK 
-    JSR $0200
-    BRK 
-    !byte $00
-    !byte $00
-    !byte $01
-    !byte $FF
-    !byte $07
-    !byte $F8
-    !byte $02
-    !byte $00
-    !byte $00
-    !byte $00
-    !byte $08
-    !byte $00
-    !byte $20
-    !byte $00
-    !byte $00
-    !byte $01
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $13
-    !byte $80
-    !byte $00
-    !byte $01
-    !byte $01
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $00
-    !byte $01
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    !byte $14
-    !byte $80
-    BRK 
-    BRK 
-    BRK 
-    ASL 
-    BRK 
-    BRK 
-    BRK 
-    !byte $01
-    !byte $00
-    !byte $3F
-    !byte $00
-    !byte $01
-    !byte $00
-    !byte $3E
-    !byte $00
-    !byte $01
-    !byte $00
-    !byte $3C
-    BRK 
-    ORA ($00,X)
-    ROL $0100,X
-    !byte $00
-    !byte $37
-    BRK 
-    ORA ($00,X)
-    !byte $23
-    !byte $80
-    ORA ($00,X)
-    ORA ($C0,X)
-    ORA ($00,X)
-    BRK 
-    !byte $E0
-    !byte $01
-    !byte $00
-    !byte $00
-    !byte $40
-    !byte $02
-    !byte $00
-    !byte $00
-    !byte $00
-    !byte $00
-    !byte $14
-    BRK 
-    BRK 
-    ORA ($01,X)
-    !byte $FF
-    !byte $FF
-    !byte $FF
-    BRK 
-    LDA #$00
-    LDY #$3F
+L_EF72:
+; --------------------
+    !by $00,$00,$15,$2B,$22,$58,$08,$00
+    !by $20,$00,$02,$00,$00,$00,$01,$FF
+    !by $07,$F8,$02,$00,$00,$00,$08,$00
+    !by $20,$00,$00,$01,$FF,$FF,$FF,$13
+    !by $80,$00,$01,$01,$FF,$FF,$FF,$00
+    !by $01,$FF,$FF,$FF,$14,$80,$00,$00
+    !by $00,$0A,$00,$00,$00,$01,$00,$3F
+    !by $00,$01,$00,$3E,$00,$01,$00,$3C
+    !by $00,$01,$00,$3E,$00,$01,$00,$37
+    !by $00,$01,$00,$23,$80,$01,$00,$01
+    !by $C0,$01,$00,$00,$E0,$01,$00,$00
+    !by $40,$02,$00,$00,$00,$00,$14,$00
+    !by $00,$01,$01,$FF,$FF,$FF,$00,$A9
+    !by $00,$A0,$3F
 L_EFDD:
     STA $7F40,Y
     DEY 
@@ -13776,7 +13746,8 @@ L_F3E2:
     !byte $10
     !byte $E9
     !byte $60
-    ; data - grafika nabídek (grafické ikony)
+; data - grafika nabídek (grafické ikony)
+; menu 1 line 1
     !by $FF,$80,$E6,$E6,$E6,$E6,$BE,$80
     !by $FF,$00,$7C,$66,$66,$66,$66,$00
     !by $FF,$80,$80,$80,$80,$80,$81,$83
@@ -13817,7 +13788,8 @@ L_F3E2:
     !by $FF,$00,$00,$00,$00,$00,$00,$00
     !by $FF,$00,$00,$00,$00,$00,$00,$00
     !by $FF,$01,$01,$01,$01,$01,$01,$01
-    !by $86,$86,$BE,$E6,$E6,$BE,$80,$FF
+; menu 1 line 2 
+	!by $86,$86,$BE,$E6,$E6,$BE,$80,$FF
     !by $00,$3C,$66,$66,$66,$3C,$00,$FF
     !by $84,$84,$89,$8E,$98,$90,$80,$FF
     !by $E0,$C0,$80,$00,$00,$00,$00,$FF
@@ -13857,7 +13829,8 @@ L_F3E2:
     !by $00,$00,$00,$00,$00,$00,$00,$FF
     !by $00,$00,$00,$00,$00,$00,$00,$FF
     !by $01,$01,$01,$01,$01,$01,$01,$FF
-    !by $FF,$80,$E6,$E6,$E6,$E6,$BE,$80
+; menu 2 line 1 
+ !by $FF,$80,$E6,$E6,$E6,$E6,$BE,$80
     !by $FF,$00,$7C,$66,$66,$66,$66,$00
     !by $FF,$80,$80,$80,$80,$8F,$88,$8A
     !by $FF,$00,$E0,$50,$28,$F8,$28,$A0
@@ -14072,11 +14045,11 @@ L_F3E2:
     !by $FF,$80,$80,$90,$88,$84,$82,$81
     !by $FF,$00,$00,$04,$08,$10,$20,$40
     !by $FF,$80,$9F,$80,$9E,$80,$9E,$80
-    !by $FF,$00,$FC,$00,$00,$00,$00,$00
-    !by $FF,$80,$9F,$80,$9F,$80,$9F,$80
-    !by $FF,$00,$FC,$00,$E0,$00,$00,$00
-    !by $FF,$80,$9F,$80,$9F,$80,$9F,$80
-    !by $FF,$00,$FC,$00,$FC,$00,$FC,$00
+	!by $FF,$00,$FC,$00,$00,$00,$00,$00
+	!by $FF,$80,$9F,$80,$9F,$80,$9F,$80
+	!by $FF,$00,$FC,$00,$E0,$00,$00,$00
+	!by $FF,$80,$9F,$80,$9F,$80,$9F,$80
+	!by $FF,$00,$FC,$00,$FC,$00,$FC,$00
     !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
     !by $80,$00,$F0,$00,$C0,$00,$F8,$00
     !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
@@ -14088,9 +14061,8 @@ L_F3E2:
     !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
     !by $3F,$20,$20,$20,$20,$20,$20,$20
     !by $9E,$80,$9C,$80,$9F,$80,$9C,$80
-    !by $3F,$20,$20,$20
-    !by $20,$20,$20,$20,$8F,$80,$9F,$80
-    !by $87,$80,$8F,$80
+    !by $3F,$20,$20,$20,$20,$20,$20,$20
+	!by $8F,$80,$9F,$80,$87,$80,$8F,$80
     !by $3F,$20,$20,$20,$20,$20,$20,$20
     !by $FE,$82,$82,$82,$82,$82,$82,$82
     !by $7C,$00,$7C,$00,$7C,$00,$7C,$00
