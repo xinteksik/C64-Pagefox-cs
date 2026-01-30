@@ -3,3 +3,4 @@ src/*.ref
 src/*.exe
 src/*.py
 src/*.report
+src/*.bat
