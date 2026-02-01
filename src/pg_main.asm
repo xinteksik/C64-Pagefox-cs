@@ -13,7 +13,7 @@ pg24 = 0	;enable / disable 24 pin mod
 
 !if language = cs {
     !source "pg_cs.asm"
-    !to "79cs.bin", plain
+    !to "pagefox-cs-2.5.bin", plain
 	VIZA_LEN = (VIZA_CS_OUT - VIZA_CS_IN)
 	VIZA_IN = VIZA_CS_IN
 	VIZA_OUT = VIZA_CS_OUT
@@ -21,7 +21,7 @@ pg24 = 0	;enable / disable 24 pin mod
 
 !if language = de {
     !source "pg_de.asm"
-    !to "79de.bin", plain
+    !to "pagefox-de-1.0.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
 	VIZA_IN = VIZA_DE_IN
 	VIZA_OUT = VIZA_DE_OUT
@@ -29,7 +29,7 @@ pg24 = 0	;enable / disable 24 pin mod
 
 !if language = en {                                                                              
     !source "pg_en.asm"                                                                         
-    !to "79en.bin", plain    
+    !to "pagefox-en-1.0.bin", plain    
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
 	VIZA_IN = VIZA_DE_IN
 	VIZA_OUT = VIZA_DE_OUT	
@@ -14092,7 +14092,18 @@ L_F3E2:
     !by $00,$00,$00,$00,$E0,$00,$FC,$00
     !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
     !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
-    !by $FF
+    
 }
-* = $7FFF
-	!by $FF
+* = $8000
+
+!if language = cs {
+!bin "zs-cs.bin"
+}
+
+!if language = de {
+!bin "zs-de.bin"
+}
+
+!if language = en {
+!bin "zs-de.bin"
+}
