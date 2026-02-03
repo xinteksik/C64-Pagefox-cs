@@ -9,11 +9,13 @@ en = 2	;not implemented
 
 ;set language
 language = cs
-pg24 = 0	;enable / disable 24 pin mod
+
+;1 =enable, 2 = disable 24 pin mod (native pg-24.prg)
+pg24 = 0
 
 !if language = cs {
     !source "pg_cs.asm"
-    !to "pagefox-cs-2.5.bin", plain
+    !to "build/pagefox-cs-2.5.bin", plain
 	VIZA_LEN = (VIZA_CS_OUT - VIZA_CS_IN)
 	VIZA_IN = VIZA_CS_IN
 	VIZA_OUT = VIZA_CS_OUT
@@ -21,7 +23,7 @@ pg24 = 0	;enable / disable 24 pin mod
 
 !if language = de {
     !source "pg_de.asm"
-    !to "pagefox-de-1.0.bin", plain
+    !to "build/pagefox-de-1.0.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
 	VIZA_IN = VIZA_DE_IN
 	VIZA_OUT = VIZA_DE_OUT
@@ -29,13 +31,14 @@ pg24 = 0	;enable / disable 24 pin mod
 
 !if language = en {                                                                              
     !source "pg_en.asm"                                                                         
-    !to "pagefox-en-1.0.bin", plain    
+    !to "build/pagefox-en-1.0.bin", plain    
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
 	VIZA_IN = VIZA_DE_IN
 	VIZA_OUT = VIZA_DE_OUT	
 } 
 
 * = 0
+
 !pseudopc $8000 {
 
 L_8000:
@@ -144,7 +147,7 @@ L_8094:
 
     !word $0DA7						; C= Q - go to main menu
     !word $0DAD						; C= G - go to graphic editor
-    !word $8989						; C= D
+    !word L_898A-1					; C= D
     !word L_8541-1					; C= C
 
     !word L_8529-1					; C= M
@@ -1576,6 +1579,10 @@ L_897C:
     LDA $90							; Kontrola konce souboru
     BEQ L_897C						; Pokračuj dokud není EOF
     JMP L_9142						; Aplikuj barvy na obrazovku
+; ---------------------------------
+; Text command C= D
+; ---------------------------------
+L_898A:
     LDA #$02
     JSR L_957C
     BCS L_8994
@@ -2884,7 +2891,7 @@ L_9205:
     PLP
     !by $60
 L_920B
-    !pet "$0"
+    !pet "$:"
     !by $04
     !by $01
     !by $02
