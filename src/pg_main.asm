@@ -10,15 +10,10 @@
 ;==========================================================
 ; build options (language, 9pin/24pin printer mod)
 ;==========================================================
+.language = 0                           ; 0 = cs, 1 = de, 2 = en (not implemented)
+.pg24 = 0                               ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 
-.cs = 0
-.de = 1
-.en = 2                              ; not implemented
-
-.language = .cs                       ; use cs or de
-.pg24 = 0                            ; 1 =enable, 2 = disable 24 pin mod (native pg-24.prg)
-
-!if .language = .cs {
+!if .language = 0 {
     !source "pg_cs.asm"
     !to "build/pagefox-cs-2.5.bin", plain
 	VIZA_LEN = (VIZA_CS_OUT - VIZA_CS_IN)
@@ -26,7 +21,7 @@
 	VIZA_OUT = VIZA_CS_OUT
 }
 
-!if .language = .de {
+!if .language = 1 {
     !source "pg_de.asm"
     !to "build/pagefox-de-1.0.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
@@ -34,7 +29,7 @@
 	VIZA_OUT = VIZA_DE_OUT
 }
 
-!if .language = .en {
+!if .language = 2 {
     !source "pg_en.asm"
     !to "build/pagefox-en-1.0.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
@@ -14128,14 +14123,14 @@ L_F3E2:
 }
 * = $8000
 
-!if .language = .cs {
+!if .language = 0 {
 !bin "zs-cs.bin"
 }
 
-!if .language = .de {
+!if .language = 1 {
 !bin "zs-de.bin"
 }
 
-!if .language = .en {
+!if .language = 2 {
 !bin "zs-de.bin"
 }
