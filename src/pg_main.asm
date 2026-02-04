@@ -11,14 +11,14 @@
 ; build options (language, 9pin/24pin printer mod)
 ;==========================================================
 
-cs = 0
-de = 1
-en = 2                              ; not implemented
+.cs = 0
+.de = 1
+.en = 2                              ; not implemented
 
-language = cs                       ; use cs or de
-pg24 = 0                            ; 1 =enable, 2 = disable 24 pin mod (native pg-24.prg)
+.language = .cs                       ; use cs or de
+.pg24 = 0                            ; 1 =enable, 2 = disable 24 pin mod (native pg-24.prg)
 
-!if language = cs {
+!if .language = .cs {
     !source "pg_cs.asm"
     !to "build/pagefox-cs-2.5.bin", plain
 	VIZA_LEN = (VIZA_CS_OUT - VIZA_CS_IN)
@@ -26,7 +26,7 @@ pg24 = 0                            ; 1 =enable, 2 = disable 24 pin mod (native 
 	VIZA_OUT = VIZA_CS_OUT
 }
 
-!if language = de {
+!if .language = .de {
     !source "pg_de.asm"
     !to "build/pagefox-de-1.0.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
@@ -34,7 +34,7 @@ pg24 = 0                            ; 1 =enable, 2 = disable 24 pin mod (native 
 	VIZA_OUT = VIZA_DE_OUT
 }
 
-!if language = en {
+!if .language = .en {
     !source "pg_en.asm"
     !to "build/pagefox-en-1.0.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
@@ -70,7 +70,7 @@ L_8000:
                 AND #$10
                 BEQ L_8042
                 JSR L_8F6A              ; cold start init
-!if pg24 = 1 {
+!if .pg24 = 1 {
                 JMP pg24_boot
 } else {
                 JMP $0DA8               ; go to main menu
@@ -2567,7 +2567,7 @@ L_8F7B:
                 STA $0288
                 JSR $FF5B
 ; Border color
-                LDA #COLOR_BORDER
+                LDA #.COLOR_BORDER
                 STA L_D020
                 LDA #$00
                 STA L_D01C
@@ -4539,7 +4539,7 @@ L_A012:
 MSG_TABLE:
 +InsertMsgTable
 
-!if pg24 = 1 {+InsertModPG24}
+!if .pg24 = 1 {+InsertModPG24}
 
 }
 
@@ -5974,10 +5974,10 @@ L_BE02:
                 BRK
                 BRK
                 !by $00
-                !by COLOR_TEXT_TEXT
-                !by COLOR_TEXT_BACKGROUND
-                !by COLOR_TEXT_MENU
-                !by COLOR_GRAPHIC_TEXT+COLOR_GRAPHIC_BACKGROUND
+                !by .COLOR_TEXT_TEXT
+                !by .COLOR_TEXT_BACKGROUND
+                !by .COLOR_TEXT_MENU
+                !by .COLOR_GRAPHIC_TEXT+.COLOR_GRAPHIC_BACKGROUND
                 !by $00
                 !by $00
                 ORA ($00,X)
@@ -14128,14 +14128,14 @@ L_F3E2:
 }
 * = $8000
 
-!if language = cs {
+!if .language = .cs {
 !bin "zs-cs.bin"
 }
 
-!if language = de {
+!if .language = .de {
 !bin "zs-de.bin"
 }
 
-!if language = en {
+!if .language = .en {
 !bin "zs-de.bin"
 }
