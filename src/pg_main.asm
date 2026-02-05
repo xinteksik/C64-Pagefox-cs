@@ -44,7 +44,7 @@
 ;==========================================================
 ; header / signature
 ;==========================================================
-L_8000:
+L0_8000:
                 !by $31, $80
                 !by $BB, $0E, $C3, $C2, $CD, $38
                 !by $30,$50,$46,$20,$56,$31,$2E,$30
@@ -53,8 +53,8 @@ L_8000:
                 JMP $9039
                 JMP $9747
                 JMP $957C
-                JMP L_915D              ; read dir
-                JMP L_9258
+                JMP L0_915D              ; read dir
+                JMP L0_9258
                 JMP $977F
                 JMP $98A2
                 JMP $8ECC
@@ -63,115 +63,115 @@ L_8000:
                 JSR $FDA3
                 LDA $DC01
                 AND #$10
-                BEQ L_8042
-                JSR L_8F6A              ; cold start init
+                BEQ L0_8042
+                JSR L0_8F6A              ; cold start init
 !if .pg24 = 1 {
                 JMP pg24_boot
 } else {
                 JMP $0DA8               ; go to main menu
 }
-L_8042:
-                JMP (L_A000)
+L0_8042:
+                JMP (L0_A000)
                 LDX #$FE
                 TXS
-                JSR L_90B0
-L_804B:                                 ; wait for input
-                JSR L_8054
-                JSR L_8BA1
-                JMP L_804B
+                JSR L0_90B0
+L0_804B:                                 ; wait for input
+                JSR L0_8054
+                JSR L0_8BA1
+                JMP L0_804B
 
 ;==========================================================
-L_8054:
-                JSR L_949D              ; get character from imput device?
-L_8057:
-                BEQ L_8077
+L0_8054:
+                JSR L0_949D              ; get character from imput device?
+L0_8057:
+                BEQ L0_8077
                 STA $61                 ; break point
                 BIT $55
-                BPL L_8064
+                BPL L0_8064
                 PHA
-L_8060:
-                JSR L_973E
+L0_8060:
+                JSR L0_973E
                 PLA
-L_8064:
+L0_8064:
                 CMP #$A0
-                BCS L_806B
+                BCS L0_806B
                 JMP $80C0
 
 ;==========================================================
-L_806B:
+L0_806B:
                 SBC #$A0
                 ASL
                 TAX
-                LDA L_8078+1,X
+                LDA L0_8078+1,X
                 PHA
-                LDA L_8078,X
+                LDA L0_8078,X
                 PHA
 
 ;==========================================================
 ; ext command RUN/STOP - C= + T
 ;==========================================================
-L_8077:
+L0_8077:
                 RTS
 
 ;==========================================================
 ; Text address table
 ; Values $A0–$C3 from macro InsertKeybMap
 ;==========================================================
-L_8078:
-                !word L_8261-1          ; CURSOR DOWN
-                !word L_8211-1          ; CURSOR UP
-                !word L_8253-1          ; CURSOR RIGHT
-                !word L_81FB-1          ; CURSOR LEFT
+L0_8078:
+                !word L0_8261-1          ; CURSOR DOWN
+                !word L0_8211-1          ; CURSOR UP
+                !word L0_8253-1          ; CURSOR RIGHT
+                !word L0_81FB-1          ; CURSOR LEFT
 
-                !word L_827F-1          ; CLR/HOME
-                !word L_82B0-1          ; SHIFT-CLR/HOME
-                !word L_82DE-1          ; F1
-                !word L_8303-1          ; F2
+                !word L0_827F-1          ; CLR/HOME
+                !word L0_82B0-1          ; SHIFT-CLR/HOME
+                !word L0_82DE-1          ; F1
+                !word L0_8303-1          ; F2
 
-                !word L_82B8-1          ; F3
-                !word L_82D3-1          ; F4
-                !word L_8313-1          ; F5
-                !word L_831E-1          ; F6
+                !word L0_82B8-1          ; F3
+                !word L0_82D3-1          ; F4
+                !word L0_8313-1          ; F5
+                !word L0_831E-1          ; F6
 
-                !word L_832C-1          ; SHIFT RETURN
-                !word L_80F0-1          ; RETURN
-L_8094:
-                !word L_80F0-1          ; CTRL RETURN
-                !word L_8104-1          ; INST/DEL
+                !word L0_832C-1          ; SHIFT RETURN
+                !word L0_80F0-1          ; RETURN
+L0_8094:
+                !word L0_80F0-1          ; CTRL RETURN
+                !word L0_8104-1          ; INST/DEL
 
-                !word L_80FF-1          ; SHIFT-INST/DEL
-                !word L_811D-1          ; F7
-                !word L_8519-1          ; F8
-                !word L_8077-1          ; RUN/STOP (points to RTS only)
+                !word L0_80FF-1          ; SHIFT-INST/DEL
+                !word L0_811D-1          ; F7
+                !word L0_8519-1          ; F8
+                !word L0_8077-1          ; RUN/STOP (points to RTS only)
 
-                !word L_8530-1          ; C= ARROW LEFT
-                !word L_87DF-1          ; C= L
-                !word L_8749-1          ; C= S
+                !word L0_8530-1          ; C= ARROW LEFT
+                !word L0_87DF-1          ; C= L
+                !word L0_8749-1          ; C= S
                 !word $0DA7             ; C= P - go to main menu
 
                 !word $0DA7             ; C= Q - go to main menu
                 !word $0DAD             ; C= G - go to graphic editor
-                !word L_898A-1          ; C= D
-                !word L_8541-1          ; C= C
+                !word L0_898A-1          ; C= D
+                !word L0_8541-1          ; C= C
 
-                !word L_8529-1          ; C= M
-                !word L_9433-1          ; C= ARROW UP
-                !word L_8997-1          ; C= F
-                !word L_89BD-1          ; C= R
+                !word L0_8529-1          ; C= M
+                !word L0_9433-1          ; C= ARROW UP
+                !word L0_8997-1          ; C= F
+                !word L0_89BD-1          ; C= R
 
-                !word L_8B45-1          ; C= F1-F8
-                !word L_8B83-1          ; C= CLR/HOME
-L_80BC:
-                !word L_8B9B-1          ; C= V
-                !word L_8077-1          ; C= T
+                !word L0_8B45-1          ; C= F1-F8
+                !word L0_8B83-1          ; C= CLR/HOME
+L0_80BC:
+                !word L0_8B9B-1          ; C= V
+                !word L0_8077-1          ; C= T
                 CMP #$20
-                BCC L_80E6
+                BCC L0_80E6
                 LDY $23
                 LDA ($58),Y
                 CMP #$02
-                BCC L_80EA
+                BCC L0_80EA
                 CMP #$0D
-                BEQ L_80EA
+                BEQ L0_80EA
                 LDA $61
                 STA ($58),Y
                 LDX $58
@@ -179,74 +179,74 @@ L_80BC:
                 STX $02
                 STY $03
                 LDX $22
-L_80DE:
+L0_80DE:
                 LDA $66
                 JSR print_msg
-                JMP L_8253
-L_80E6:
+                JMP L0_8253
+L0_80E6:
                 CMP #$03
-                BCC L_80F2
-L_80EA:
-                JSR L_8132
-                JMP L_8253
+                BCC L0_80F2
+L0_80EA:
+                JSR L0_8132
+                JMP L0_8253
 
 ;==========================================================
 ; Text command SHIFT RETURN
 ;==========================================================
-L_80F0:
+L0_80F0:
                 LDA #$0D
-L_80F2:
-                JSR L_8130
-                BCS L_80FE
+L0_80F2:
+                JSR L0_8130
+                BCS L0_80FE
                 LDA $23
                 STA $66
-                JSR L_8253
-L_80FE:
+                JSR L0_8253
+L0_80FE:
                 RTS
 
 ;==========================================================
 ; Text command SHIFT INST/DEL
 ;==========================================================
-L_80FF:
+L0_80FF:
                 LDA #$20
-                JMP L_8130
+                JMP L0_8130
 
 ;==========================================================
 ; Text command INST/DEL
 ;==========================================================
-L_8104:
+L0_8104:
                 LDY $23
                 LDA ($58),Y
                 CMP #$0D
-                BEQ L_8110
+                BEQ L0_8110
                 CMP #$02
-                BCS L_8119
-L_8110:
-                JSR L_81FB
+                BCS L0_8119
+L0_8110:
+                JSR L0_81FB
                 LDY $23
                 LDA ($58),Y
-                BEQ L_811C
-L_8119:
-                JSR L_8190
-L_811C:
+                BEQ L0_811C
+L0_8119:
+                JSR L0_8190
+L0_811C:
                 RTS
 
 ;==========================================================
 ; Text command F7
 ;==========================================================
-L_811D:
+L0_811D:
                 LDY $23
                 LDA ($58),Y
                 CMP #$0D
-                BEQ L_812D
+                BEQ L0_812D
                 LDA #$0D
-                JSR L_8130
-                JMP L_83A5
-L_812D:
-                JMP L_8190
-L_8130:
+                JSR L0_8130
+                JMP L0_83A5
+L0_812D:
+                JMP L0_8190
+L0_8130:
                 STA $61
-L_8132:
+L0_8132:
                 LDA $5A
                 TAX
                 SEC
@@ -256,11 +256,11 @@ L_8132:
                 SBC $59
                 STA $1C
                 INX
-                BNE L_8147
+                BNE L0_8147
                 INY
                 CPY #$3C
-                BCS L_8189
-L_8147:
+                BCS L0_8189
+L0_8147:
                 STX $5A
                 STY $5B
                 TAX
@@ -275,37 +275,37 @@ L_8147:
                 STA $03
                 STA $09
                 INC $08
-                BNE L_8164
+                BNE L0_8164
                 INC $09
-L_8164:
-                JSR L_81D8
+L0_8164:
+                JSR L0_81D8
                 LDY $23
                 LDA $61
                 STA ($58),Y
                 INC $66
                 LDA $66
                 CMP #$29
-                BCS L_8184
+                BCS L0_8184
                 LDX $58
                 LDY $59
                 STX $02
                 STY $03
                 LDX $22
-L_817F:
+L0_817F:
                 JSR print_msg
                 CLC
                 RTS
-L_8184:
-                JSR L_83A5
+L0_8184:
+                JSR L0_83A5
                 CLC
                 RTS
-L_8189:
+L0_8189:
                 LDA #$05                ; msg. no.
-                JSR L_9747              ; print "Preteceni pameti"
+                JSR L0_9747              ; print "Preteceni pameti"
                 SEC
-L_818F:
+L0_818F:
                 RTS
-L_8190:
+L0_8190:
                 LDA $5A
                 TAY
                 SEC
@@ -315,9 +315,9 @@ L_8190:
                 TAX
                 INX
                 TYA
-                BNE L_81A1
+                BNE L0_81A1
                 DEC $5B
-L_81A1:
+L0_81A1:
                 DEC $5A
                 LDA $58
                 CLC
@@ -329,14 +329,14 @@ L_81A1:
                 STA $03
                 STA $09
                 INC $02
-                BNE L_81BA
+                BNE L0_81BA
                 INC $03
-L_81BA:
-                JSR L_81EA
+L0_81BA:
+                JSR L0_81EA
                 DEC $66
                 LDA $23
                 CMP $66
-                BCS L_81D5
+                BCS L0_81D5
                 LDX $58
                 LDY $59
                 STX $02
@@ -345,101 +345,101 @@ L_81BA:
                 LDA $66
                 JSR print_msg
                 RTS
-L_81D5:
-                JMP L_83A5
-L_81D8:
+L0_81D5:
+                JMP L0_83A5
+L0_81D8:
                 LDY #$00
-L_81DA:
+L0_81DA:
                 DEY
                 LDA ($02),Y
                 STA ($08),Y
                 TYA
-                BNE L_81DA
+                BNE L0_81DA
                 DEC $03
                 DEC $09
                 DEX
-                BNE L_81DA
-L_81E9:
+                BNE L0_81DA
+L0_81E9:
                 RTS
-L_81EA:
+L0_81EA:
                 LDY #$00
-L_81EC:
+L0_81EC:
                 LDA ($02),Y
                 STA ($08),Y
                 INY
-                BNE L_81EC
+                BNE L0_81EC
                 INC $03
                 INC $09
                 DEX
-                BNE L_81EC
+                BNE L0_81EC
                 RTS
-L_81FB:
+L0_81FB:
                 LDA $23
-                BNE L_8206
-                JSR L_8382
+                BNE L0_8206
+                JSR L0_8382
                 LDA $23
-                BEQ L_820B
-L_8206:
+                BEQ L0_820B
+L0_8206:
                 DEC $23
-                JMP L_9660
-L_820B:
+                JMP L0_9660
+L0_820B:
                 LDA #$27
                 STA $23
-                BNE L_8214
+                BNE L0_8214
 
 ;==========================================================
 ; Text command CURSOR UP
 ;==========================================================
-L_8211:
-                JSR L_8382
-L_8214:
+L0_8211:
+                JSR L0_8382
+L0_8214:
                 LDA $22
                 CMP #$03
-                BEQ L_8234
-                JSR L_8463
+                BEQ L0_8234
+                JSR L0_8463
                 LDA $58
-L_821F:
+L0_821F:
                 SEC
                 SBC $02
                 STA $66
-                JSR L_8332
+                JSR L0_8332
                 DEC $22
                 LDX $02
                 LDY $03
                 STX $58
                 STY $59
-                JMP L_9660
-L_8234:
-                JSR L_8421
+                JMP L0_9660
+L0_8234:
+                JSR L0_8421
                 LDX $56
                 LDY $57
                 STX $58
                 STY $59
                 STX $02
                 STY $03
-                JSR L_84A8
+                JSR L0_84A8
                 STA $66
-                JSR L_8332
+                JSR L0_8332
                 LDX #$03
-                JSR L_8482
-                JMP L_9660
+                JSR L0_8482
+                JMP L0_9660
 
 ;==========================================================
 ; Text command CURSOR RIGHT
 ;==========================================================
-L_8253:
+L0_8253:
                 INC $23
                 LDA $23
                 CMP $66
-                BCC L_825E
-                JMP L_83A5
-L_825E:
-                JMP L_9660
+                BCC L0_825E
+                JMP L0_83A5
+L0_825E:
+                JMP L0_9660
 
 ;==========================================================
 ; Text command CURSOR DOWN
 ;==========================================================
-L_8261:
+L0_8261:
                 LDA $58
                 CLC
                 ADC $66
@@ -447,69 +447,69 @@ L_8261:
                 LDA $59
                 ADC #$00
                 STA $03
-                JSR L_84A8
+                JSR L0_84A8
                 TAY
-                JSR L_8334
+                JSR L0_8334
                 LDA $23
                 CLC
                 ADC $66
                 STA $23
-                JMP L_83A5
-L_827F:
+                JMP L0_83A5
+L0_827F:
                 LDA $22
                 CMP #$03
-                BNE L_8291
+                BNE L0_8291
                 LDA $23
-                BNE L_8291
+                BNE L0_8291
                 LDX #$01
                 LDY #$19
                 STX $56
                 STY $57
-L_8291:
+L0_8291:
                 LDX $56
                 LDY $57
                 STX $58
                 STY $59
                 STX $02
                 STY $03
-                JSR L_84A8
+                JSR L0_84A8
                 STA $66
                 LDA #$00
                 STA $23
                 LDX #$03
                 STX $22
-                JSR L_8482
-                JMP L_9660
+                JSR L0_8482
+                JMP L0_9660
 
 ;==========================================================
 ; Text command SHIFT-CLR/HOME
 ;==========================================================
-L_82B0:
-                JSR L_833C
+L0_82B0:
+                JSR L0_833C
                 LDA #$12
-                JMP L_8354
+                JMP L0_8354
 
 ;==========================================================
 ; Text command F3
 ;==========================================================
-L_82B8:
+L0_82B8:
                 LDA $5A
                 CMP $0342
                 LDA $5B
                 SBC $0343
-                BCC L_82B0
+                BCC L0_82B0
                 LDX $0342
-L_82C7:
+L0_82C7:
                 LDY $0343
                 STX $58
                 STY $59
                 LDA #$0A
-                JMP L_8354
+                JMP L0_8354
 
 ;==========================================================
 ; Text command F4
 ;==========================================================
-L_82D3:
+L0_82D3:
                 LDX $58
                 LDY $59
                 STX $0342
@@ -519,154 +519,154 @@ L_82D3:
 ;==========================================================
 ; Text command F1
 ;==========================================================
-L_82DE:
+L0_82DE:
                 LDX $56
                 LDY $57
                 STX $02
                 STY $03
                 LDA #$12
                 STA $26
-L_82EA:
-                JSR L_84A8
-                BCC L_8300
+L0_82EA:
+                JSR L0_84A8
+                BCC L0_8300
                 CLC
                 ADC $02
                 STA $02
                 STA $56
-                BCC L_82FC
+                BCC L0_82FC
                 INC $03
                 INC $57
-L_82FC:
+L0_82FC:
                 DEC $26
-                BNE L_82EA
-L_8300:
-                JMP L_8291
+                BNE L0_82EA
+L0_8300:
+                JMP L0_8291
 
 ;==========================================================
 ; Text command F2
 ;==========================================================
-L_8303:
+L0_8303:
                 LDA #$12
                 STA $26
-L_8307:
-                JSR L_8421
-                BEQ L_8310
-L_830C:
+L0_8307:
+                JSR L0_8421
+                BEQ L0_8310
+L0_830C:
                 DEC $26
-                BNE L_8307
-L_8310:
-                JMP L_8291
+                BNE L0_8307
+L0_8310:
+                JMP L0_8291
 
 ;==========================================================
 ; Text command F5
 ;==========================================================
-L_8313:
-                JSR L_8382
+L0_8313:
+                JSR L0_8382
                 LDY $66
-L_8318:
+L0_8318:
                 DEY
                 STY $23
-                JMP L_9660
+                JMP L0_9660
 
 ;==========================================================
 ; Text command F6
 ;==========================================================
-L_831E:
+L0_831E:
                 LDA $23
-                BEQ L_8313
-L_8322:
-                JSR L_8382
+                BEQ L0_8313
+L0_8322:
+                JSR L0_8382
                 LDA #$00
                 STA $23
-                JMP L_9660
+                JMP L0_9660
 
 ;==========================================================
 ; Text command SHIFT RETURN
 ;==========================================================
-L_832C:
-                JSR L_8322
-                JMP L_8261
-L_8332:
+L0_832C:
+                JSR L0_8322
+                JMP L0_8261
+L0_8332:
                 LDY $66
-L_8334:
+L0_8334:
                 DEY
                 CPY $23
-                BCS L_833B
+                BCS L0_833B
                 STY $23
-L_833B:
+L0_833B:
                 RTS
-L_833C:
+L0_833C:
                 LDY #$00
-L_833E:
+L0_833E:
                 LDA ($58),Y
-                BEQ L_8349
+                BEQ L0_8349
                 INY
-                BNE L_833E
+                BNE L0_833E
                 INC $59
-                BNE L_833E
-L_8349:
+                BNE L0_833E
+L0_8349:
                 TYA
                 CLC
                 ADC $58
                 STA $58
-                BCC L_8353
+                BCC L0_8353
                 INC $59
-L_8353:
+L0_8353:
                 RTS
-L_8354:
+L0_8354:
                 LDX $58
                 LDY $59
                 STX $56
                 STY $57
                 STA $26
-L_835E:
-                JSR L_8421
-                BEQ L_8367
+L0_835E:
+                JSR L0_8421
+                BEQ L0_8367
                 DEC $26
-                BNE L_835E
-L_8367:
+                BNE L0_835E
+L0_8367:
                 LDX #$58
-                JSR L_84D7
+                JSR L0_84D7
                 STX $22
                 LDX $56
                 LDY $57
                 STX $02
                 STY $03
                 LDX #$03
-                JSR L_8482
-L_837B:
+                JSR L0_8482
+L0_837B:
                 LDA #$00
                 STA $23
-L_837F:
-                JMP L_83A5
-L_8382:
+L0_837F:
+                JMP L0_83A5
+L0_8382:
                 LDA $22
                 CMP #$03
-                BEQ L_8395
-                JSR L_8463
-                JSR L_84A8
+                BEQ L0_8395
+                JSR L0_8463
+                JSR L0_84A8
                 CLC
                 ADC $02
                 CMP $58
-                BNE L_83A5
-L_8395:
+                BNE L0_83A5
+L0_8395:
                 LDX $58
                 LDY $59
                 STX $02
                 STY $03
-                JSR L_84A8
+                JSR L0_84A8
                 CMP $66
-                BNE L_83A5
+                BNE L0_83A5
                 RTS
-L_83A5:
+L0_83A5:
                 LDA $58
                 CLC
                 ADC $23
                 STA $58
-                BCC L_83B0
+                BCC L0_83B0
                 INC $59
-L_83B0:
-                JSR L_8463
+L0_83B0:
+                JSR L0_8463
                 STX $22
                 TXA
                 PHA
@@ -674,46 +674,46 @@ L_83B0:
                 PHA
                 LDA $03
                 PHA
-L_83BD:
+L0_83BD:
                 LDA $58
                 SEC
                 SBC $02
                 STA $23
-                JSR L_84A8
+                JSR L0_84A8
                 STA $66
-                BCC L_83E0
+                BCC L0_83E0
                 LDA $23
                 CMP $66
-                BCC L_83E0
+                BCC L0_83E0
                 INC $22
                 LDA $02
                 CLC
                 ADC $66
                 STA $02
-                BCC L_83BD
+                BCC L0_83BD
                 INC $03
-                BCS L_83BD
-L_83E0:
+                BCS L0_83BD
+L0_83E0:
                 LDX $02
                 LDY $03
                 STX $58
                 STY $59
-                JSR L_8332
-L_83EB:
+                JSR L0_8332
+L0_83EB:
                 LDA $22
                 CMP #$18
-                BCC L_8413
+                BCC L0_8413
                 PLA
                 PLA
                 PLA
                 LDA #$03
                 PHA
                 LDX $56
-L_83F9:
+L0_83F9:
                 LDY $57
                 STX $02
                 STY $03
-                JSR L_84A8
+                JSR L0_84A8
                 CLC
                 ADC $56
                 STA $56
@@ -723,179 +723,179 @@ L_83F9:
                 STA $57
                 PHA
                 DEC $22
-                BNE L_83EB
-L_8413:
+                BNE L0_83EB
+L0_8413:
                 PLA
                 STA $03
                 PLA
                 STA $02
                 PLA
                 TAX
-                JSR L_8482
-                JMP L_9660
-L_8421:
+                JSR L0_8482
+                JMP L0_9660
+L0_8421:
                 LDA $56
                 SEC
                 SBC #$28
                 STA $56
-                BCS L_842C
+                BCS L0_842C
                 DEC $57
-L_842C:
+L0_842C:
                 LDY #$27
                 LDA #$FF
                 STA $6A
-L_8432:
+L0_8432:
                 LDA ($56),Y
-                BEQ L_8455
+                BEQ L0_8455
                 CMP #$02
-                BEQ L_8456
+                BEQ L0_8456
                 CPY #$27
-                BEQ L_8450
+                BEQ L0_8450
                 CMP #$01
-                BEQ L_8455
+                BEQ L0_8455
                 CMP #$0D
-                BEQ L_8455
+                BEQ L0_8455
                 CMP #$2D
-                BEQ L_844E
+                BEQ L0_844E
                 CMP #$20
-                BNE L_8450
-L_844E:
+                BNE L0_8450
+L0_844E:
                 STY $6A
-L_8450:
+L0_8450:
                 DEY
-                BPL L_8432
+                BPL L0_8432
                 LDY $6A
-L_8455:
+L0_8455:
                 INY
-L_8456:
+L0_8456:
                 TYA
                 CLC
                 ADC $56
                 STA $56
-                BCC L_8460
+                BCC L0_8460
                 INC $57
-L_8460:
+L0_8460:
                 CPY #$28
                 RTS
-L_8463:
+L0_8463:
                 LDA $56
                 STA $02
-L_8467:
+L0_8467:
                 LDA $57
                 STA $03
                 LDX #$04
-L_846D:
+L0_846D:
                 CPX $22
-                BCS L_8480
-L_8471:
-                JSR L_84A8
+                BCS L0_8480
+L0_8471:
+                JSR L0_84A8
                 CLC
                 ADC $02
                 STA $02
-                BCC L_847D
+                BCC L0_847D
                 INC $03
-L_847D:
+L0_847D:
                 INX
-                BNE L_846D
-L_8480:
+                BNE L0_846D
+L0_8480:
                 DEX
                 RTS
-L_8482:
+L0_8482:
                 TXA
                 PHA
-                JSR L_84A8
-                BCC L_849F
+                JSR L0_84A8
+                BCC L0_849F
                 PHA
                 JSR print_msg
                 PLA
                 CLC
                 ADC $02
                 STA $02
-                BCC L_8497
+                BCC L0_8497
                 INC $03
-L_8497:
+L0_8497:
                 PLA
                 TAX
                 INX
                 CPX #$19
-                BCC L_8482
+                BCC L0_8482
                 RTS
-L_849F:
+L0_849F:
                 JSR print_msg
                 PLA
                 TAX
                 INX
-                JMP L_964F
-L_84A8:
+                JMP L0_964F
+L0_84A8:
                 LDY #$00
                 LDA #$28
                 STA $6A
-L_84AE:
+L0_84AE:
                 LDA ($02),Y
                 INY
                 CMP #$01
-                BCC L_84C0
-                BEQ L_84C0
+                BCC L0_84C0
+                BEQ L0_84C0
                 CMP #$02
-                BNE L_84C2
+                BNE L0_84C2
                 CPY #$01
-                BEQ L_84C2
+                BEQ L0_84C2
                 DEY
-L_84C0:
+L0_84C0:
                 TYA
                 RTS
-L_84C2:
+L0_84C2:
                 CMP #$0D
-                BEQ L_84C0
+                BEQ L0_84C0
                 CMP #$20
-                BEQ L_84CE
+                BEQ L0_84CE
                 CMP #$2D
-                BNE L_84D0
-L_84CE:
+                BNE L0_84D0
+L0_84CE:
                 STY $6A
-L_84D0:
+L0_84D0:
                 CPY #$28
-                BCC L_84AE
+                BCC L0_84AE
                 LDA $6A
                 RTS
-L_84D7:
+L0_84D7:
                 LDA $56
                 STA $02
                 LDA $57
                 STA $03
                 LDA #$03
                 STA $26
-L_84E3:
+L0_84E3:
                 LDA $00,X
                 SEC
                 SBC $02
                 STA $1C
                 LDA $01,X
                 SBC $03
-                BCC L_8510
-                BEQ L_84F6
+                BCC L0_8510
+                BEQ L0_84F6
                 LDA #$FF
                 STA $1C
-L_84F6:
-                JSR L_84A8
+L0_84F6:
+                JSR L0_84A8
                 CMP $1C
-                BEQ L_84FF
-                BCS L_8514
-L_84FF:
+                BEQ L0_84FF
+                BCS L0_8514
+L0_84FF:
                 CLC
                 ADC $02
                 STA $02
-                BCC L_8508
+                BCC L0_8508
                 INC $03
-L_8508:
+L0_8508:
                 INC $26
                 LDA $26
                 CMP #$19
-                BCC L_84E3
-L_8510:
+                BCC L0_84E3
+L0_8510:
                 LDA #$00
                 STA $1C
-L_8514:
+L0_8514:
                 LDX $26
                 LDA $1C
                 RTS
@@ -903,29 +903,29 @@ L_8514:
 ;==========================================================
 ; Text command F8
 ;==========================================================
-L_8519:
-                JSR L_8643
-                BCS L_8528
-                JSR L_8578
-                JSR L_85B1
-                JSR L_83A5
+L0_8519:
+                JSR L0_8643
+                BCS L0_8528
+                JSR L0_8578
+                JSR L0_85B1
+                JSR L0_83A5
                 CLC
-L_8528:
+L0_8528:
                 RTS
 
 ;==========================================================
 ; Text command C= M
 ;==========================================================
-L_8529:
-                JSR L_8519
-                BCS L_8528
-                BCC L_8549
+L0_8529:
+                JSR L0_8519
+                BCS L0_8528
+                BCC L0_8549
 ;==========================================================
 ; Text command C= ARROW LEFT
 ;==========================================================
-L_8530:
+L0_8530:
                 BIT $5C
-                BPL L_8572
+                BPL L0_8572
                 LDA $58
                 CLC
                 ADC $23
@@ -933,44 +933,44 @@ L_8530:
                 LDA $59
                 ADC #$00
                 TAY
-                BCC L_854E
+                BCC L0_854E
 ;==========================================================
 ; Text command C= C
 ;==========================================================
-L_8541:
-                JSR L_8643
-                BCS L_8572
-                JSR L_8578
-L_8549:
-                JSR L_860E
-                BCS L_8572
-L_854E:
+L0_8541:
+                JSR L0_8643
+                BCS L0_8572
+                JSR L0_8578
+L0_8549:
+                JSR L0_860E
+                BCS L0_8572
+L0_854E:
                 LDA $5A
                 SEC
                 ADC $6C
                 LDA $5B
                 ADC $6D
                 CMP #$3C
-                BCS L_8573
+                BCS L0_8573
                 STX $02
                 STY $03
                 TXA
                 PHA
                 TYA
                 PHA
-                JSR L_85E1
+                JSR L0_85E1
                 PLA
                 STA $09
                 PLA
                 STA $08
-                JSR L_858E
-                JSR L_83A5
-L_8572:
+                JSR L0_858E
+                JSR L0_83A5
+L0_8572:
                 RTS
-L_8573:
+L0_8573:
                 LDA #$05                ; msg. no.
-                JMP L_9747              ; print "Preteceni pameti"
-L_8578:
+                JMP L0_9747              ; print "Preteceni pameti"
+L0_8578:
                 LDX $5D
                 LDY $5E
                 STX $02
@@ -981,8 +981,8 @@ L_8578:
                 STY $09
                 LDX $6D
                 INX
-                JMP L_81EA
-L_858E:
+                JMP L0_81EA
+L0_858E:
                 LDY #$00
                 STY $02
                 LDA #$3F                ;$3F00
@@ -990,30 +990,30 @@ L_858E:
                 LDX $6C
                 LDA $6D
                 STA $1C
-L_859C:
+L0_859C:
                 LDA ($02),Y
                 STA ($08),Y
                 INY
-                BNE L_85A7
+                BNE L0_85A7
                 INC $03
                 INC $09
-L_85A7:
+L0_85A7:
                 DEX
                 CPX #$FF
-                BNE L_859C
+                BNE L0_859C
                 DEC $1C
-                BPL L_859C
+                BPL L0_859C
                 RTS
-L_85B1:
+L0_85B1:
                 LDX $5F
                 LDY $60
                 INX
-                BNE L_85B9
+                BNE L0_85B9
                 INY
-L_85B9:
+L0_85B9:
                 STX $02
                 STY $03
-L_85BD:
+L0_85BD:
                 LDX $5D
                 LDY $5E
                 STX $08
@@ -1025,7 +1025,7 @@ L_85BD:
                 SBC $60
                 TAX
                 INX
-                JSR L_81EA
+                JSR L0_81EA
                 LDA $5A
                 CLC
                 SBC $6C
@@ -1034,7 +1034,7 @@ L_85BD:
                 SBC $6D
                 STA $5B
                 RTS
-L_85E1:
+L0_85E1:
                 LDA $5A
                 CMP $02
                 LDA $5B
@@ -1051,7 +1051,7 @@ L_85E1:
                 LDA $03
                 ADC $6D
                 STA $09
-                JSR L_81D8
+                JSR L0_81D8
                 LDA $5A
                 SEC
                 ADC $6C
@@ -1060,59 +1060,59 @@ L_85E1:
                 ADC $6D
                 STA $5B
                 RTS
-L_860E:
+L0_860E:
                 LDA #$07                ; msg. no.
-                JSR L_9747              ; print "Označ cil a potvrd ..."
-L_8613:
+                JSR L0_9747              ; print "Označ cil a potvrd ..."
+L0_8613:
                 JSR $9474               ; get character from imput device?
                 CMP #$A0
-                BCC L_8613
+                BCC L0_8613
                 CMP #$B3
-                BEQ L_863E
+                BEQ L0_863E
                 CMP #$AD
-                BEQ L_862A
-                BCS L_8613
-                JSR L_8064
-                JMP L_8613
-L_862A:
+                BEQ L0_862A
+                BCS L0_8613
+                JSR L0_8064
+                JMP L0_8613
+L0_862A:
                 LDA $58
-L_862C:
+L0_862C:
                 CLC
                 ADC $23
                 PHA
                 LDA $59
                 ADC #$00
                 PHA
-                JSR L_973E
+                JSR L0_973E
                 PLA
                 TAY
                 PLA
                 TAX
                 CLC
                 RTS
-L_863E:
-                JSR L_973E
-L_8641:
+L0_863E:
+                JSR L0_973E
+L0_8641:
                 SEC
-L_8642:
+L0_8642:
                 RTS
-L_8643:
+L0_8643:
                 LDY $23
                 LDA ($58),Y
                 SEC
-                BEQ L_8642
+                BEQ L0_8642
                 LDA #$06                ; msg. no.
-                JSR L_9747              ; print "Oznac konec a potvrd"
-                JSR L_8382
+                JSR L0_9747              ; print "Oznac konec a potvrd"
+                JSR L0_8382
                 LDA $56
                 PHA
                 LDA $57
                 PHA
-L_8658:
+L0_8658:
                 LDA $22
                 PHA
                 LDA $58
-L_865D:
+L0_865D:
                 CLC
                 ADC $23
                 STA $5D
@@ -1121,22 +1121,22 @@ L_865D:
                 ADC #$00
                 STA $5E
                 STA $60
-L_866C:
-                JSR L_86EF
-L_866F:
+L0_866C:
+                JSR L0_86EF
+L0_866F:
                 JSR $9474               ; get character from imput device?
                 CMP #$A0
-L_8674:
-                BCC L_866F
+L0_8674:
+                BCC L0_866F
                 CMP #$B3
-                BEQ L_86A0
-L_867A:
+                BEQ L0_86A0
+L0_867A:
                 CMP #$AD
                 CLC
-                BEQ L_86A0
+                BEQ L0_86A0
                 CMP #$AD
-                BCS L_866F
-                JSR L_8064
+                BCS L0_866F
+                JSR L0_8064
                 LDA $58
                 CLC
                 ADC $23
@@ -1149,19 +1149,19 @@ L_867A:
                 STA $60
                 ROL $1C
                 SBC $5E
-                BCS L_866C
+                BCS L0_866C
                 SEC
-L_86A0:
+L0_86A0:
                 ROL $1C
                 LDY #$00
                 LDA ($5F),Y
-                BNE L_86B0
+                BNE L0_86B0
                 LDA $5F
-                BNE L_86AE
+                BNE L0_86AE
                 DEC $60
-L_86AE:
+L0_86AE:
                 DEC $5F
-L_86B0:
+L0_86B0:
                 PLA
                 STA $22
                 PLA
@@ -1178,7 +1178,7 @@ L_86B0:
                 STA $23
                 ROR $1C
                 PHP
-                BCS L_86DF
+                BCS L0_86DF
                 LDA #$80
                 STA $5C
                 LDA $5F
@@ -1188,25 +1188,25 @@ L_86B0:
                 LDA $60
                 SBC $5E
                 STA $6D
-L_86DF:
+L0_86DF:
                 LDX #$03
-                JSR L_8482
-                JSR L_9142
-                JSR L_973E
-                JSR L_83A5
+                JSR L0_8482
+                JSR L0_9142
+                JSR L0_973E
+                JSR L0_83A5
                 PLP
                 RTS
-L_86EF:
+L0_86EF:
                 LDX #$5F
-                JSR L_8734
+                JSR L0_8734
                 INX
-                BNE L_86F8
+                BNE L0_86F8
                 INY
-L_86F8:
+L0_86F8:
                 STX $08
                 STY $09
                 LDX #$5D
-                JSR L_8734
+                JSR L0_8734
                 STX $1C
                 STY $1D
                 LDA #$D8
@@ -1214,30 +1214,30 @@ L_86F8:
                 LDA #$00
                 STA $02
                 LDY #$78
-L_870F:
+L0_870F:
                 LDX $1701
                 CPY $1C
                 LDA $03
                 SBC $1D
-                BCC L_8725
+                BCC L0_8725
                 CPY $08
                 LDA $03
                 SBC $09
-                BCS L_8725
+                BCS L0_8725
                 LDX $1703
-L_8725:
+L0_8725:
                 TXA
                 STA ($02),Y
                 INY
-                BNE L_870F
-L_872B:
+                BNE L0_870F
+L0_872B:
                 INC $03
                 LDA $03
                 CMP #$DC
-                BCC L_870F
+                BCC L0_870F
                 RTS
-L_8734:
-                JSR L_84D7
+L0_8734:
+                JSR L0_84D7
                 PHA
                 LDY #$28
                 JSR multiply_x_y        ; multiply X with Y
@@ -1253,7 +1253,7 @@ L_8734:
 ;==========================================================
 ; Text command C= S
 ;==========================================================
-L_8749:
+L0_8749:
 ; Nastavení rozsahu textu k uložení
                 LDX #$01
                 LDY #$19
@@ -1267,19 +1267,19 @@ L_8749:
                 LDY #$87
                 STX $04
                 STY $05
-                JSR L_9598              ; Zobraz dialog
-                BCS L_87D6              ; Zrušeno -> konec
-                BEQ L_8770              ; OK bez výběru -> pokračuj
-                JSR L_9660
-                JSR L_8643              ; Označ blok textu
-                BCS L_87D6
-L_8770:
+                JSR L0_9598              ; Zobraz dialog
+                BCS L0_87D6              ; Zrušeno -> konec
+                BEQ L0_8770              ; OK bez výběru -> pokračuj
+                JSR L0_9660
+                JSR L0_8643              ; Označ blok textu
+                BCS L0_87D6
+L0_8770:
                 LDA #$03                ; msg. no. 03
-                JSR L_957C              ; print "Nazev"
-                BCS L_87D6
+                JSR L0_957C              ; print "Nazev"
+                BCS L0_87D6
                 LDY #$01
-                JSR L_9297              ; set file prameter and open
-                BCS L_87CE
+                JSR L0_9297              ; set file prameter and open
+                BCS L0_87CE
 ; === Zápis 'T' (signatura textu) ===
                 LDA #$54                ; 'T'
                 JSR CBM_CHROUT          ; Output vetor
@@ -1287,23 +1287,23 @@ L_8770:
                 LDY $5D
                 LDA #$00
                 STA $5D
-L_8789:
+L0_8789:
                 LDA ($5D),Y             ; Čti bajt textu
                 JSR CBM_CHROUT          ; Zapiš na disk
-L_878E:
+L0_878E:
                 LDA $90
-                BNE L_87CE              ; Chyba I/O
+                BNE L0_87CE              ; Chyba I/O
                 CPY $5F                 ; Konec textu
-                BNE L_879C
+                BNE L0_879C
                 LDA $5E
                 CMP $60
-                BEQ L_87A3              ; Ano -> pokračuj na layout
-L_879C:
+                BEQ L0_87A3              ; Ano -> pokračuj na layout
+L0_879C:
                 INY
-                BNE L_8789
+                BNE L0_8789
                 INC $5E
-                BNE L_8789
-L_87A3:
+                BNE L0_8789
+L0_87A3:
 ; === Zápis $00 (ukončení textu) ===
                 LDA #$00
                 JSR CBM_CHROUT          ; Output Vector
@@ -1320,98 +1320,98 @@ L_87A3:
 ; kde n = délka názvu souboru (dolní nibble flags)
 ; Souřadnice jsou v jednotkách 4 bodů
                 LDY #$00
-L_87B5:
+L0_87B5:
                 LDA $1800,Y             ; Layout data z $1800
                 JSR CBM_CHROUT
                 INY
                 CPY $1700
-                BCC L_87B5
+                BCC L0_87B5
 ; === Zápis barev ($1701-$170C) ===
                 LDY #$00
-L_87C3:
+L0_87C3:
                 LDA $1701,Y             ; Barvy a další nastavení
                 JSR CBM_CHROUT
                 INY
                 CPY #$0C                ; 12 bajtů
-                BCC L_87C3
-L_87CE:
-                JSR L_92B2              ; restore i/o and close?
+                BCC L0_87C3
+L0_87CE:
+                JSR L0_92B2              ; restore i/o and close?
                 LDA #$00
-                JSR L_9258
-L_87D6:
-                JMP L_9660
+                JSR L0_9258
+L0_87D6:
+                JMP L0_9660
                 !by $0A,$01,$02,$00,$06,$0E
 ;==========================================================
 ; Text command C= L
 ;==========================================================
-L_87DF:
+L0_87DF:
                 LDA #$00
-                JSR L_915D              ;read dir
-                BCS L_882C
+                JSR L0_915D              ;read dir
+                BCS L0_882C
                 LDY #$02
-                JSR L_9297              ; Otevři soubor pro čtení
+                JSR L0_9297              ; Otevři soubor pro čtení
 ; === Kontrola signatury 'T' ===
                 JSR CBM_CHRIN           ; Přečti první bajt
                 LDX #$00
                 CMP #$54                ; Je to 'T'?
-                BEQ L_880D              ; Ano -> nativní PageFox formát
+                BEQ L0_880D              ; Ano -> nativní PageFox formát
 ; Není 'T' -> dialog pro výběr formátu (ASCII, atd.)
                 JSR CBM_CLRCHN
                 LDX #$41
                 LDY #$88
                 STX $04
                 STY $05
-                JSR L_9598
-                BCS L_8824
+                JSR L0_9598
+                BCS L0_8824
                 PHA
                 LDX #$08
                 JSR CBM_CHKIN
                 PLA
                 TAX
                 INX
-L_880D:
+L0_880D:
                 STX $24                 ; $24 = typ formátu (0=PageFox, 1-4=jiné)
-                JSR L_8849              ; Načti textová data
-                BCS L_8825
+                JSR L0_8849              ; Načti textová data
+                BCS L0_8825
                 BIT $1F
-                BPL L_8824
+                BPL L0_8824
                 LDA $24
-                BNE L_8824              ; Pokud není PageFox, přeskoč layout
+                BNE L0_8824              ; Pokud není PageFox, přeskoč layout
 ; === Načtení layout sekce (jen pro PageFox) ===
-                JSR L_8956              ; Načti 'L' + layout data
-                BCS L_8824
-                JSR L_897A              ; Načti barvy
-L_8824:
+                JSR L0_8956              ; Načti 'L' + layout data
+                BCS L0_8824
+                JSR L0_897A              ; Načti barvy
+L0_8824:
                 CLC
-L_8825:
+L0_8825:
                 PHP
-                JSR L_92B2              ; Zavři soubor
+                JSR L0_92B2              ; Zavři soubor
                 PLP
-                BCS L_8831
-L_882C:
+                BCS L0_8831
+L0_882C:
                 LDA #$00
-                JSR L_9258
-L_8831:
+                JSR L0_9258
+L0_8831:
 ; Překresli obrazovku
                 LDX $56
                 LDY $57
                 STX $02
                 STY $03
                 LDX #$03
-                JSR L_8482
-                JMP L_83A5
+                JSR L0_8482
+                JMP L0_83A5
 ; Definice klikacich poli pro vetu 1D (ASCII, ..., VIZA)
                 !by $1D, $01, $04, $00, $07, $12, $22, $28
-L_8849:
+L0_8849:
                 BIT $1F
-                BPL L_8853
+                BPL L0_8853
                 LDX #$01
                 LDY #$19
-                BNE L_8857
-L_8853:
+                BNE L0_8857
+L0_8853:
                 LDX $5A
                 LDY $5B
-L_8857:
+L0_8857:
                 STX $5F
                 STY $60
                 LDA #$00
@@ -1420,42 +1420,42 @@ L_8857:
                 LDY #$3F
                 STX $02
                 STY $03
-L_8867:
+L0_8867:
                 JSR CBM_CHRIN
-                JSR L_88E3
-                BCS L_8894
-L_886F:
+                JSR L0_88E3
+                BCS L0_8894
+L0_886F:
                 TAX
-                BEQ L_8899
+                BEQ L0_8899
                 LDY #$00
                 STA ($02),Y
                 INC $02
-                BNE L_887C
+                BNE L0_887C
                 INC $03
-L_887C:
+L0_887C:
                 LDX $5F
                 LDY $60
                 INX
-                BNE L_8890
+                BNE L0_8890
                 INY
                 CPY #$3C
-                BCC L_8890
+                BCC L0_8890
                 LDA #$05                ; msg. no.
-                JSR L_9747              ; print "Preteceni pameti"
+                JSR L0_9747              ; print "Preteceni pameti"
                 SEC
-                BCS L_8899
-L_8890:
+                BCS L0_8899
+L0_8890:
                 STX $5F
                 STY $60
-L_8894:
+L0_8894:
                 LDA $90
-                BEQ L_8867
+                BEQ L0_8867
                 CLC
-L_8899:
+L0_8899:
                 PHP
                 BIT $1F
-                BPL L_88B3
-                JSR L_90C2
+                BPL L0_88B3
+                JSR L0_90C2
                 STX $56
                 STY $57
                 STX $58
@@ -1464,8 +1464,8 @@ L_8899:
                 STA $23
                 LDA #$03
                 STA $22
-                BNE L_88BE
-L_88B3:
+                BNE L0_88BE
+L0_88B3:
                 LDA $58
                 CLC
                 ADC $23
@@ -1473,7 +1473,7 @@ L_88B3:
                 LDA $59
                 ADC #$00
                 TAY
-L_88BE:
+L0_88BE:
                 LDA $5F
                 CLC
                 SBC $5A
@@ -1481,40 +1481,40 @@ L_88BE:
                 LDA $60
                 SBC $5B
                 STA $6D
-                BCC L_88E1
+                BCC L0_88E1
                 STX $02
                 STY $03
                 TXA
                 PHA
                 TYA
                 PHA
-                JSR L_85E1
+                JSR L0_85E1
                 PLA
                 STA $09
                 PLA
                 STA $08
-                JSR L_858E
-L_88E1:
+                JSR L0_858E
+L0_88E1:
                 PLP
                 RTS
-L_88E3:
+L0_88E3:
                 LDX $24
-                BEQ L_8920
+                BEQ L0_8920
                 CPX #$04
-                BNE L_88FB
+                BNE L0_88FB
                 LDY #VIZA_LEN
-L_88ED:
+L0_88ED:
                 DEY
-                BMI L_88FA
+                BMI L0_88FA
                 CMP VIZA_IN,Y
-                BNE L_88ED
+                BNE L0_88ED
                 LDA VIZA_OUT,Y
-                BCS L_8920
-L_88FA:
+                BCS L0_8920
+L0_88FA:
                 DEX
-L_88FB:
+L0_88FB:
                 DEX
-                BEQ L_8913
+                BEQ L0_8913
                 DEX
                 TAY
                 AND #$1F
@@ -1532,20 +1532,20 @@ L_88FB:
                 ROL
                 TAY
                 PLA
-                ORA L_8922,Y
-L_8913:
+                ORA L0_8922,Y
+L0_8913:
                 CMP #$80
-                BCS L_8921
+                BCS L0_8921
                 CMP #$20
-                BCS L_8920
+                BCS L0_8920
                 CMP #$0D
                 SEC
-                BNE L_8921
-L_8920:
+                BNE L0_8921
+L0_8920:
                 CLC
-L_8921:
+L0_8921:
                 RTS
-L_8922:
+L0_8922:
                 !by $00,$60,$20,$20,$60,$40,$00,$00
                 !by $00,$00,$00,$00,$40,$00,$00,$00
 ; VIZA_DE map change in L_88DE
@@ -1567,178 +1567,178 @@ VIZA_DE_OUT:
 ; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = obrázek (5+n bajtů)
 ; kde n = délka názvu souboru (dolní nibble flags)
 ;==========================================================
-L_8956:
+L0_8956:
                 JSR CBM_CHRIN           ; Čti bajt
                 TAX
-                BEQ L_8956              ; Přeskoč $00
+                BEQ L0_8956              ; Přeskoč $00
                 CMP #$4C                ; Je to 'L'?
                 SEC
-                BNE L_8979              ; Ne -> chyba
+                BNE L0_8979              ; Ne -> chyba
 ; === Načti délku layoutu ===
                 JSR CBM_CHRIN
                 STA $1700               ; Ulož délku (počet bajtů)
 ; === Načti layout data (rámečky) ===
                 LDY #$00
-L_8969:
+L0_8969:
                 JSR CBM_CHRIN
                 STA $1800,Y             ; Ulož do $1800+
                 INY
                 CPY $1700
-                BCC L_8969
-L_8975:
-                JSR L_907B              ; Zpracuj layout data?
+                BCC L0_8969
+L0_8975:
+                JSR L0_907B              ; Zpracuj layout data?
                 CLC
-L_8979:
+L0_8979:
                 RTS
-L_897A:
+L0_897A:
                 LDY #$00
-L_897C:
+L0_897C:
                 JSR CBM_CHRIN           ; Čti bajt
                 STA $1701,Y             ; Ulož do $1701+ (barvy)
                 INY
                 LDA $90                 ; Kontrola konce souboru
-                BEQ L_897C              ; Pokračuj dokud není EOF
-                JMP L_9142              ; Aplikuj barvy na obrazovku
+                BEQ L0_897C              ; Pokračuj dokud není EOF
+                JMP L0_9142              ; Aplikuj barvy na obrazovku
 ;==========================================================
 ; Text command C= D
 ;==========================================================
-L_898A:
+L0_898A:
                 LDA #$02
-                JSR L_957C
-                BCS L_8994
-                JSR L_9258
-L_8994:
-                JMP L_9660
+                JSR L0_957C
+                BCS L0_8994
+                JSR L0_9258
+L0_8994:
+                JMP L0_9660
 ;==========================================================
 ; Text command C= F
 ;==========================================================
-L_8997:
+L0_8997:
                 LDY #$00
-                JSR L_8A08
-                BCS L_89B8
+                JSR L0_8A08
+                BCS L0_89B8
                 LDA #$00
-L_89A0:
-                JSR L_8A6F
-                BCS L_89B8
+L0_89A0:
+                JSR L0_8A6F
+                BCS L0_89B8
                 LDA #$0E                ; msg. no.
-                JSR L_9747              ; print "RETURN=Dale"
-L_89AA:
+                JSR L0_9747              ; print "RETURN=Dale"
+L0_89AA:
                 JSR $9474
-                BEQ L_89AA
+                BEQ L0_89AA
                 CMP #$AD
-                BNE L_89B8
-L_89B3:
+                BNE L0_89B8
+L0_89B3:
                 LDA $0355
-                BCS L_89A0
-L_89B8:
-                JSR L_9660
-                JMP L_973E
+                BCS L0_89A0
+L0_89B8:
+                JSR L0_9660
+                JMP L0_973E
 ;==========================================================
 ; Text command C= R
 ;==========================================================
-L_89BD:
+L0_89BD:
                 LDY #$00
-                JSR L_8A08
-                BCS L_89B8
+                JSR L0_8A08
+                BCS L0_89B8
                 LDY #$21
-                JSR L_8A08
-L_89CA:
-                BCS L_89B8
+                JSR L0_8A08
+L0_89CA:
+                BCS L0_89B8
                 LDA #$00
                 STA $1F
-L_89D0:
-                JSR L_8A6F
-                BCS L_89B8
+L0_89D0:
+                JSR L0_8A6F
+                BCS L0_89B8
                 LDA #$0F                ; msg. no.
-                JSR L_9747              ; print "RETURN=Nahradit..."
-L_89DA:
+                JSR L0_9747              ; print "RETURN=Nahradit..."
+L0_89DA:
                 JSR $9474
                 CMP #$B3
-                BEQ L_89B8
+                BEQ L0_89B8
                 BIT $1F
-                BMI L_89FB
+                BMI L0_89FB
                 TAX
-                BEQ L_89DA
+                BEQ L0_89DA
                 LDA $0355
                 CPX #$20
-                BEQ L_89D0
+                BEQ L0_89D0
                 CPX #$AD
-                BEQ L_89FB
+                BEQ L0_89FB
                 CPX #$AC
-                BNE L_89B8
+                BNE L0_89B8
                 LDA #$80
                 STA $1F
-L_89FB:
-                JSR L_8AD2
+L0_89FB:
+                JSR L0_8AD2
                 LDA $0376
-                BCC L_89D0
+                BCC L0_89D0
                 LDA #$05                ; msg. no.
-                JMP L_9747              ; print "Preteceni pameti"
-L_8A08:
+                JMP L0_9747              ; print "Preteceni pameti"
+L0_8A08:
                 STY $85
-                JSR L_8A64
+                JSR L0_8A64
                 LDY $85
                 LDA $0355,Y
-                BEQ L_8A40
+                BEQ L0_8A40
                 TAX
                 DEX
                 CLC
                 ADC $85
                 TAY
-L_8A1A:
+L0_8A1A:
                 LDA $0355,Y
                 STA $0430,X
                 DEY
                 DEX
-                BPL L_8A1A
+                BPL L0_8A1A
                 LDA #$08
                 LDY #$01
-                JSR L_9664
-L_8A2B:
+                JSR L0_9664
+L0_8A2B:
                 JSR $9474
-                BEQ L_8A2B
+                BEQ L0_8A2B
                 CMP #$AD
-                BEQ L_8A62
+                BEQ L0_8A62
                 SEI
                 LDX $C6
                 STA $0277,X
                 INC $C6
                 CLI
-                JSR L_8A64
-L_8A40:
-                JSR L_94DB
-                BCS L_8A63
+                JSR L0_8A64
+L0_8A40:
+                JSR L0_94DB
+                BCS L0_8A63
                 SEC
                 TAX
                 ORA $85
-                BEQ L_8A63
+                BEQ L0_8A63
                 LDY $85
                 TXA
                 STA $0355,Y
-                BEQ L_8A62
+                BEQ L0_8A62
                 CLC
                 ADC $85
                 TAY
                 DEX
-L_8A58:
+L0_8A58:
                 LDA $0430,X
                 STA $0355,Y
-L_8A5E:
+L0_8A5E:
                 DEY
                 DEX
-                BPL L_8A58
-L_8A62:
+                BPL L0_8A58
+L0_8A62:
                 CLC
-L_8A63:
+L0_8A63:
                 RTS
-L_8A64:
+L0_8A64:
                 LDA #$0C
                 LDY $85
-                BEQ L_8A6C
+                BEQ L0_8A6C
                 LDA #$0D                ; msg. no.
-L_8A6C:
-                JMP L_9747              ; print "Novy"
-L_8A6F:
+L0_8A6C:
+                JMP L0_9747              ; print "Novy"
+L0_8A6F:
                 SEI
                 CLC
                 ADC $23
@@ -1747,7 +1747,7 @@ L_8A6F:
                 LDA $59
                 ADC #$00
                 STA $03
-L_8A7D:
+L0_8A7D:
                 LDA $02
                 CLC
                 ADC $0355
@@ -1759,47 +1759,47 @@ L_8A7D:
                 ADC #$00
                 ROL $1C
                 SBC $5B
-                BCS L_8AC7
+                BCS L0_8AC7
                 LDY #$00
-L_8A96:
+L0_8A96:
                 LDA ($02),Y
                 BIT $54
-                BPL L_8A9F
-                JSR L_944B
-L_8A9F:
+                BPL L0_8A9F
+                JSR L0_944B
+L0_8A9F:
                 STA $1C
-L_8AA1:
+L0_8AA1:
                 LDA $0356,Y
                 CMP #$09
-                BEQ L_8AB3
+                BEQ L0_8AB3
                 BIT $54
-                BPL L_8AAF
-                JSR L_944B
-L_8AAF:
+                BPL L0_8AAF
+                JSR L0_944B
+L0_8AAF:
                 CMP $1C
-                BNE L_8AC9
-L_8AB3:
+                BNE L0_8AC9
+L0_8AB3:
                 INY
                 CPY $0355
-                BCC L_8A96
+                BCC L0_8A96
                 LDX $02
                 LDY $03
                 STX $58
                 STY $59
-L_8AC1:
+L0_8AC1:
                 LDA #$0A                ; msg. no.
-                JSR L_8354
+                JSR L0_8354
                 CLC
-L_8AC7:
+L0_8AC7:
                 CLI
                 RTS
-L_8AC9:
+L0_8AC9:
                 INC $02
-                BNE L_8ACF
+                BNE L0_8ACF
                 INC $03
-L_8ACF:
-                JMP L_8A7D
-L_8AD2:
+L0_8ACF:
+                JMP L0_8A7D
+L0_8AD2:
                 LDA $6C
                 PHA
                 LDA $6D
@@ -1810,15 +1810,15 @@ L_8AD2:
                 TAX
                 LDA #$00
                 STA $6D
-L_8AE2:
+L0_8AE2:
                 ADC $59
                 TAY
                 LDA $0376
                 SEC
                 SBC $0355
-L_8AEC:
-                BEQ L_8B29
-                BCC L_8B0D
+L0_8AEC:
+                BEQ L0_8B29
+                BCC L0_8B0D
                 STA $6C
                 DEC $6C
                 CLC
@@ -1826,16 +1826,16 @@ L_8AEC:
                 LDA $5B
                 ADC #$00
                 CMP #$3C
-                BCS L_8B3F
+                BCS L0_8B3F
                 STX $02
                 STY $03
                 TXA
                 PHA
                 TYA
                 PHA
-                JSR L_85E1
-                JMP L_8B25
-L_8B0D:
+                JSR L0_85E1
+                JMP L0_8B25
+L0_8B0D:
                 EOR #$FF
                 STA $6C
                 STX $5D
@@ -1849,28 +1849,28 @@ L_8B0D:
                 PHA
                 ADC #$00
                 STA $60
-                JSR L_85B1
-L_8B25:
+                JSR L0_85B1
+L0_8B25:
                 PLA
                 TAY
                 PLA
                 TAX
-L_8B29:
+L0_8B29:
                 STX $02
                 STY $03
                 LDY $0376
-L_8B30:
-                BEQ L_8B3B
+L0_8B30:
+                BEQ L0_8B3B
                 DEY
-L_8B33:
+L0_8B33:
                 LDA $0377,Y
                 STA ($02),Y
                 DEY
-                BPL L_8B33
-L_8B3B:
-                JSR L_83A5
+                BPL L0_8B33
+L0_8B3B:
+                JSR L0_83A5
                 CLC
-L_8B3F:
+L0_8B3F:
                 PLA
                 STA $6D
                 PLA
@@ -1879,43 +1879,43 @@ L_8B3F:
 ;==========================================================
 ; Text command C= F1 - F8
 ;==========================================================
-L_8B45:
+L0_8B45:
                 LDA #$09                ; msg. no.
-                JSR L_9747              ; print "F1=Text ...."
-L_8B4B:
+                JSR L0_9747              ; print "F1=Text ...."
+L0_8B4B:
                 JSR $9474
                 CMP #$B3
-                BEQ L_8B80
+                BEQ L0_8B80
                 CMP #$AA
-                BNE L_8B5F
+                BNE L0_8B5F
                 INC $1702
                 LDX $1702
                 STX $D021
-L_8B5F:
+L0_8B5F:
                 CMP #$B1
-                BNE L_8B66
-                INC L_D020
-L_8B66:
+                BNE L0_8B66
+                INC $D020
+L0_8B66:
                 CMP #$A8
-                BNE L_8B73
+                BNE L0_8B73
                 INC $1701
-                JSR L_9142
-                JMP L_8B4B
-L_8B73:
+                JSR L0_9142
+                JMP L0_8B4B
+L0_8B73:
                 CMP #$A6
-                BNE L_8B4B
+                BNE L0_8B4B
                 INC $1703
-                JSR L_9136
-                JMP L_8B4B
-L_8B80:
-                JMP L_973E
+                JSR L0_9136
+                JMP L0_8B4B
+L0_8B80:
+                JMP L0_973E
 
 ;==========================================================
 ; Text command C= CLR/HOME
 ;==========================================================
-L_8B83:
+L0_8B83:
                 LDA #$08                ; msg. no.
-                JSR L_9747              ; print "Volnych znaku:"
+                JSR L0_9747              ; print "Volnych znaku:"
                 LDA #$00
                 CLC
                 SBC $5A
@@ -1925,80 +1925,80 @@ L_8B83:
                 STA $1B
                 LDX #$01
                 LDY #$0F
-                JMP L_9682
+                JMP L0_9682
 ;==========================================================
 ; Text command C= V
 ;==========================================================
-L_8B9B:
+L0_8B9B:
                 LDA #$1E                ; msg. no.
-                JMP L_9747              ; print "Pagefox version"
-L_8BA1:
+                JMP L0_9747              ; print "Pagefox version"
+L0_8BA1:
                 LDA $3F
                 ASL
                 ASL
                 ORA $3F
                 AND #$24
                 CMP #$04
-                BNE L_8BE3
+                BNE L0_8BE3
                 LDA #$FF
                 STA $3F
-                JSR L_8E0A
-                JSR L_8EAA
-L_8BB7:
+                JSR L0_8E0A
+                JSR L0_8EAA
+L0_8BB7:
                 JSR CBM_GETIN
                 CMP #$B3
-                BEQ L_8BDD
+                BEQ L0_8BDD
                 BIT $36
-                BPL L_8BC5
+                BPL L0_8BC5
                 JSR $8DB3
-L_8BC5:
+L0_8BC5:
                 LDA $3F
                 ASL
                 ASL
                 ORA $3F
                 AND #$24
                 CMP #$04
-                BNE L_8BB7
+                BNE L0_8BB7
                 LDA #$FF
                 STA $3F
                 JSR $8DB3
-                JSR L_8BE4
-                BCC L_8BB7
-L_8BDD:
-                JSR L_90D3
-                JSR L_9660
-L_8BE3:
+                JSR L0_8BE4
+                BCC L0_8BB7
+L0_8BDD:
+                JSR L0_90D3
+                JSR L0_9660
+L0_8BE3:
                 RTS
-L_8BE4:
-                JSR L_8C09
-                BCS L_8C08
-                BEQ L_8C08
+L0_8BE4:
+                JSR L0_8C09
+                BCS L0_8C08
+                BEQ L0_8C08
                 CMP #$9F
-                BEQ L_8BF7
-                BCS L_8BFC
+                BEQ L0_8BF7
+                BCS L0_8BFC
                 JSR $8C6C
                 CLC
-                BCC L_8C08
-L_8BF7:
+                BCC L0_8C08
+L0_8BF7:
                 JSR $8CC9
                 SEC
                 RTS
-L_8BFC:
+L0_8BFC:
                 PHA
-                JSR L_90D3
-                JSR L_9660
+                JSR L0_90D3
+                JSR L0_9660
                 PLA
-                JSR L_8057
+                JSR L0_8057
                 SEC
-L_8C08:
+L0_8C08:
                 RTS
-L_8C09:
+L0_8C09:
                 LDA $0B
                 SEC
                 SBC #$50
-                BCC L_8C38
+                BCC L0_8C38
                 CMP #$A0
-                BCS L_8C38
+                BCS L0_8C38
                 LSR
                 LSR
                 LSR
@@ -2007,10 +2007,10 @@ L_8C09:
                 LDA $0D
                 SEC
                 SBC #$48
-                BCC L_8C38
-L_8C21:
+                BCC L0_8C38
+L0_8C21:
                 CMP #$50
-                BCS L_8C38
+                BCS L0_8C38
                 AND #$F0
                 LSR
                 LSR
@@ -2021,292 +2021,292 @@ L_8C21:
                 ASL
                 ADC $1C
                 TAX
-                LDA L_8C3A,X
-L_8C36:
+                LDA L0_8C3A,X
+L0_8C36:
                 CLC
                 RTS
-L_8C38:
+L0_8C38:
                 SEC
                 RTS
-L_8C3A:
+L0_8C3A:
                 !by $00
                 !by $00
                 !by $00
-L_8C3D:
-                !by $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $01
-                !byte $02
-                !byte $9F
+L0_8C3D:
                 !by $00
                 !by $00
                 !by $00
                 !by $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $03
-                !byte $04
-                !byte $9F
+                !by $01
+                !by $02
+                !by $9F
                 !by $00
                 !by $00
-                !byte $00
-                !byte $00
-L_8C52:
-                !byte $00
-L_8C53:
-                !byte $00
-                !byte $00
-L_8C55:
-                !byte $05
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $03
+                !by $04
+                !by $9F
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+L0_8C52:
+                !by $00
+L0_8C53:
+                !by $00
+                !by $00
+L0_8C55:
+                !by $05
                 !by $06, $9F
                 !by $11, $09
                 !by $08
-                !byte $0F
+                !by $0F
                 !by $0A
                 !by $10,$0D
                 !by $0E, $0B, $0C
-                !byte $B2
-                !byte $BB
+                !by $B2
+                !by $BB
                 !by $BC, $BE, $BF
                 !by $B5, $B6
                 !by $BA
                 !by $B8
                 LDA $08C9,Y
-                BCC L_8C90
+                BCC L0_8C90
                 PHA
                 TXA
                 SEC
                 SBC #$1E
-                JSR L_8E8E
+                JSR L0_8E8E
                 PLA
                 SEC
                 SBC #$08
                 LDX #$00
                 CMP #$08
-                BCC L_8C85
-L_8C82:
+                BCC L0_8C85
+L0_8C82:
                 AND #$07
                 INX
-L_8C85:
+L0_8C85:
                 TAY
                 LDA $8CC1,Y
                 EOR $81,X
                 STA $81,X
                 CLC
-                BCC L_8CBD
-L_8C90:
+                BCC L0_8CBD
+L0_8C90:
                 TAY
                 DEY
-                BNE L_8C97
+                BNE L0_8C97
                 SEC
-L_8C95:
-                BCS L_8C9B
-L_8C97:
+L0_8C95:
+                BCS L0_8C9B
+L0_8C97:
                 DEY
-                BNE L_8CA1
+                BNE L0_8CA1
                 CLC
-L_8C9B:
+L0_8C9B:
                 JSR $0DC6
                 CLC
-                BCC L_8CBD
-L_8CA1:
+                BCC L0_8CBD
+L0_8CA1:
                 LDX #$00
                 DEY
-                BEQ L_8CB7
+                BEQ L0_8CB7
                 DEY
-                BEQ L_8CAD
+                BEQ L0_8CAD
                 INX
                 DEY
-                BEQ L_8CB7
-L_8CAD:
+                BEQ L0_8CB7
+L0_8CAD:
                 LDA $77,X
                 CMP #$08
-                BCS L_8CBF+1
+                BCS L0_8CBF+1
                 INC $77,X
-                BCC L_8CBD
-L_8CB7:
+                BCC L0_8CBD
+L0_8CB7:
                 LDA $77,X
-                BEQ L_8CBF+1
+                BEQ L0_8CBF+1
                 DEC $77,X
-L_8CBD:
-                !byte $20
+L0_8CBD:
+                !by $20
                 TAX
-L_8CBF:
-                STX L_8060
+L0_8CBF:
+                STX L0_8060
                 RTI
                 JSR $0810
-                !byte $04
-                !byte $02
+                !by $04
+                !by $02
                 ORA ($A4,X)
-                !byte $23
-                BEQ L_8CD9
+                !by $23
+                BEQ L0_8CD9
                 LDA #$20
-L_8CCF:
+L0_8CCF:
                 CMP ($58),Y
-                BEQ L_8CD6
+                BEQ L0_8CD6
                 DEY
-                BPL L_8CCF
-L_8CD6:
+                BPL L0_8CCF
+L0_8CD6:
                 INY
                 STY $23
-L_8CD9:
+L0_8CD9:
                 LDY #$00
                 BIT $82
-                BVC L_8D2C
+                BVC L0_8D2C
                 STY $23
                 LDY $59
                 LDX $58
-                BNE L_8CE8
+                BNE L0_8CE8
                 DEY
-L_8CE8:
+L0_8CE8:
                 DEX
                 STX $02
                 STY $03
                 LDY #$00
                 LDA ($02),Y
                 CMP #$0D
-                BEQ L_8CFF
+                BEQ L0_8CFF
                 CMP #$02
-                BCC L_8CFF
+                BCC L0_8CFF
                 LDA #$0D
                 STA $3F00
                 INY
-L_8CFF:
+L0_8CFF:
                 LDX #$02
-L_8D01:
-                LDA L_8DA8,X
+L0_8D01:
+                LDA L0_8DA8,X
                 STA $3F00,Y
                 INY
                 DEX
-                BPL L_8D01
+                BPL L0_8D01
                 TYA
                 PHA
                 LDA $7F
                 STA $1A
                 LDA #$00
                 STA $1B
-                JSR L_96A1
+                JSR L0_96A1
                 PLA
                 TAY
-L_8D1A:
+L0_8D1A:
                 LDA $0201,X
                 STA $3F00,Y
-L_8D20:
+L0_8D20:
                 INY
                 INX
                 CPX #$05
-                BCC L_8D1A
+                BCC L0_8D1A
                 LDA #$0D
                 STA $3F00,Y
                 INY
-L_8D2C:
+L0_8D2C:
                 BIT $82
-                BPL L_8D36
+                BPL L0_8D36
                 LDA #$11
                 STA $3F00,Y
                 INY
-L_8D36:
+L0_8D36:
                 LDA $81
                 STA $1C
                 LDX #$07
-L_8D3C:
+L0_8D3C:
                 LSR $1C
-                BCC L_8D67
-                LDA L_8DAB,X
+                BCC L0_8D67
+                LDA L0_8DAB,X
                 STA $3F00,Y
                 INY
                 CMP #$18
-                BNE L_8D57
+                BNE L0_8D57
                 LDA $77
                 CMP #$02
-                BEQ L_8D67
+                BEQ L0_8D67
                 ORA #$30
                 STA $3F00,Y
                 INY
-L_8D57:
+L0_8D57:
                 CMP #$19
-                BNE L_8D67
+                BNE L0_8D67
                 LDA $78
                 CMP #$02
-                BEQ L_8D67
+                BEQ L0_8D67
                 ORA #$30
                 STA $3F00,Y
                 INY
-L_8D67:
+L0_8D67:
                 DEX
-                BPL L_8D3C
+                BPL L0_8D3C
                 DEY
-                BMI L_8DA7
+                BMI L0_8DA7
                 STY $6C
                 LDA #$00
                 STA $6D
                 LDA #$80
                 STA $5C
-                JSR L_8530
+                JSR L0_8530
                 LDA $82
                 AND #$80
                 ORA $81
-                BEQ L_8DA7
+                BEQ L0_8DA7
                 LDA #$06                ; msg. no.
-                JSR L_9747              ; print "Oznac konec..."
-                JSR L_90D3
-                JSR L_9660
-                JSR L_8613
-                BCS L_8DA7
+                JSR L0_9747              ; print "Oznac konec..."
+                JSR L0_90D3
+                JSR L0_9660
+                JSR L0_8613
+                BCS L0_8DA7
                 LDY $23
                 LDA #$20
-L_8D96:
+L0_8D96:
                 CMP ($58),Y
-                BEQ L_8DA0
+                BEQ L0_8DA0
                 INY
                 CPY $66
-                BCC L_8D96
+                BCC L0_8D96
                 DEY
-L_8DA0:
+L0_8DA0:
                 STY $23
                 LDA #$1A
-                JSR L_8130
-L_8DA7:
+                JSR L0_8130
+L0_8DA7:
                 RTS
-L_8DA8:
+L0_8DA8:
                 AND $027A,X
-L_8DAB:
-                !byte $03
-                !byte $04
+L0_8DAB:
+                !by $03
+                !by $04
                 ORA $0B
-                !byte $0C
+                !by $0C
                 CLC
                 ORA $780E,Y
                 LDA #$EF
                 CMP $19
-                BCS L_8DBC
+                BCS L0_8DBC
                 STA $19
-L_8DBC:
+L0_8DBC:
                 LDA #$28
                 CMP $19
-                BCC L_8DC4
+                BCC L0_8DC4
                 STA $19
-L_8DC4:
+L0_8DC4:
                 LDA $18
-                BNE L_8DD2
+                BNE L0_8DD2
                 LDA #$0E
                 CMP $17
-                BCC L_8DDE
+                BCC L0_8DDE
                 STA $17
-                BCS L_8DDE
-L_8DD2:
+                BCS L0_8DDE
+L0_8DD2:
                 LDA #$01
                 STA $18
                 LDA #$4D
                 CMP $17
-                BCS L_8DDE
+                BCS L0_8DDE
                 STA $17
-L_8DDE:
+L0_8DDE:
                 LDA $19
-                STA L_D003
+                STA $D003
                 LDA $17
                 STA $D002
                 LDA $18
@@ -2328,8 +2328,8 @@ L_8DDE:
                 STA $36
                 CLI
                 RTS
-L_8E0A:
-                JSR L_8ECC
+L0_8E0A:
+                JSR L0_8ECC
                 LDX #$1A
                 LDY #$A0
                 STX $02
@@ -2341,7 +2341,7 @@ L_8E0A:
                 LDX #$0A
                 LDY #$14
                 CLC
-                JSR L_8F12
+                JSR L0_8F12
                 LDA #$00
                 STA $02
                 LDA #$5C
@@ -2357,7 +2357,7 @@ L_8E0A:
                 ASL
                 ASL
                 ORA $1C
-                JSR L_8F50
+                JSR L0_8F50
                 LDX #$15
                 LDY #$27
                 LDA $1702
@@ -2369,7 +2369,7 @@ L_8E0A:
                 ASL
                 ASL
                 ORA $1C
-                JSR L_8F50
+                JSR L0_8F50
                 LDA #$72
                 STA $02
                 LDA #$5D
@@ -2377,7 +2377,7 @@ L_8E0A:
                 LDX #$09
                 LDY #$13
                 LDA $1704
-                JSR L_8F50
+                JSR L0_8F50
                 LDA #$03
                 JSR $0DCC
                 LDX #$00
@@ -2386,25 +2386,25 @@ L_8E0A:
                 STX $82
                 INX
                 STX $7F
-L_8E7D:
+L0_8E7D:
                 INX
                 STX $77
                 STX $78
-                JSR L_9042
+                JSR L0_9042
                 SEI
                 LDA $36
                 ORA #$80
                 STA $36
                 CLI
                 RTS
-L_8E8E:
+L0_8E8E:
                 ASL
                 ASL
                 ASL
                 ASL
                 TAY
                 LDX #$10
-L_8E95:
+L0_8E95:
                 LDA $7310,Y
                 EOR #$FF
                 STA $7310,Y
@@ -2413,9 +2413,9 @@ L_8E95:
                 STA $7450,Y
                 INY
                 DEX
-                BNE L_8E95
+                BNE L0_8E95
                 RTS
-L_8EAA:
+L0_8EAA:
                 LDX #$1A
                 LDY #$A0
                 STX $02
@@ -2427,14 +2427,14 @@ L_8EAA:
                 LDX #$06
                 LDY #$14
                 CLC
-                JSR L_8F12
+                JSR L0_8F12
                 LDA $66
                 PHA
                 JSR $0DD7
                 PLA
                 STA $66
                 RTS
-L_8ECC:
+L0_8ECC:
                 LDX #$00
                 LDY #$04
                 STX $02
@@ -2442,7 +2442,7 @@ L_8ECC:
                 LDY #$60
                 STX $06
                 STY $07
-L_8EDA:
+L0_8EDA:
                 LDA #$01
                 STA $09
                 LDY #$00
@@ -2455,60 +2455,60 @@ L_8EDA:
                 ROL $09
                 STA $08
                 LDY #$07
-L_8EEF:
+L0_8EEF:
                 LDA ($08),Y
                 STA ($06),Y
                 DEY
-                BPL L_8EEF
+                BPL L0_8EEF
                 LDA $06
                 CLC
                 ADC #$08
                 STA $06
-                BCC L_8F01
+                BCC L0_8F01
                 INC $07
-L_8F01:
+L0_8F01:
                 INC $02
-                BNE L_8F07
+                BNE L0_8F07
                 INC $03
-L_8F07:
+L0_8F07:
                 LDA $02
                 CMP #$E8
                 LDA $03
                 SBC #$07
-                BCC L_8EDA
+                BCC L0_8EDA
                 RTS
-L_8F12:
+L0_8F12:
                 STX $27
                 STY $26
-L_8F16:
+L0_8F16:
                 LDA $09
                 PHA
                 LDA $08
                 PHA
                 LDX $26
-L_8F1E:
+L0_8F1E:
                 LDY #$07
-L_8F20:
+L0_8F20:
                 LDA ($02),Y
                 STA ($08),Y
                 DEY
-                BPL L_8F20
+                BPL L0_8F20
                 LDA $02
                 CLC
                 ADC #$08
                 STA $02
-                BCC L_8F32
+                BCC L0_8F32
                 INC $03
-L_8F32:
+L0_8F32:
                 LDA $08
                 CLC
                 ADC #$08
                 STA $08
-                BCC L_8F3D
+                BCC L0_8F3D
                 INC $09
-L_8F3D:
+L0_8F3D:
                 DEX
-                BNE L_8F1E
+                BNE L0_8F1E
                 PLA
                 CLC
                 ADC #$40
@@ -2517,58 +2517,58 @@ L_8F3D:
                 ADC #$01
                 STA $09
                 DEC $27
-                BNE L_8F16
+                BNE L0_8F16
                 RTS
-L_8F50:
+L0_8F50:
                 STY $1C
-L_8F52:
+L0_8F52:
                 LDY $1C
-L_8F54:
+L0_8F54:
                 STA ($02),Y
                 DEY
-                BPL L_8F54
+                BPL L0_8F54
                 PHA
                 LDA $02
                 CLC
                 ADC #$28
                 STA $02
-                BCC L_8F65
+                BCC L0_8F65
                 INC $03
-L_8F65:
+L0_8F65:
                 PLA
                 DEX
-                BPL L_8F52
+                BPL L0_8F52
                 RTS
 ; cold start init
-L_8F6A:
+L0_8F6A:
                 LDA #$00
                 TAY
 ; clear ram $0002..$00FF, $0200..$02FF, $0300..$03FF
-L_8F6D:
+L0_8F6D:
                 STA $0002,Y
                 STA $0200,Y
                 STA $0300,Y
                 INY
-                BNE L_8F6D
+                BNE L0_8F6D
                 LDY #$1F
 ; copy KERNAL ROM to RAM: $FD30..$FD4F → $0314..$0333
-L_8F7B:
+L0_8F7B:
                 LDA $FD30,Y
                 STA $0314,Y
                 DEY
-                BPL L_8F7B
+                BPL L0_8F7B
 ; set colors and sprites
                 LDA #$04
                 STA $0288
                 JSR $FF5B
 ; Border color
                 LDA #.COLOR_BORDER
-                STA L_D020
+                STA $D020
                 LDA #$00
-                STA L_D01C
+                STA $D01C
                 STA $D01D
-                STA L_D017
-                JSR L_9070
+                STA $D017
+                JSR L0_9070
 ; set pointer / buffer on $1900
                 LDX #$01
                 LDY #$19
@@ -2596,20 +2596,20 @@ L_8F7B:
 ; CIA timer
                 LDA #$1C
                 STA $DC04
-                STA L_DC05
+                STA $DC05
 ;==========================================================
 ; ram upload check
                 LDX #$10
                 LDY #$7F
-L_8FDD:
+L0_8FDD:
                 LDA $0900,Y
                 CMP $B100,Y
-                BNE L_8FE9
+                BNE L0_8FE9
                 DEY
-                BPL L_8FDD
+                BPL L0_8FDD
                 DEX
 ; copy data from $B000 to $0800, X pages by 256B (10)
-L_8FE9:
+L0_8FE9:
                 TYA
                 PHA
                 LDA #$B0
@@ -2619,60 +2619,60 @@ L_8FE9:
                 LDY #$00
                 STY $02
                 STY $04
-L_8FF9:
+L0_8FF9:
                 LDA ($02),Y
                 STA ($04),Y
                 INY
-                BNE L_8FF9
+                BNE L0_8FF9
                 INC $03
                 INC $05
                 DEX
-                BNE L_8FF9
+                BNE L0_8FF9
                 CLI
                 PLA
-                BPL L_9033
+                BPL L0_9033
                 LDY #$01
                 LDA #$19
                 STA $5B
                 LDA #$00
                 STA $1900
                 STA $5A
-L_9018:
+L0_9018:
                 LDA ($5A),Y
-                BEQ L_9029
+                BEQ L0_9029
                 INY
-                BNE L_9018
+                BNE L0_9018
                 INC $5B
                 LDA $5B
                 CMP #$3C
-                BCC L_9018
-                BCS L_9036
-L_9029:
+                BCC L0_9018
+                BCS L0_9036
+L0_9029:
                 STY $5A
                 LDA #$00
                 STA $1900
-                JMP L_907B
-L_9033:
+                JMP L0_907B
+L0_9033:
                 JSR $0DBA
-L_9036:
-                JMP L_90C2
-L_9039:
-                JSR L_90B9
-L_903C:
+L0_9036:
+                JMP L0_90C2
+L0_9039:
+                JSR L0_90B9
+L0_903C:
                 LDX #$03
-                JSR L_964F
+                JSR L0_964F
                 RTS
-L_9042:
+L0_9042:
                 BIT $D011
-                BPL L_9042
+                BPL L0_9042
                 LDA #$BB
                 STA $D011
                 LDA #$78
                 STA $D018
-                LDA L_DD00
+                LDA $DD00
                 AND #$FC
                 ORA #$02
-                STA L_DD00
+                STA $DD00
                 LDX #$00
                 STX $D01B
                 STX $54
@@ -2685,19 +2685,19 @@ L_9042:
                 STX $5FF9
                 RTS
 ; clear $7F40..$7F7F (64B)
-L_9070:
+L0_9070:
                 LDA #$00
                 LDY #$3F
-L_9074:
+L0_9074:
                 STA $7F40,Y
                 DEY
-                BPL L_9074
+                BPL L0_9074
                 RTS
-L_907B:
+L0_907B:
                 LDY #$00
-L_907D:
+L0_907D:
                 CPY $1700
-                BCS L_90AC
+                BCS L0_90AC
                 LDA $1800,Y
                 AND #$1F
                 CLC
@@ -2705,33 +2705,33 @@ L_907D:
                 STA $1C
                 LDA $1803,Y
                 CMP $1801,Y
-L_9092:
-                BCC L_90AC
+L0_9092:
+                BCC L0_90AC
                 CMP #$A1
-                BCS L_90AC
+                BCS L0_90AC
                 LDA $1804,Y
                 CMP $1802,Y
-                BCC L_90AC
+                BCC L0_90AC
                 CMP #$C9
-                BCS L_90AC
+                BCS L0_90AC
                 TYA
                 ADC $1C
                 TAY
-                BCC L_907D
+                BCC L0_907D
                 LDY #$00
-L_90AC:
+L0_90AC:
                 STY $1700
                 RTS
-L_90B0:
+L0_90B0:
                 LDA #$00
                 STA $5C
                 LDA #$0A
-                JSR L_8354
-L_90B9:
-                JSR L_9122
-                JSR L_9142
-                JMP L_90D3
-L_90C2:
+                JSR L0_8354
+L0_90B9:
+                JSR L0_9122
+                JSR L0_9142
+                JMP L0_90D3
+L0_90C2:
                 LDX #$01
                 LDY #$19
                 STX $5A
@@ -2740,22 +2740,22 @@ L_90C2:
                 STA $1900
                 STA $1901
                 RTS
-L_90D3:
+L0_90D3:
                 BIT $D011
-                BPL L_90D3
+                BPL L0_90D3
                 LDA #$9B
                 STA $D011
                 LDA #$12
                 STA $D018
-                LDA L_DD00
+                LDA $DD00
                 ORA #$03
-                STA L_DD00
+                STA $DD00
                 LDA #$00
                 LDX #$3E
-L_90EE:
+L0_90EE:
                 STA $03C0,X
                 DEX
-                BPL L_90EE
+                BPL L0_90EE
                 LDA #$FF
                 STA $03EB
                 STA $03EE
@@ -2764,9 +2764,9 @@ L_90EE:
                 LDA #$0F
                 STA $07F9
                 LDA #$02
-                STA L_D015
+                STA $D015
                 LDA #$00
-                JSR L_9437
+                JSR L0_9437
                 SEI
                 LDA #$80
                 STA $19
@@ -2778,92 +2778,92 @@ L_90EE:
                 STA $36
                 CLI
                 RTS
-L_9122:
+L0_9122:
                 LDX #$00
                 LDA #$00
-                JSR L_974D
-                JSR L_973E
+                JSR L0_974D
+                JSR L0_973E
                 LDY #$27
                 LDA #$1E
 -   STA $0450,Y
-L_9133:
+L0_9133:
                 DEY
                 BPL -
-L_9136:
+L0_9136:
                 LDA $1703
                 LDY #$77
-L_913B:
-                STA L_D800,Y
+L0_913B:
+                STA $D800,Y
                 DEY
-                BPL L_913B
+                BPL L0_913B
                 RTS
-L_9142:
+L0_9142:
                 LDA $1701
                 LDY #$DC
-L_9147:
+L0_9147:
                 STA $D877,Y
                 STA $D953,Y
-                STA L_DA2F,Y
+                STA $DA2F,Y
                 STA $DB0B,Y
                 DEY
-                BNE L_9147
+                BNE L0_9147
                 LDA $1702
                 STA $D021
                 RTS
-L_915D:
+L0_915D:
                 STA $1F
 ;read dir
                 LDA #$01                ; msg. no.
-                JSR L_9747              ; print "SPACE=...
-                LDX #<L_920B            ; "$0" need_fix for SoftIEC?
-                LDY #>L_920B
+                JSR L0_9747              ; print "SPACE=...
+                LDX #<L0_920B            ; "$0" need_fix for SoftIEC?
+                LDY #>L0_920B
                 LDA #$02
                 JSR CBM_SETNAM          ; Set file name
                 LDY #$00
-L_916F:
-                JSR L_9297              ; set file parameter and open
-                BCS L_91D7
+L0_916F:
+                JSR L0_9297              ; set file parameter and open
+                BCS L0_91D7
                 LDA #$04
                 STA $26
-L_9178:
+L0_9178:
                 JSR CBM_CHRIN           ; Input Vector
                 DEC $26
-                BNE L_9178
+                BNE L0_9178
                 LDA $90
                 SEC
-                BNE L_91D7
+                BNE L0_91D7
                 JSR CBM_CLRCHN          ; Restore I/O Vector
-L_9187:
-                JSR L_9213
-                BCS L_91D7
+L0_9187:
+                JSR L0_9213
+                BCS L0_91D7
                 STA $1C
                 LDA #$03
                 STA $27
-L_9192:
+L0_9192:
                 LDY $27
                 LDA #$0C
-                JSR L_9664
-L_9199:
+                JSR L0_9664
+L0_9199:
                 JSR $9474               ; get character from imput device
                 LDX $27
                 CMP #$A0
-                BNE L_91AA
+                BNE L0_91AA
                 CPX $26
-                BCS L_9199
+                BCS L0_9199
                 INC $27
-                BCC L_9192
-L_91AA:
+                BCC L0_9192
+L0_91AA:
                 CMP #$A1
-                BNE L_91B6
+                BNE L0_91B6
                 CPX #$04
-                BCC L_9199
+                BCC L0_9199
                 DEC $27
-                BCS L_9192
-L_91B6:
+                BCS L0_9192
+L0_91B6:
                 CMP #$AD
-                BNE L_91D9
+                BNE L0_91D9
                 LDY #$28
-                JSR L_96FB
+                JSR L0_96FB
                 TXA
                 CLC
                 ADC #$0C
@@ -2873,44 +2873,44 @@ L_91B6:
                 STA $03
                 LDY #$00
                 LDA #$22
-L_91CE:
+L0_91CE:
                 CMP ($02),Y
-                BEQ L_91E7
+                BEQ L0_91E7
                 INY
                 CPY #$14
-                BCC L_91CE
-L_91D7:
-                BCS L_9205
-L_91D9:
+                BCC L0_91CE
+L0_91D7:
+                BCS L0_9205
+L0_91D9:
                 CMP #$B3
-                BEQ L_9205
+                BEQ L0_9205
                 CMP #$20
-                BNE L_9199
+                BNE L0_9199
                 LDA $1C
-                BNE L_9187
-                BEQ L_9205
-L_91E7:
+                BNE L0_9187
+                BEQ L0_9205
+L0_91E7:
                 TYA
                 LDX $02
                 LDY $03
                 JSR CBM_SETNAM          ; Set file name
                 CLC
                 BIT $1F
-                BMI L_9205
+                BMI L0_9205
                 LDX #$0D
                 LDY #$92
                 STX $04
                 STY $05
-                JSR L_9598
-                BNE L_9205
+                JSR L0_9598
+                BNE L0_9205
                 LDA #$80
                 STA $1F
-L_9205:
+L0_9205:
                 PHP
-                JSR L_92B2
+                JSR L0_92B2
                 PLP
                 !by $60
-L_920B:
+L0_920B:
                 !pet "$:"
                 !by $04
                 !by $01
@@ -2918,45 +2918,45 @@ L_920B:
                 !by $00
                 !by $06
                 !by $0E
-L_9213:
+L0_9213:
                 LDX #$03
                 STX $26
-                JSR L_964F
+                JSR L0_964F
                 LDX #$08
                 JSR CBM_CHKIN           ; Set input file
-L_921F:
+L0_921F:
                 JSR CBM_CHRIN           ; Input Vector
                 STA $1A
                 JSR CBM_CHRIN           ; Input Vector
                 STA $1B
                 LDX $26
                 LDY #$07
-                JSR L_9682
+                JSR L0_9682
                 LDA #$00
-L_9232:
+L0_9232:
                 LDX $26
-                JSR L_94E1
-                BCS L_9250
+                JSR L0_94E1
+                BCS L0_9250
                 JSR CBM_CHRIN
                 STA $1C
                 JSR CBM_CHRIN
                 ORA $1C
-                BEQ L_924F
+                BEQ L0_924F
                 LDA $26
                 CMP #$18
-                BCS L_924F
+                BCS L0_924F
                 INC $26
-                BCC L_921F
-L_924F:
+                BCC L0_921F
+L0_924F:
                 CLC
-L_9250:
+L0_9250:
                 PHA
                 PHP
                 JSR CBM_CLRCHN
                 PLP
                 PLA
                 RTS
-L_9258:
+L0_9258:
                 LDX #$30
                 LDY #$04
                 JSR CBM_SETNAM
@@ -2965,29 +2965,29 @@ L_9258:
                 LDX #$08
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
-                BCS L_928C
+                BCS L0_928C
                 LDX #$0F
                 JSR CBM_CHKIN
-                BCS L_928C
-                JSR L_973E
+                BCS L0_928C
+                JSR L0_973E
                 LDA #$FF
                 STA $55
                 LDA #$0D
                 LDY #$00
-                JSR L_94DF
+                JSR L0_94DF
                 LDA $0428
                 ORA $0429
                 CMP #$30
-                BNE L_928C
+                BNE L0_928C
                 CLC
-L_928C:
+L0_928C:
                 PHP
                 JSR CBM_CLRCHN
                 LDA #$0F
                 JSR CBM_CLOSE
                 PLP
                 RTS
-L_9297:
+L0_9297:
                 !by $98
                 !by $29
                 !by $01
@@ -2998,15 +2998,15 @@ L_9297:
                 JSR CBM_OPEN
                 LDX #$08
                 PLA
-                BCS L_92B1
-L_92A9:
-                BNE L_92AE
+                BCS L0_92B1
+L0_92A9:
+                BNE L0_92AE
                 JMP $FFC6
-L_92AE:
+L0_92AE:
                 JSR CBM_CHKOUT
-L_92B1:
+L0_92B1:
                 RTS
-L_92B2:
+L0_92B2:
                 JSR CBM_CLRCHN
                 LDA #$08
                 JMP $FFC3
@@ -3017,48 +3017,48 @@ L_92B2:
                 PHA
                 LDA $028D
                 PHA
-                JSR L_EA87
+                JSR $EA87
                 PLA
                 TAX
                 LDA $028D
                 AND #$06
-                BEQ L_92D8
+                BEQ L0_92D8
                 TXA
                 EOR $028D
                 AND #$06
-                BEQ L_92D8
-                JSR L_941B
-L_92D8:
+                BEQ L0_92D8
+                JSR L0_941B
+L0_92D8:
                 PLA
                 CMP $C6
-                BEQ L_930C
+                BEQ L0_930C
                 TAX
                 LDA $028D
                 ORA $53
                 CMP #$04
-                BCC L_92E9
+                BCC L0_92E9
                 LDA #$04
-L_92E9:
+L0_92E9:
                 ASL
                 TAY
-                LDA L_930D,Y
+                LDA L0_930D,Y
                 STA $F5
-                LDA L_930D+1,Y
+                LDA L0_930D+1,Y
                 STA $F6
                 LDY $CB
                 LDA ($F5),Y
                 BIT $54
-                BPL L_9300
+                BPL L0_9300
                 JSR $944B
-L_9300:
+L0_9300:
                 STA $0277,X
                 LDA $53
-                BEQ L_930C
+                BEQ L0_930C
                 LDA #$00
                 JSR $941B
-L_930C:
+L0_930C:
                 RTS
-L_930D:
+L0_930D:
                 !word L_9317
                 !word L_9358
                 !word L_9399
@@ -3072,60 +3072,60 @@ L_930D:
 ; 0 => empty, to delete C= or CTRL in front of CAPS
 ; 2 => print C=
 ; 4 => print CTRL
-L_941B:
+L0_941B:
                 STA $53
                 CMP #$06                ; 0 = empty, 2 = C=
-                BCC L_9423
+                BCC L0_9423
                 LDA #$04                ; for CTRL
-L_9423:
+L0_9423:
                 ASL
                 ASL
                 TAX
                 LDY #$07
-L_9428:
-                LDA L_945C,X
+L0_9428:
+                LDA L0_945C,X
                 STA $0450,Y
                 INX
                 DEY
-                BPL L_9428
+                BPL L0_9428
                 RTS
 ;==========================================================
 ; handle 'CAPS'
 ; #$00 > switch off, #$FF > switch on
-L_9433:
+L0_9433:
                 LDA #$FF
                 EOR $54
-L_9437:
+L0_9437:
                 STA $54
                 AND #$06
                 EOR #$06
                 TAX
                 LDY #$05
-L_9440:
-                LDA L_9456,X
+L0_9440:
+                LDA L0_9456,X
                 STA $0459,Y
-L_9446:
+L0_9446:
                 INX
                 DEY
-                BPL L_9440
+                BPL L0_9440
                 RTS
 ;==========================================================
-L_944B:
+L0_944B:
                 CMP #$7E
-                BCS L_9455
+                BCS L0_9455
                 CMP #$61
-                BCC L_9455
+                BCC L0_9455
                 SBC #$20
-L_9455:
+L0_9455:
                 RTS
-L_9456:
+L0_9456:
                 !by $1D,$53,$50,$41,$43,$1C ; "<caps>"
-L_945C:
+L0_945C:
                 !by $1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E
                 !by $1E,$1D,$3D,$43,$1C,$1E,$1E,$1E
                 !by $1D,$4C,$52,$54,$43,$1C,$1E,$1E
                 LDA $99
-                BNE L_94D6
+                BNE L0_94D6
                 SEI
                 LDA $3F
                 ASL
@@ -3133,74 +3133,74 @@ L_945C:
                 ORA $3F
                 AND #$24
                 CMP #$04
-                BNE L_948D
+                BNE L0_948D
                 LDA #$FF
                 STA $3F
                 LDA #$AD
-                BNE L_94D9
-L_948D:
+                BNE L0_94D9
+L0_948D:
                 LDA $3F
                 AND #$12
                 CMP #$02
-                BNE L_949D
+                BNE L0_949D
                 LDA #$FF
                 STA $3F
                 LDA #$20
-                BNE L_94D9
-L_949D:
+                BNE L0_94D9
+L0_949D:
                 SEI
                 LDX #$A0
                 LDA $19
-                BMI L_94AB
+                BMI L0_94AB
                 LDX #$A1
                 LDA #$00
                 SEC
                 SBC $19
-L_94AB:
+L0_94AB:
                 AND #$7F
-L_94AD:
+L0_94AD:
                 CMP #$08
-                BCC L_94BA
+                BCC L0_94BA
                 LDA #$80
                 STA $19
                 STA $17
                 TXA
-                BNE L_94D9
-L_94BA:
+                BNE L0_94D9
+L0_94BA:
                 LDX #$A2
                 LDA $17
-                BMI L_94C7
+                BMI L0_94C7
                 LDX #$A3
                 LDA #$00
                 SEC
                 SBC $17
-L_94C7:
+L0_94C7:
                 AND #$7F
                 CMP #$08
-                BCC L_94D6
+                BCC L0_94D6
                 LDA #$80
                 STA $17
                 STA $19
-L_94D3:
+L0_94D3:
                 TXA
-                BNE L_94D9
-L_94D6:
+                BNE L0_94D9
+L0_94D6:
                 JSR CBM_GETIN
-L_94D9:
+L0_94D9:
                 CLI
                 RTS
-L_94DB:
+L0_94DB:
                 LDA #$AD
                 LDY #$08
-L_94DF:
+L0_94DF:
                 LDX #$01
-L_94E1:
+L0_94E1:
                 STA $24
                 TYA
                 PHA
                 STX $26
                 LDY #$28
-                JSR L_96FB
+                JSR L0_96FB
                 STX $02
                 TYA
                 ORA #$04
@@ -3209,17 +3209,17 @@ L_94E1:
                 STA $1D
                 STA $1C
                 LDY $26
-                JSR L_9664
+                JSR L0_9664
                 LDA #$00
                 STA $90
-L_9501:
+L0_9501:
                 JSR $9474
                 SEC
                 LDX $90
-                BNE L_957B
+                BNE L0_957B
                 LDY $1C
                 CMP $24
-                BEQ L_9576
+                BEQ L0_9576
                 NOP
                 NOP
                 NOP
@@ -3229,102 +3229,102 @@ L_9501:
                 NOP
                 NOP
                 LDX $99
-                BNE L_9564
+                BNE L0_9564
                 TAX
-                BEQ L_9501
+                BEQ L0_9501
                 CMP #$AE
-                BNE L_9524
+                BNE L0_9524
                 LDA #$0D
-L_9524:
+L0_9524:
                 CMP #$AF
-                BNE L_9533
+                BNE L0_9533
                 CPY $1D
-                BEQ L_9501
+                BEQ L0_9501
                 DEY
                 DEC $1C
                 LDA #$1F
-L_9531:
-                BNE L_956A
-L_9533:
+L0_9531:
+                BNE L0_956A
+L0_9533:
                 CMP #$B3
-                BEQ L_957B
+                BEQ L0_957B
                 CMP #$BD
-                BNE L_9541
-                JSR L_9433
-                JMP L_9501
-L_9541:
+                BNE L0_9541
+                JSR L0_9433
+                JMP L0_9501
+L0_9541:
                 CMP #$B4
-                BNE L_9560
+                BNE L0_9560
                 LDA $59
                 CMP #$5C
-                BCS L_9501
+                BCS L0_9501
                 LDX $23
-L_954D:
+L0_954D:
                 TXA
                 TAY
                 LDA ($58),Y
-                BEQ L_956C
+                BEQ L0_956C
                 LDY $1C
                 CPY #$28
-                BCS L_956C
+                BCS L0_956C
                 STA ($02),Y
                 INX
                 INC $1C
-                BNE L_954D
-L_9560:
+                BNE L0_954D
+L0_9560:
                 CMP #$A0
-                BCS L_9501
-L_9564:
+                BCS L0_9501
+L0_9564:
                 CPY #$28
-                BCS L_9501
+                BCS L0_9501
                 INC $1C
-L_956A:
+L0_956A:
                 STA ($02),Y
-L_956C:
+L0_956C:
                 LDA $1C
                 LDY $26
-L_9570:
-                JSR L_9664
-                JMP L_9501
-L_9576:
+L0_9570:
+                JSR L0_9664
+                JMP L0_9501
+L0_9576:
                 SEC
                 TYA
                 SBC $1D
                 CLC
-L_957B:
+L0_957B:
                 RTS
-L_957C:
-                JSR L_9747
+L0_957C:
+                JSR L0_9747
                 LDA #$FF
-                JSR L_9437
-                JSR L_94DB
+                JSR L0_9437
+                JSR L0_94DB
                 PHA
                 PHP
                 LDX #$30
                 LDY #$04
                 JSR CBM_SETNAM
                 LDA #$00
-                JSR L_9437
+                JSR L0_9437
                 PLP
                 PLA
                 RTS
-L_9598:
+L0_9598:
                 LDY #$00
                 STY $26
                 LDA ($04),Y
-                JSR L_9747
-L_95A1:
-                JSR L_95B1
-                BCC L_95AF
+                JSR L0_9747
+L0_95A1:
+                JSR L0_95B1
+                BCC L0_95AF
                 CMP #$A0
-                BEQ L_95A1
+                BEQ L0_95A1
                 CMP #$A1
-                BEQ L_95A1
+                BEQ L0_95A1
                 SEC
-L_95AF:
+L0_95AF:
                 TAX
                 RTS
-L_95B1:
+L0_95B1:
                 LDY #$02
                 LDA ($04),Y
                 CLC
@@ -3333,83 +3333,83 @@ L_95B1:
                 LDA ($04),Y
                 STA $27
                 CMP $26
-                BCS L_95C3
+                BCS L0_95C3
                 STA $26
-L_95C3:
+L0_95C3:
                 LDY #$01
                 LDA ($04),Y
                 TAY
                 LDA $26
-                JSR L_9664
-L_95CD:
+                JSR L0_9664
+L0_95CD:
                 JSR $9474
-                BEQ L_95CD
+                BEQ L0_95CD
                 CMP #$A2
-                BNE L_95E1
+                BNE L0_95E1
                 LDX $26
                 INX
                 CPX $27
-L_95DB:
-                BCS L_95CD
+L0_95DB:
+                BCS L0_95CD
                 STX $26
-                BCC L_95C3
-L_95E1:
+                BCC L0_95C3
+L0_95E1:
                 CMP #$A3
-                BNE L_95EE
+                BNE L0_95EE
                 LDX $26
                 DEX
-                BMI L_95CD
+                BMI L0_95CD
                 STX $26
-                BPL L_95C3
-L_95EE:
+                BPL L0_95C3
+L0_95EE:
                 CMP #$AD
-                BNE L_960D
+                BNE L0_960D
                 LDY #$02
                 LDA ($04),Y
                 CLC
                 ADC #$02
                 TAY
                 LDA $26
-L_95FC:
+L0_95FC:
                 CMP ($04),Y
-                BCS L_9607
+                BCS L0_9607
                 DEY
                 CPY #$03
-                BCS L_95FC
-                BCC L_95CD
-L_9607:
+                BCS L0_95FC
+                BCC L0_95CD
+L0_9607:
                 TYA
                 SEC
                 SBC #$03
                 CLC
                 RTS
-L_960D:
+L0_960D:
                 CMP #$B3
-                BEQ L_9619
+                BEQ L0_9619
                 CMP #$A0
-                BEQ L_9619
+                BEQ L0_9619
                 CMP #$A1
-                BNE L_95CD
-L_9619:
+                BNE L0_95CD
+L0_9619:
                 RTS
-L_961A:
+L0_961A:
                 PHA
                 LDY #$01
                 LDA ($04),Y
                 TAX
                 DEY
                 LDA ($04),Y
-                JSR L_974D
+                JSR L0_974D
                 LDA $09
                 CLC
                 ADC #$D4
                 STA $09
                 LDA $1701
                 LDY #$27
-L_9632:
+L0_9632:
                 STA ($08),Y
                 DEY
-                BPL L_9632
+                BPL L0_9632
                 PLA
                 CLC
                 ADC #$04
@@ -3418,18 +3418,18 @@ L_9632:
                 STA $1C
                 DEY
                 LDA ($04),Y
-L_9643:
+L0_9643:
                 TAY
                 LDA $1703
-L_9647:
+L0_9647:
                 STA ($08),Y
                 INY
                 CPY $1C
-                BCC L_9647
+                BCC L0_9647
                 RTS
-L_964F:
+L0_964F:
                 CPX #$19
-                BCS L_965F
+                BCS L0_965F
                 TXA
                 PHA
                 LDA #$00
@@ -3437,13 +3437,13 @@ L_964F:
                 PLA
                 TAX
                 INX
-                BNE L_964F
-L_965F:
+                BNE L0_964F
+L0_965F:
                 RTS
-L_9660:
+L0_9660:
                 LDA $23
                 LDY $22
-L_9664:
+L0_9664:
                 ASL
                 ASL
                 ASL
@@ -3462,74 +3462,74 @@ L_9664:
                 ASL
                 ASL
                 ADC #$2B
-                STA L_D003
+                STA $D003
                 RTS
-L_9682:
+L0_9682:
                 TYA
                 PHA
                 LDY #$28
-                JSR L_96FB
+                JSR L0_96FB
                 STX $02
                 TYA
                 ORA #$04
                 STA $03
-                JSR L_96A1
+                JSR L0_96A1
                 PLA
                 TAY
-L_9695:
+L0_9695:
                 LDA $0201,X
                 STA ($02),Y
                 INY
                 INX
                 CPX #$05
-                BCC L_9695
+                BCC L0_9695
                 RTS
-L_96A1:
+L0_96A1:
                 LDX #$04
-L_96A3:
+L0_96A3:
                 LDA #$00
                 LDY #$10
-L_96A7:
+L0_96A7:
                 ROL $1A
                 ROL $1B
                 ROL
                 CMP #$0A
-                BCC L_96B2
+                BCC L0_96B2
                 SBC #$0A
-L_96B2:
+L0_96B2:
                 DEY
-                BNE L_96A7
+                BNE L0_96A7
                 ROL $1A
                 ROL $1B
                 ORA #$30
                 STA $0201,X
                 DEX
-                BPL L_96A3
+                BPL L0_96A3
                 INX
-L_96C2:
+L0_96C2:
                 LDA $0201,X
                 CMP #$30
-                BNE L_96D3
-L_96C9:
+                BNE L0_96D3
+L0_96C9:
                 LDA #$1F
                 STA $0201,X
                 INX
                 CPX #$04
-                BCC L_96C2
-L_96D3:
+                BCC L0_96C2
+L0_96D3:
                 RTS
-L_96D4:
+L0_96D4:
                 LDX #$00
                 STX $1A
-L_96D8:
+L0_96D8:
                 LDA $0430,X
                 CMP #$20
-                BEQ L_96F7
+                BEQ L0_96F7
                 SEC
                 SBC #$30
-                BCC L_96FA
+                BCC L0_96FA
                 CMP #$0A
-                BCS L_96FA
+                BCS L0_96FA
                 PHA
                 LDA $1A
                 ASL
@@ -3540,12 +3540,12 @@ L_96D8:
                 PLA
                 ADC $1A
                 STA $1A
-L_96F7:
+L0_96F7:
                 INX
-                BNE L_96D8
-L_96FA:
+                BNE L0_96D8
+L0_96FA:
                 RTS
-L_96FB:
+L0_96FB:
 ; multiply X with Y
 ; result in X = low byte, and Y = high byte
 multiply_x_y
@@ -3568,67 +3568,67 @@ multiply_x_y
 ; clculate screen position, and copy msg. to screen
 ; msg start in ($03)
 ; line No. in X
-L_9716:
+L0_9716:
 print_msg:
                 PHA                     ; save msg. length
                 LDY #$28                ; screen line length
-                JSR L_96FB              ; multiply X with Y
+                JSR L0_96FB              ; multiply X with Y
                 STX $08                 ; screen position low byte
                 TYA
                 ORA #$04
                 STA $09                 ; screen position high byte
                 PLA                     ; msg. length
-                BEQ L_9731              ; if zero, go delete the whole line
+                BEQ L0_9731              ; if zero, go delete the whole line
                 PHA
                 TAY
                 DEY
 ; copy actual msg. to the screen
-L_9729:
+L0_9729:
                 LDA ($02),Y
                 STA ($08),Y
                 DEY
-                BPL L_9729
+                BPL L0_9729
                 PLA
 ; fill actual line from Y-position to the end with empty spaces
-L_9731:
+L0_9731:
                 TAY                     ; position in line
                 LDA #$1F                ; empty space
-L_9734:
+L0_9734:
                 CPY #$28                ; compare with line end position
-                BCS L_973D
+                BCS L0_973D
                 STA ($08),Y
                 INY
-                BNE L_9734
-L_973D:
+                BNE L0_9734
+L0_973D:
                 RTS
 
 ; delete line 1
-L_973E:
+L0_973E:
                 LDA #$00
                 STA $55
                 LDX #$01
-                JMP print_msg           ; L_9716
+                JMP print_msg           ; L0_9716
 
 ; print a text into the second line on screen
 ; the text part No. must be in accu
-L_9747:
+L0_9747:
                 LDX #$FF
                 STX $55
                 LDX #$01                ; line No.
 ; print a text into a line on screen
 ; the line No. must be in X,
 ; the text part No. must be in accu
-L_974D:
+L0_974D:
                 TAY                     ; msg. No.
                 TXA                     ; line No.
                 PHA                     ; save line No.
                 TYA                     ; msg. No
-                BMI L_975B
+                BMI L0_975B
                 LDX #<MSG_TABLE         ; msg. table start
                 LDY #>MSG_TABLE
                 STX $02
                 STY $03
-L_975B:
+L0_975B:
                 AND #$7F                ; delete bit 7
                 TAX                     ; set masg. No as counter
 
@@ -3637,14 +3637,14 @@ L_975B:
 msg_search:
                 LDY #$00                ; pointer
 ; find $0D for msg. end
-L_9760:
+L0_9760:
                 INY
                 LDA ($02),Y             ; load char fom msg_table
                 CMP #$0D
-                BNE L_9760
+                BNE L0_9760
 
                 DEX                     ; decrement counter
-L_9768:
+L0_9768:
                 BMI msg_found           ; msg found
                 TYA
                 SEC
@@ -3658,15 +3658,15 @@ msg_found:
                 TAX                     ; move to X
                 TYA                     ; msg. length
                 PHA
-                JSR print_msg           ;L_9716
+                JSR print_msg           ;L0_9716
                 PLA
                 RTS
 
-                JSR L_9039
+                JSR L0_9039
                 LDA #$00
                 STA $1709
                 LDX #$04
-L_9789:
+L0_9789:
                 TXA
                 PHA
                 ASL
@@ -3678,18 +3678,18 @@ L_9789:
                 LDA $1705,X
                 LDY #$02
                 CMP ($04),Y
-                BCC L_97A2
+                BCC L0_97A2
                 LDA ($04),Y
-L_97A2:
-                JSR L_961A
+L0_97A2:
+                JSR L0_961A
                 PLA
                 TAX
                 DEX
-                BPL L_9789
+                BPL L0_9789
                 LDA #$12
                 STA $23
                 LDX #$04
-L_97B0:
+L0_97B0:
                 TXA
                 PHA
                 ASL
@@ -3698,101 +3698,101 @@ L_97B0:
                 STA $04
                 LDA $9870,Y
                 STA $05
-                JSR L_973E
+                JSR L0_973E
                 LDA $23
                 STA $26
-                JSR L_95B1
+                JSR L0_95B1
                 TAY
                 LDA $26
                 STA $23
                 PLA
                 TAX
-                BCC L_97E9
+                BCC L0_97E9
                 CPY #$B3
-                BEQ L_9840
+                BEQ L0_9840
                 CPY #$A1
-                BNE L_97DE
+                BNE L0_97DE
                 CPX #$00
-                BEQ L_97B0
+                BEQ L0_97B0
                 DEX
-L_97DE:
+L0_97DE:
                 CPY #$A0
-                BNE L_97B0
+                BNE L0_97B0
                 CPX #$04
-                BCS L_97B0
+                BCS L0_97B0
                 INX
-                BCC L_97B0
-L_97E9:
+                BCC L0_97B0
+L0_97E9:
                 PHA
                 TYA
                 STA $1705,X
-                JSR L_961A
+                JSR L0_961A
                 PLA
                 TAX
                 CPX #$03
-                BCC L_97B0
-                BNE L_9817
+                BCC L0_97B0
+                BNE L0_9817
                 LDA $1708
-                BEQ L_97B0
+                BEQ L0_97B0
                 LDA #$21                ; msg. no.
-                JSR L_9747              ; print "Radky"
-                JSR L_94DB
+                JSR L0_9747              ; print "Radky"
+                JSR L0_94DB
                 LDX #$03
-                BCS L_97B0
-                JSR L_96D4
+                BCS L0_97B0
+                JSR L0_96D4
                 LDA $1A
                 STA $1708
                 LDX #$03
-                JMP L_97B0
-L_9817:
+                JMP L0_97B0
+L0_9817:
                 LDY $1709
-                BEQ L_97B0
+                BEQ L0_97B0
                 DEY
-                BEQ L_983C
+                BEQ L0_983C
                 LDA #$1F                ; msg. no.
-                JSR L_9747              ; print "Cislo"
-                JSR L_94DB
+                JSR L0_9747              ; print "Cislo"
+                JSR L0_94DB
                 LDX #$04
-                BCS L_97B0
-                JSR L_96D4
+                BCS L0_97B0
+                JSR L0_96D4
                 LDA $1A
                 SEC
-                BEQ L_9840
+                BEQ L0_9840
                 STA $1709
                 LDA $70
                 ORA #$30
                 STA $70
-L_983C:
-                JSR L_9042
+L0_983C:
+                JSR L0_9042
                 CLC
-L_9840:
+L0_9840:
                 RTS
-L_9841:
+L0_9841:
                 LDX #$00
-L_9843:
+L0_9843:
                 LDA $02,X
                 PHA
                 INX
                 CPX #$04
-                BNE L_9843
-                JSR L_9039
-L_984E:
+                BNE L0_9843
+                JSR L0_9039
+L0_984E:
                 LDX #$9C
                 LDY #$98
                 STX $04
                 STY $05
-                JSR L_9598
-                BCS L_984E
+                JSR L0_9598
+                BCS L0_984E
                 PHA
-                JSR L_9042
+                JSR L0_9042
                 PLA
                 LSR
                 LDX #$03
-L_9863:
+L0_9863:
                 PLA
                 STA $02,X
                 DEX
-                BPL L_9863
+                BPL L0_9863
 ; Menu row definitions (text + row + tab stops)
                 lda #$00
                 sta $D015
@@ -3815,135 +3815,135 @@ pf_menu_rowdef_ptr_table:               ; pointer table (little-endian)
                 !by $17,$10,$03
                 +InsertPrinterMenuMod1
 ; msg $1C on row $01: "Pokracovat Zrusit" (2 items)
-                !byte $1C,$01,$02
+                !by $1C,$01,$02
                 !by $00,$0B,$14
                 !by $A9, $00
-                STA L_D015
-                JSR L_9AF8
-                BCS L_98CE
+                STA $D015
+                JSR L0_9AF8
+                BCS L0_98CE
                 !by $AD, $09, $17
                 !by $8D, $44, $03
-L_98B2:
+L0_98B2:
                 LDX $1705
                 LDA $1710,X
                 STA $1F
                 CPX #$04
-                BEQ L_98C4
-                JSR L_98D9
-                JMP L_98C7
-L_98C4:
-                JSR L_9A39
-L_98C7:
-                BCS L_98CE
+                BEQ L0_98C4
+                JSR L0_98D9
+                JMP L0_98C7
+L0_98C4:
+                JSR L0_9A39
+L0_98C7:
+                BCS L0_98CE
                 DEC $0344
-                BNE L_98B2
-L_98CE:
+                BNE L0_98B2
+L0_98CE:
                 PHP
-                JSR L_9B66
+                JSR L0_9B66
                 LDA #$02
-                STA L_D015
+                STA $D015
                 PLP
                 RTS
-L_98D9:
+L0_98D9:
                 LDA $70
-L_98DB:
+L0_98DB:
                 AND #$EF
                 CMP $70
-                BEQ L_98F8
+                BEQ L0_98F8
                 STA $70
                 LDY #$0A
-                JSR L_9B92
+                JSR L0_9B92
                 LDA $1708
-                BEQ L_98F8
+                BEQ L0_98F8
                 LDY #$0B
-                JSR L_9B92
+                JSR L0_9B92
                 LDA $1708
-                JSR L_9B70
-L_98F8:
+                JSR L0_9B70
+L0_98F8:
                 LDA #$00
                 STA $25
                 LDA $4C
                 STA $22
-L_9900:
+L0_9900:
                 INC $25
                 SEC
                 JSR $0DC0
                 LDA $23
-                BEQ L_9940
-                JSR L_9BAD
+                BEQ L0_9940
+                JSR L0_9BAD
                 LDA $1F
                 AND #$7F
                 STA $1F
-                JSR L_9963
+                JSR L0_9963
                 LDA $1F
                 AND #$20
-                BEQ L_9931
-L_991C:
+                BEQ L0_9931
+L0_991C:
                 LDY #$05
-                JSR L_9B92
-                JSR L_9BCC
+                JSR L0_9B92
+                JSR L0_9BCC
                 SEC
                 JSR $0DC0
                 LDA $1F
                 ORA #$80
                 STA $1F
-                JSR L_9963
-L_9931:
+                JSR L0_9963
+L0_9931:
                 LDA $1F
                 AND #$0C
                 LSR
                 LSR
                 ADC #$01
                 TAY
-L_993A:
-                JSR L_9B92
-                JSR L_9BCC
-L_9940:
+L0_993A:
+                JSR L0_9B92
+                JSR L0_9BCC
+L0_9940:
                 INC $22
                 LDA $4E
                 CMP $22
-                BCC L_9956
+                BCC L0_9956
                 JSR CBM_GETIN
                 CMP #$B3
-                BNE L_9900
-                JSR L_9841
-                BCC L_9900
-                BCS L_9962
-L_9956:
+                BNE L0_9900
+                JSR L0_9841
+                BCC L0_9900
+                BCS L0_9962
+L0_9956:
                 LDA $70
                 AND #$20
-                BEQ L_9962
+                BEQ L0_9962
                 LDA #$0C
-                JSR L_9B70
-L_9961:
+                JSR L0_9B70
+L0_9961:
                 CLC
-L_9962:
+L0_9962:
                 RTS
-L_9963:
+L0_9963:
                 LDA #$00
                 STA $1B
                 STA $26
                 LDA $23
                 ASL
-L_996C:
+L0_996C:
                 ASL
                 ROL $1B
-L_996F:
+L0_996F:
                 ASL
                 ROL $1B
-L_9972:
+L0_9972:
                 STA $1A
                 LDA #$50
-                JSR L_9BDC
+                JSR L0_9BDC
                 LDA $1F
                 AND #$03
                 CLC
                 ADC #$06
                 TAY
-                JSR L_9B92
-L_9984:
+                JSR L0_9B92
+L0_9984:
                 BIT $1F
-                BVC L_999D
+                BVC L0_999D
                 LDA $1A
                 ASL
                 ROL $1C
@@ -3954,58 +3954,58 @@ L_9984:
                 LDA $1B
                 ROL
                 ROL $1C
-L_9999:
+L0_9999:
                 ADC $1B
                 STA $1B
-L_999D:
+L0_999D:
                 LDA $1A
-                JSR L_9B70
+                JSR L0_9B70
                 LDA $1B
-                JSR L_9B70
-L_99A7:
+                JSR L0_9B70
+L0_99A7:
                 JSR $0DC3
                 LDY #$08
-L_99AC:
+L0_99AC:
                 LDX #$00
-L_99AE:
+L0_99AE:
                 ROL $0200,X
                 ROL
                 INX
                 CPX #$08
-                BNE L_99AE
+                BNE L0_99AE
                 ROL $0208
-                JSR L_99CF
+                JSR L0_99CF
                 DEY
-                BNE L_99AC
+                BNE L0_99AC
                 DEC $23
-                BNE L_99A7
+                BNE L0_99A7
                 BIT $1F
-                BVC L_99CE
+                BVC L0_99CE
                 LDA #$00
                 CLC
-                JSR L_99CF
-L_99CE:
+                JSR L0_99CF
+L0_99CE:
                 RTS
-L_99CF:
+L0_99CF:
                 BIT $1F
-                BVC L_9A1F
-                BMI L_99EC
+                BVC L0_9A1F
+                BMI L0_99EC
                 BIT $26
-                BPL L_9A2B
+                BPL L0_9A2B
                 STA $0C
                 LDA $0F
                 AND $0B
                 STA $1C
                 EOR $0B
                 PHA
-L_99E4:
+L0_99E4:
                 AND $0C
                 STA $1D
                 PLA
-                JMP L_9A13
-L_99EC:
+                JMP L0_9A13
+L0_99EC:
                 BIT $26
-                BPL L_9A2B
+                BPL L0_9A2B
                 STA $0C
                 ROL
                 STA $0E
@@ -4025,21 +4025,21 @@ L_99EC:
                 EOR #$FF
                 AND $0B
                 AND $0D
-L_9A13:
-                JSR L_9B70
+L0_9A13:
+                JSR L0_9B70
                 LDA $1C
-                JSR L_9B70
+                JSR L0_9B70
                 LDA $1D
                 STA $0F
-L_9A1F:
-                JSR L_9B70
+L0_9A1F:
+                JSR L0_9B70
                 LDA $0E
                 STA $0D
-L_9A26:
+L0_9A26:
                 LDA $0C
                 STA $0B
                 RTS
-L_9A2B:
+L0_9A2B:
                 STA $0B
                 ROL
                 STA $0D
@@ -4048,152 +4048,152 @@ L_9A2B:
                 LDA #$80
                 STA $26
                 RTS
-L_9A39:
+L0_9A39:
                 LDA #$08
-                JSR L_9B70
+                JSR L0_9B70
                 LDA #$3C
                 CMP $51
-                BCS L_9A46
+                BCS L0_9A46
                 STA $51
-L_9A46:
+L0_9A46:
                 LDA $4C
                 STA $22
                 LDA #$00
                 STA $24
-L_9A4E:
+L0_9A4E:
                 CLC
                 JSR $0DC0
                 LDA #$3C
                 SEC
                 SBC $51
-                BEQ L_9A7E
+                BEQ L0_9A7E
                 LDX $1707
-L_9A5C:
-                BEQ L_9A7E
+L0_9A5C:
+                BEQ L0_9A7E
                 CPX #$02
-                BEQ L_9A63
+                BEQ L0_9A63
                 LSR
-L_9A63:
+L0_9A63:
                 ASL
                 ASL
                 ASL
                 ROL $1C
                 PHA
                 LDA #$1B
-                JSR L_9B70
+                JSR L0_9B70
                 LDA #$10
-                JSR L_9B70
+                JSR L0_9B70
                 LDA #$1C
                 AND #$01
-                JSR L_9B70
+                JSR L0_9B70
                 PLA
-                JSR L_9B70
-L_9A7E:
+                JSR L0_9B70
+L0_9A7E:
                 LDA $51
                 STA $23
                 LDA #$00
                 STA $26
                 STA $27
-L_9A88:
+L0_9A88:
                 JSR $0DC3
                 LDY #$08
-L_9A8D:
+L0_9A8D:
                 LDA #$07
                 STA $1C
                 LDX $24
-L_9A93:
+L0_9A93:
                 ROL $0200,X
                 ROR
                 INX
                 DEC $1C
-                BNE L_9A93
-                JSR L_9AD1
+                BNE L0_9A93
+                JSR L0_9AD1
                 DEY
-                BNE L_9A8D
+                BNE L0_9A8D
                 DEC $23
-                BNE L_9A88
+                BNE L0_9A88
                 LDA #$0D
-                JSR L_9B70
+                JSR L0_9B70
                 INC $22
                 DEC $24
-                BPL L_9AB7
+                BPL L0_9AB7
                 DEC $22
                 LDA #$07
                 STA $24
-L_9AB7:
+L0_9AB7:
                 LDA $4E
                 CMP $22
-                BCC L_9AC9
+                BCC L0_9AC9
                 JSR CBM_GETIN
                 CMP #$B3
-                BNE L_9A4E
-                JSR L_9841
-                BCC L_9A4E
-L_9AC9:
+                BNE L0_9A4E
+                JSR L0_9841
+                BCC L0_9A4E
+L0_9AC9:
                 PHP
                 LDA #$0F
-                JSR L_9B70
+                JSR L0_9B70
                 PLP
                 RTS
-L_9AD1:
+L0_9AD1:
                 LSR
-                BEQ L_9AF1
+                BEQ L0_9AF1
                 PHA
-L_9AD5:
+L0_9AD5:
                 LDA $26
                 ORA $27
-                BEQ L_9AEB
+                BEQ L0_9AEB
                 LDA #$80
-                JSR L_9B70
+                JSR L0_9B70
                 LDA $26
-                BNE L_9AE6
+                BNE L0_9AE6
                 DEC $27
-L_9AE6:
+L0_9AE6:
                 DEC $26
                 SEC
-                BCS L_9AD5
-L_9AEB:
+                BCS L0_9AD5
+L0_9AEB:
                 PLA
                 ORA #$80
-                JMP L_9B70
-L_9AF1:
+                JMP L0_9B70
+L0_9AF1:
                 INC $26
-                BNE L_9AF7
+                BNE L0_9AF7
                 INC $27
-L_9AF7:
+L0_9AF7:
                 RTS
-L_9AF8:
+L0_9AF8:
                 SEI
                 LDA #$00
                 STA $DD01
                 LDA #$FF
-L_9B00:
-                STA L_DD03
-                LDA L_DD00
+L0_9B00:
+                STA $DD03
+                LDA $DD00
                 ORA #$04
-                STA L_DD00
-                LDA L_DD02
+                STA $DD00
+                LDA $DD02
                 ORA #$04
-                STA L_DD02
+                STA $DD02
                 LDA $DD0D
-                LDA L_DD00
+                LDA $DD00
                 AND #$FB
-                STA L_DD00
+                STA $DD00
                 ORA #$04
-                STA L_DD00
+                STA $DD00
                 LDX #$FF
-L_9B25:
+L0_9B25:
                 LDA $DD0D
                 DEX
-                BEQ L_9B37
+                BEQ L0_9B37
                 AND #$10
-                BEQ L_9B25
+                BEQ L0_9B25
                 CLI
                 LDA #$00
                 STA $170F
                 CLC
                 RTS
-L_9B37:
+L0_9B37:
                 CLI
                 LDA #$80
                 STA $170F
@@ -4201,65 +4201,65 @@ L_9B37:
                 LDY #$00
                 LDA $1705
                 CMP #$04
-                BEQ L_9B4C
+                BEQ L0_9B4C
                 LDY $170E
-L_9B4C:
+L0_9B4C:
                 LDA #$04
                 LDX $170D
                 JSR CBM_SETLFS
                 LDA #$00
                 JSR CBM_SETNAM
                 JSR CBM_OPEN
-                BCS L_9B66
+                BCS L0_9B66
                 LDX #$04
                 JSR CBM_CHKOUT
-                BCS L_9B66
+                BCS L0_9B66
                 RTS
-L_9B66:
+L0_9B66:
                 JSR CBM_CLRCHN
                 LDA #$04
                 JSR CBM_CLOSE
                 SEC
                 RTS
-L_9B70:
+L0_9B70:
                 BIT $170F
-                BPL L_9B78
+                BPL L0_9B78
                 JMP $FFD2
-L_9B78:
+L0_9B78:
                 PHA
                 STA $DD01
-                LDA L_DD00
+                LDA $DD00
                 AND #$FB
-                STA L_DD00
+                STA $DD00
                 ORA #$04
-                STA L_DD00
-L_9B89:
+                STA $DD00
+L0_9B89:
                 LDA $DD0D
                 AND #$10
-                BEQ L_9B89
+                BEQ L0_9B89
                 PLA
                 RTS
-L_9B92:
+L0_9B92:
                 LDX #$00
-L_9B94:
+L0_9B94:
                 LDA $1717,X
                 INX
                 CMP #$FF
-                BNE L_9B94
+                BNE L0_9B94
                 DEY
-                BNE L_9B94
-L_9B9F:
+                BNE L0_9B94
+L0_9B9F:
                 LDA $1717,X
                 CMP #$FF
-                BEQ L_9BAC
-                JSR L_9B70
+                BEQ L0_9BAC
+                JSR L0_9B70
                 INX
-                BNE L_9B9F
-L_9BAC:
+                BNE L0_9B9F
+L0_9BAC:
                 RTS
-L_9BAD:
+L0_9BAD:
                 DEC $25
-                BEQ L_9BCB
+                BEQ L0_9BCB
                 LDA $1F
                 AND #$0C
                 LSR
@@ -4268,42 +4268,42 @@ L_9BAD:
                 TAY
                 LDA $1F
                 AND #$20
-                BEQ L_9BC1
+                BEQ L0_9BC1
                 DEY
-L_9BC1:
-                JSR L_9B92
-L_9BC4:
-                JSR L_9BCC
+L0_9BC1:
+                JSR L0_9B92
+L0_9BC4:
+                JSR L0_9BCC
                 DEC $25
-                BNE L_9BC4
-L_9BCB:
+                BNE L0_9BC4
+L0_9BCB:
                 RTS
-L_9BCC:
+L0_9BCC:
                 LDA #$0D
-                JSR L_9B70
+                JSR L0_9B70
                 LDA $1706
-                BEQ L_9BDB
+                BEQ L0_9BDB
                 LDA #$0A
-                JSR L_9B70
-L_9BDB:
+                JSR L0_9B70
+L0_9BDB:
                 RTS
-L_9BDC:
+L0_9BDC:
                 SEC
-L_9BDD:
+L0_9BDD:
                 SBC $51
-                BEQ L_9BF4
+                BEQ L0_9BF4
                 LDX $1707
-                BEQ L_9BF4
+                BEQ L0_9BF4
                 CPX #$02
-                BEQ L_9BEB
+                BEQ L0_9BEB
                 LSR
-L_9BEB:
+L0_9BEB:
                 TAX
                 LDA #$20
                 JSR $9B70
                 DEX
-                BNE L_9BEB+1
-L_9BF4:
+                BNE L0_9BEB+1
+L0_9BF4:
                 RTS
 VIZA_CS_IN:
 +InsertVizaIn
@@ -4315,17 +4315,17 @@ VIZA_CS_OUT:
 * = $2000
 
 !pseudopc $A000 {
-L_A000:
+L0_A000:
                 !word $A004
                 !word $A004
                 LDX #$08
 PF_INIT_LOOP:
-                LDA L_A012,X
+                LDA L0_A012,X
                 STA $0340,X
                 DEX
                 BPL PF_INIT_LOOP
                 JMP $0340
-L_A012:
+L0_A012:
                 LDA #$FF
                 STA $DE80               ; disable cartridge / reset bank switching
                 JMP CBM_START           ; KERNAL RESET
@@ -4542,13 +4542,13 @@ MSG_TABLE:
 
 !pseudopc $B000 {
 +InsertChars
-                LDA #$00
+                LDA #$00                ; map ROM0 LO
                 STA $DE80
                 JMP $FCE2
                 JSR $0FDC
-                JMP L_9972
+                JMP L0_9972
                 JSR $0FDC
-                JMP L_8000
+                JMP L0_8000
                 JSR $0FE8
                 JMP $8010
                 JSR $0FFA
@@ -4597,35 +4597,35 @@ MSG_TABLE:
                 JSR $0FE8
                 JSR $8025
                 JMP $0FDC
-                !byte $20
-                !byte $E8
-                !byte $0F
-                !byte $20
-                !byte $28
-                !byte $80
-                !byte $4C
-                !byte $DC
-                !byte $0F
-                !byte $20
-                !byte $E8
-                !byte $0F
-                !byte $20
-                !byte $2E
-                !byte $80
-                !byte $48
-                !byte $20
-                !byte $DC
-                !byte $0F
-                !byte $68
-                !byte $60
-                !byte $E7
-                !byte $B3
-                !byte $67
+                !by $20
+                !by $E8
+                !by $0F
+                !by $20
+                !by $28
+                !by $80
+                !by $4C
+                !by $DC
+                !by $0F
+                !by $20
+                !by $E8
+                !by $0F
+                !by $20
+                !by $2E
+                !by $80
+                !by $48
+                !by $20
+                !by $DC
+                !by $0F
+                !by $68
+                !by $60
+                !by $E7
+                !by $B3
+                !by $67
                 LDX $07,Y
                 TSX
-                !byte $AF
+                !by $AF
                 STA $CE,X
-                !byte $9F
+                !by $9F
                 ASL
                 LDA ($48,X)
                 TXA
@@ -4636,36 +4636,36 @@ MSG_TABLE:
                 PHA
                 LDA #$37
                 STA $01
-                LDA #$02
+                LDA #$02                ; map ROM0 HI
                 STA $DE80
                 LDA $DC0D
                 LDA $A2
                 AND #$3F
-                BNE L_B66C
+                BNE L0_B66C
                 LDA $D028
                 EOR #$01
                 AND #$01
                 STA $D028
-                STA L_D029
-L_B66C:
+                STA $D029
+L0_B66C:
                 INC $A2
-                JSR L_886F
+                JSR L0_886F
                 LDA $39
                 ORA $3A
-                BEQ L_B68F
+                BEQ L0_B68F
                 LDX $39
                 LDY $3A
                 JSR $8984
                 LDA #$04
                 BIT $29
-                BEQ L_B687
-                JSR L_872B
-L_B687:
+                BEQ L0_B687
+                JSR L0_872B
+L0_B687:
                 LDA $36
                 ORA #$A0
                 STA $36
-                BNE L_B6AD
-L_B68F:
+                BNE L0_B6AD
+L0_B68F:
                 LDA $36
                 ASL
                 AND #$40
@@ -4674,14 +4674,14 @@ L_B68F:
                 STA $36
                 LDA $A2
                 LSR
-                BCC L_B6AD
+                BCC L0_B6AD
                 LDA $3F
                 AND #$07
-                BNE L_B6AD
-                LDA #$00
+                BNE L0_B6AD
+                LDA #$00                ; map ROM0 LO
                 STA $DE80
                 JSR $8013
-L_B6AD:
+L0_B6AD:
                 LDA $42
                 STA $DE80
                 PLA
@@ -4695,30 +4695,30 @@ L_B6AD:
                 PHA
                 LDA $028D
                 LSR
-                BCC L_B6E1
-                BNE L_B6DE
+                BCC L0_B6E1
+                BNE L0_B6DE
                 CLI
                 JSR $0FE8
                 JSR $FFE7
                 LDA $D011
                 AND #$20
-                BNE L_B6D5
+                BNE L0_B6D5
                 JSR $802B
-L_B6D5:
+L0_B6D5:
                 JSR $0FDC
-                JSR L_83F9
+                JSR L0_83F9
                 JMP $0DAE               ; go to graphic menu
-L_B6DE:
+L0_B6DE:
                 JMP $148E
-L_B6E1:
+L0_B6E1:
                 LDA #$00
                 STA $36
                 PLA
                 RTI
                 LDA $4A
-                BPL L_B6EC
+                BPL L0_B6EC
                 RTS
-L_B6EC:
+L0_B6EC:
                 AND #$BF
                 STA $4A
                 LDA $29
@@ -4726,28 +4726,28 @@ L_B6EC:
                 LSR
                 LSR
                 LDA #$80
-                BCC L_B705
+                BCC L0_B705
                 LDA $29
                 AND #$FB
                 STA $29
                 LDA #$00
                 STA $34
                 LDA #$00
-L_B705:
+L0_B705:
                 STA $1F
                 LDX $2A
                 CPX #$4D
-                BCC L_B711
+                BCC L0_B711
                 LDX #$4D
                 STX $2A
-L_B711:
+L0_B711:
                 LDY $2B
                 CPY #$28
-                BCC L_B71B
+                BCC L0_B71B
                 LDY #$28
                 STY $2B
-L_B71B:
-                JSR L_82D3
+L0_B71B:
+                JSR L0_82D3
                 LDX #$00
                 LDY #$60
                 STX $04
@@ -4757,10 +4757,10 @@ L_B71B:
                 STY $07
                 LDX #$00
                 BIT $4A
-                BPL L_B735
+                BPL L0_B735
                 LDX $35
                 INX
-L_B735:
+L0_B735:
                 LDA $94D2,X
                 STA $0F5E
                 LDA $29
@@ -4772,79 +4772,79 @@ L_B735:
                 STA $24
                 LDA #$17
                 BIT $1F
-                BVC L_B74D
+                BVC L0_B74D
                 LDA #$19
-L_B74D:
+L0_B74D:
                 STA $27
-L_B74F:
+L0_B74F:
                 JSR $0FD0
                 LDY #$00
                 LDX #$08
                 SEC
-L_B757:
+L0_B757:
                 BIT $1F
-                BMI L_B76E
-L_B75B:
+                BMI L0_B76E
+L0_B75B:
                 DEY
                 LDA ($02),Y
                 ORA ($06),Y
                 DEX
-                BNE L_B767
+                BNE L0_B767
                 EOR $24
                 LDX #$08
-L_B767:
+L0_B767:
                 STA ($04),Y
                 TYA
-                BNE L_B75B
-                BEQ L_B7AA
-L_B76E:
+                BNE L0_B75B
+                BEQ L0_B7AA
+L0_B76E:
                 BIT $43
-                BMI L_B783
-L_B772:
+                BMI L0_B783
+L0_B772:
                 DEY
                 LDA ($04),Y
                 DEX
-                BNE L_B77C
+                BNE L0_B77C
                 EOR $24
                 LDX #$08
-L_B77C:
+L0_B77C:
                 STA ($02),Y
                 TYA
-                BNE L_B772
-                BEQ L_B7AA
-L_B783:
+                BNE L0_B772
+                BEQ L0_B7AA
+L0_B783:
                 LDA #$35
-                STA $01
-L_B787:
+                STA $01                 ; C64-RAM + IO enabled
+L0_B787:
                 DEY
-                LDA ($02),Y
-                PHA
-                LDA $43
-                STA $42
-                STA $DE80
-                LDA ($04),Y
-                DEX
-                BNE L_B79B
+                LDA ($02),Y             ; reading C64-RAM
+                PHA                     ; and save
+                LDA $43                 ; read value $08, $0A, $04, $06
+                STA $42                 ; and save
+                STA $DE80               ; CRT-RAM enable
+                LDA ($04),Y             ; Source
+                DEX                     ; 
+                BNE L0_B79B
                 EOR $24
                 LDX #$08
-L_B79B:
-                STA ($02),Y
-                LDA #$0C
+L0_B79B:
+                STA ($02),Y             ; in CRT
+                LDA #$0C                ; idle CRT-RAM
                 STA $42
-                STA $DE80
+                STA $DE80               ; idle CRT-RAM
                 PLA
-                STA ($02),Y
+                STA ($02),Y             ; Repairing C64-RAM
                 TYA
-                BNE L_B787
-L_B7AA:
-                BCC L_B7B7
+                BNE L0_B787
+L0_B7AA:
+                BCC L0_B7B7
                 INC $03
                 INC $05
                 INC $07
                 LDY #$40
                 CLC
-                BCC L_B757
-L_B7B7:
+                BCC L0_B757
+L0_B7B7:
                 JSR $0FDC
                 JSR $82CF
                 DEC $05
@@ -4854,7 +4854,7 @@ L_B7B7:
                 LDX #$06
                 JSR $8331
                 DEC $27
-                BNE L_B74F
+                BNE L0_B74F
                 RTS
                 LDA $43
                 STA $42
@@ -4864,24 +4864,24 @@ L_B7B7:
                 RTS
                 LDA #$37
                 STA $01
-                LDA #$02
+                LDA #$02                ;map to ROM0 HI
                 STA $42
                 STA $DE80
                 RTS
                 LDA #$37
                 STA $01
-                LDA #$00
+                LDA #$00                ;map to ROM0 LO
                 STA $42
                 STA $DE80
                 RTS
                 JSR $0FFA
                 JMP $0FDC
-                LDA #$88
+                LDA #$88                ;map to RAM LO
                 STA $42
                 STA $DE80
                 LDA #$80
                 JSR $1018
-                LDA #$8A
+                LDA #$8A                ;map to RAM HI
                 STA $42
                 STA $DE80
                 LDA #$80
@@ -4894,13 +4894,13 @@ L_B7B7:
                 LDA #$00
                 STA $02
                 TAY
-L_B821:
+L0_B821:
                 STA ($02),Y
                 INY
-                BNE L_B821
+                BNE L0_B821
                 INC $03
                 DEX
-                BNE L_B821
+                BNE L0_B821
                 RTS
                 JSR $B285
                 SEI
@@ -4908,40 +4908,40 @@ L_B821:
                 STA $DE80
                 JMP $FCE2
                 JSR $0FD0
-L_B83B:
+L0_B83B:
                 LDA #$08
-L_B83D:
+L0_B83D:
                 SEC
                 SBC $25
-                BCC L_B886
+                BCC L0_B886
                 PHA
                 TAY
                 LDX $25
-L_B846:
+L0_B846:
                 TXA
                 PHA
                 LDX $25
                 LDA #$00
-L_B84C:
+L0_B84C:
                 ASL
                 ORA ($02),Y
                 INY
                 DEX
-                BNE L_B84C
+                BNE L0_B84C
                 PHA
                 LDA $25
                 EOR #$06
                 STA $1C
                 PLA
                 LDX #$01
-L_B85D:
+L0_B85D:
                 ASL
                 DEX
-                BNE L_B85D
+                BNE L0_B85D
                 ROL $24
                 LDX $25
                 DEC $1C
-                BNE L_B85D
+                BNE L0_B85D
                 TYA
                 SEC
                 SBC $25
@@ -4951,44 +4951,44 @@ L_B85D:
                 PLA
                 TAX
                 DEX
-                BNE L_B846
+                BNE L0_B846
                 PLA
                 PHA
                 LSR
                 BIT $1F
-                BPL L_B87E
+                BPL L0_B87E
                 LSR
-L_B87E:
+L0_B87E:
                 TAY
                 LDA $24
                 STA ($06),Y
                 PLA
-                BPL L_B83D
-L_B886:
+                BPL L0_B83D
+L0_B886:
                 LDA $25
                 ASL
                 ASL
                 ASL
                 ADC $02
                 STA $02
-                BCC L_B893
+                BCC L0_B893
                 INC $03
-L_B893:
+L0_B893:
                 LDA $06
                 CLC
                 ADC #$08
                 STA $06
-                BCC L_B89E
+                BCC L0_B89E
                 INC $07
-L_B89E:
+L0_B89E:
                 DEC $26
-                BNE L_B83B
+                BNE L0_B83B
                 JMP $0FDC
                 PHA
                 JSR $827E
                 LDX $2A
                 LDY $2B
-                JSR L_82D3
+                JSR L0_82D3
                 PLA
                 ASL
                 ASL
@@ -5008,33 +5008,33 @@ L_B89E:
                 STY $07
                 LDX #$00
                 BIT $4A
-                BVC L_B8D7
+                BVC L0_B8D7
                 LDX $35
                 INX
-L_B8D7:
+L0_B8D7:
                 LDA $94D2,X
                 STA $10F4
                 LDA #$17
                 STA $26
-L_B8E1:
+L0_B8E1:
                 JSR $0FD0
                 LDX #$28
-L_B8E6:
+L0_B8E6:
                 LDY #$07
-L_B8E8:
+L0_B8E8:
                 BIT $4A
-                BVS L_B8F2
+                BVS L0_B8F2
                 LDA ($02),Y
                 EOR ($04),Y
                 STA ($06),Y
-L_B8F2:
+L0_B8F2:
                 LDA ($08),Y
                 ORA ($04),Y
                 AND ($06),Y
                 EOR ($02),Y
                 STA ($04),Y
                 DEY
-                BPL L_B8E8
+                BPL L0_B8E8
                 JSR $12E3
                 LDA $04
                 CLC
@@ -5044,17 +5044,17 @@ L_B8F2:
                 CLC
                 ADC #$08
                 STA $06
-                BCC L_B916
+                BCC L0_B916
                 INC $05
                 INC $07
-L_B916:
+L0_B916:
                 DEX
-L_B917:
-                BNE L_B8E6
+L0_B917:
+                BNE L0_B8E6
                 JSR $0FDC
                 JSR $82CF
                 DEC $26
-                BNE L_B8E1
+                BNE L0_B8E1
                 LDA #$40
                 STA $4A
                 LDA $29
@@ -5065,31 +5065,31 @@ L_B917:
                 JMP $827E
                 LDX $2A
                 LDY $2B
-                JSR L_82D3
+                JSR L0_82D3
                 LDX #$00
                 STX $26
                 STX $27
                 BIT $1F
-                BMI L_B948
+                BMI L0_B948
                 LDX $35
-L_B947:
+L0_B947:
                 INX
-L_B948:
+L0_B948:
                 LDA $94D2,X
                 STA $116D
-L_B94E:
+L0_B94E:
                 LDA $23
                 STA $1C
-L_B952:
+L0_B952:
                 LDY #$00
-L_B954:
+L0_B954:
                 LDA #$35
                 STA $01
                 BIT $43
-                BPL L_B95F
+                BPL L0_B95F
                 LDA ($02),Y
                 PHA
-L_B95F:
+L0_B95F:
                 JSR $119A
                 LDX $43
                 STX $42
@@ -5099,126 +5099,126 @@ L_B95F:
                 ORA ($02),Y
                 STA ($02),Y
                 BIT $43
-                BPL L_B97F
+                BPL L0_B97F
                 LDA #$0C
                 STA $42
                 STA $DE80
                 PLA
                 STA ($02),Y
-L_B97F:
+L0_B97F:
                 INY
                 CPY #$08
-                BNE L_B954
+                BNE L0_B954
                 JSR $12E3
                 DEC $1C
-                BNE L_B952
+                BNE L0_B952
                 JSR $0FDC
                 LDA $90
-                BNE L_B999
+                BNE L0_B999
                 JSR $82CF
                 DEC $22
-                BNE L_B94E
-L_B999:
+                BNE L0_B94E
+L0_B999:
                 RTS
                 LDA $26
                 ORA $27
-                BNE L_B9D2
+                BNE L0_B9D2
                 INC $26
                 LDA #$37
                 STA $01
                 JSR CBM_CHRIN
                 CMP #$9B
-                BNE L_B9D0
+                BNE L0_B9D0
                 BIT $1F
-                BVS L_B9D0
+                BVS L0_B9D0
                 JSR CBM_CHRIN
                 STA $26
                 LDA $1F
                 AND #$02
-                BEQ L_B9C8
+                BEQ L0_B9C8
                 LDA $26
-                BEQ L_B9C4
+                BEQ L0_B9C4
                 LDA #$00
-                BEQ L_B9CB
-L_B9C4:
+                BEQ L0_B9CB
+L0_B9C4:
                 LDA #$01
-                BNE L_B9CB
-L_B9C8:
+                BNE L0_B9CB
+L0_B9C8:
                 JSR CBM_CHRIN
-L_B9CB:
+L0_B9CB:
                 STA $27
                 JSR CBM_CHRIN
-L_B9D0:
+L0_B9D0:
                 STA $24
-L_B9D2:
+L0_B9D2:
                 LDA $26
-                BNE L_B9D8
+                BNE L0_B9D8
                 DEC $27
-L_B9D8:
+L0_B9D8:
                 DEC $26
                 LDA $24
                 RTS
                 LDX $4C
                 BIT $4B
-                BVS L_B9E5
+                BVS L0_B9E5
                 LDX $4E
-L_B9E5:
+L0_B9E5:
                 LDY $4D
                 BIT $4B
-                BMI L_B9ED
+                BMI L0_B9ED
                 LDY $4F
-L_B9ED:
-                JSR L_82D3
+L0_B9ED:
+                JSR L0_82D3
                 LDA #$00
                 STA $26
                 STA $27
-L_B9F6:
+L0_B9F6:
                 LDX $51
-L_B9F8:
+L0_B9F8:
                 LDY #$07
-L_B9FA:
+L0_B9FA:
                 JSR $0FD0
                 TYA
                 PHA
                 BIT $4B
-                BVC L_BA06
+                BVC L0_BA06
                 EOR #$07
                 TAY
-L_BA06:
+L0_BA06:
                 LDA ($02),Y
                 PHA
                 JSR $0FDC
                 PLA
                 BIT $4B
-                BMI L_BA14
+                BMI L0_BA14
                 JSR $9371
-L_BA14:
-                JSR L_85BD
+L0_BA14:
+                JSR L0_85BD
                 PLA
                 TAY
                 DEY
-                BPL L_B9FA
+                BPL L0_B9FA
                 JSR $12DB
                 DEX
-                BNE L_B9F8
+                BNE L0_B9F8
                 JSR $0FDC
                 LDA $90
-                BNE L_BA37
-                JSR L_82C7
+                BNE L0_BA37
+                JSR L0_82C7
                 DEC $50
-                BNE L_B9F6
+                BNE L0_B9F6
                 LDA $24
                 EOR #$FF
-                JSR L_85BD
-L_BA37:
+                JSR L0_85BD
+L0_BA37:
                 RTS
                 LDX $4C
                 BIT $4B
-                BVS L_BA40
+                BVS L0_BA40
                 LDX $4E
-L_BA40:
+L0_BA40:
                 LDY $4D
-                JSR L_82D3
+                JSR L0_82D3
                 LDA $4B
                 ASL
                 PHP
@@ -5232,34 +5232,34 @@ L_BA40:
                 JSR CBM_CHROUT
                 LDA $50
                 STA $27
-L_BA5A:
+L0_BA5A:
                 JSR $0FD0
                 LDA #$FE
                 LDX #$03
-L_BA61:
+L0_BA61:
                 STA $0200,X
                 DEX
-                BPL L_BA61
+                BPL L0_BA61
                 LDA #$00
                 STA $26
                 STA $1C
                 STA $1E
-L_BA6F:
+L0_BA6F:
                 LDX #$02
-L_BA71:
+L0_BA71:
                 LDA $02
                 EOR #$04
                 STA $02
                 LDY #$03
                 LDA #$00
-L_BA7B:
+L0_BA7B:
                 ORA ($02),Y
                 DEY
-                BPL L_BA7B
+                BPL L0_BA7B
                 TAY
-                BEQ L_BAA1
+                BEQ L0_BAA1
                 LDY $1C,X
-                BNE L_BA95
+                BNE L0_BA95
                 STA $1C,X
                 CMP #$10
                 LDA $26
@@ -5267,53 +5267,53 @@ L_BA7B:
                 EOR #$01
                 STA $0200,X
                 LDA $1C,X
-L_BA95:
+L0_BA95:
                 AND #$0F
                 CMP #$01
                 LDA $26
                 ROL
                 ADC #$01
                 STA $0201,X
-L_BAA1:
+L0_BAA1:
                 DEX
                 DEX
-                BPL L_BA71
+                BPL L0_BA71
                 JSR $12E3
                 INC $26
                 LDA $26
                 CMP $51
-                BCC L_BA6F
+                BCC L0_BA6F
                 JSR $0FDC
                 LDX #$03
-L_BAB5:
+L0_BAB5:
                 TXA
                 EOR $24
                 TAY
                 LDA $0200,Y
                 CMP #$FE
-                BEQ L_BACB
+                BEQ L0_BACB
                 BIT $4B
-                BMI L_BACB
+                BMI L0_BACB
                 LDA $51
                 ASL
                 SEC
                 SBC $0200,Y
-L_BACB:
+L0_BACB:
                 EOR #$FF
                 JSR CBM_CHROUT
                 DEX
-                BPL L_BAB5
-                JSR L_82C7
+                BPL L0_BAB5
+                JSR L0_82C7
                 DEC $27
-                BNE L_BA5A
+                BNE L0_BA5A
                 RTS
                 LDA #$F8
                 LDY #$FF
                 BIT $4B
-                BPL L_BAE7
+                BPL L0_BAE7
                 LDA #$08
                 LDY #$00
-L_BAE7:
+L0_BAE7:
                 CLC
                 ADC $02
                 STA $02
@@ -5323,26 +5323,26 @@ L_BAE7:
                 RTS
                 LDA #$04
                 STA $42
-                STA $DE80
-                LDA L_8000
-                CMP #$5A
-                BNE L_BB0C
-                LDA $7F
-                LDY #$0F
-L_BB04:
-                CMP $8001,Y
-                BEQ L_BB11
-                DEY
-                BPL L_BB04
-L_BB0C:
-                JSR $0FDC
+                STA $DE80               ; ROM1 LO
+                LDA $8000               ; ROM1 LO 
+                CMP #$5A                ; first byte = Z
+                BNE L0_BB0C             ; if not
+                LDA $7F                 ; ZS number
+                LDY #$0F                ; 16 bits
+L0_BB04:
+                CMP $8001,Y             ; serach from $8001 to $8010
+                BEQ L0_BB11              ; ok
+                DEY                     ; Y+1
+                BPL L0_BB04              ; loop
+L0_BB0C:
+                JSR $0FDC               ; error
                 SEC
                 RTS
-L_BB11:
+L0_BB11:
                 TYA
                 ASL
                 TAY
-                LDA $8011,Y
+                LDA $8011,Y             ; read ZS ROM addres
                 STA $02
                 CLC
                 ADC #$78
@@ -5353,11 +5353,11 @@ L_BB11:
                 ORA #$80
                 STA $03
                 STA $74
-                BCC L_BB2E
+                BCC L0_BB2E
                 INC $74
-L_BB2E:
+L0_BB2E:                                 ; read from ZS LO or HI
                 PLA
-                AND #$40
+                AND #$40                ; $4xxx = HI, $0xxx = LO
                 ASL
                 ASL
                 ROL
@@ -5367,11 +5367,11 @@ L_BB2E:
                 STA $42
                 STA $DE80
                 LDY #$77
-L_BB40:
+L0_BB40:                                 ; map 120 chars from ZS
                 LDA ($02),Y
                 STA $3C00,Y
                 DEY
-                BPL L_BB40
+                BPL L0_BB40
                 JSR $0FDC
                 CLC
                 RTS
@@ -5379,23 +5379,23 @@ L_BB40:
                 STA $42
                 STA $DE80
                 LDY #$0F
-L_BB56:
+L0_BB56:
                 LDA $7F
                 EOR $8001,Y
-                BEQ L_BB60
+                BEQ L0_BB60
                 DEY
-                BPL L_BB56
-L_BB60:
+                BPL L0_BB56
+L0_BB60:
                 INY
-                BCC L_BB65
+                BCC L0_BB65
                 DEY
                 DEY
-L_BB65:
+L0_BB65:
                 TYA
                 AND #$0F
                 TAY
                 LDA $8001,Y
-                BEQ L_BB60
+                BEQ L0_BB60
                 STA $7F
                 JMP $0FDC
                 LDA $44
@@ -5404,17 +5404,17 @@ L_BB65:
                 LDX #$FF
                 STX $26
                 INX
-L_BB7F:
+L0_BB7F:
                 LDA ($08),Y
                 STA $0200,X
-                BEQ L_BB88
+                BEQ L0_BB88
                 STX $26
-L_BB88:
+L0_BB88:
                 INY
                 INX
                 CPX $3C01
-                BNE L_BB7F
-                LDA #$02
+                BNE L0_BB7F
+                LDA #$02                ; map ROM0 HI
                 STA $42
                 STA $DE80
                 RTS
@@ -5422,12 +5422,12 @@ L_BB88:
                 AND #$01
                 ASL
                 TAY
-                LDA L_94D3,Y
+                LDA L0_94D3,Y
                 STA $13D1
                 TYA
-                BEQ L_BBA8
+                BEQ L0_BBA8
                 LDA #$FF
-L_BBA8:
+L0_BBA8:
                 STA $24
                 LDX $26
                 TXA
@@ -5435,16 +5435,16 @@ L_BBA8:
                 ASL
                 ASL
                 TAY
-L_BBB1:
+L0_BBB1:
                 LDA $0200,X
-                BEQ L_BBE3
+                BEQ L0_BBE3
                 LDA #$35
                 STA $01
                 BIT $43
-                BPL L_BBC1
+                BPL L0_BBC1
                 LDA ($02),Y
                 PHA
-L_BBC1:
+L0_BBC1:
                 LDA $43
                 STA $42
                 STA $DE80
@@ -5455,112 +5455,112 @@ L_BBC1:
                 ORA ($02),Y
                 STA ($02),Y
                 BIT $43
-                BPL L_BBE3
+                BPL L0_BBE3
                 LDA #$0C
                 STA $42
                 STA $DE80
                 PLA
                 STA ($02),Y
-L_BBE3:
+L0_BBE3:
                 TYA
                 SEC
                 SBC #$08
                 TAY
                 DEX
-                BPL L_BBB1
+                BPL L0_BBB1
                 JMP $0FDC
-                BCC L_BC1D
+                BCC L0_BC1D
                 JSR $0FDC
                 LDX $22
                 LDY $4F
-                JSR L_82D3
+                JSR L0_82D3
                 JSR $0FD0
                 LDX $51
-L_BBFF:
+L0_BBFF:
                 LDY #$07
                 LDA #$00
-L_BC03:
+L0_BC03:
                 ORA ($02),Y
                 DEY
-                BPL L_BC03
+                BPL L0_BC03
                 TAY
-                BNE L_BC19
+                BNE L0_BC19
                 LDA $02
                 SEC
                 SBC #$08
                 STA $02
-                BCS L_BC16
+                BCS L0_BC16
                 DEC $03
-L_BC16:
+L0_BC16:
                 DEX
-                BNE L_BBFF
-L_BC19:
+                BNE L0_BBFF
+L0_BC19:
                 STX $23
-                BEQ L_BC3F
-L_BC1D:
+                BEQ L0_BC3F
+L0_BC1D:
                 JSR $0FDC
                 LDX $22
                 INX
                 CPX #$64
-                BEQ L_BC38
+                BEQ L0_BC38
                 LDY $4D
-                JSR L_82D3
+                JSR L0_82D3
                 LDA $43
                 STA $44
                 LDX $02
                 LDY $03
                 STX $04
                 STY $05
-L_BC38:
+L0_BC38:
                 LDX $22
                 LDY $4D
-                JSR L_82D3
-L_BC3F:
+                JSR L0_82D3
+L0_BC3F:
                 JMP $0FE8
                 JSR $0FD0
                 LDY #$07
-L_BC47:
+L0_BC47:
                 LDA ($02),Y
                 STA $0200,Y
                 DEY
-                BPL L_BC47
+                BPL L0_BC47
                 LDA #$00
                 TAY
                 LDX $22
                 CPX #$63
-                BEQ L_BC6F
+                BEQ L0_BC6F
                 LDA #$37
                 STA $01
                 LDX #$34
                 LDA $44
                 STA $42
                 STA $DE80
-                BPL L_BC69
+                BPL L0_BC69
                 LDX #$37
-L_BC69:
+L0_BC69:
                 STX $01
                 LDY #$05
-L_BC6D:
+L0_BC6D:
                 LDA ($04),Y
-L_BC6F:
+L0_BC6F:
                 STA $0208,Y
                 DEY
-                BPL L_BC6D
+                BPL L0_BC6D
                 LDA $02
                 CLC
                 ADC #$08
                 STA $02
-                BCC L_BC80
+                BCC L0_BC80
                 INC $03
-L_BC80:
+L0_BC80:
                 LDA $04
                 CLC
                 ADC #$08
                 STA $04
-L_BC87:
-                BCC L_BC8B
+L0_BC87:
+                BCC L0_BC8B
                 INC $05
-L_BC8B:
+L0_BC8B:
                 JMP $0FE8
                 LDA #$7F
                 STA $DC0D
@@ -5568,16 +5568,16 @@ L_BC8B:
                 JSR $0FDC
                 JSR $AFFC
                 LDA #$00
-                STA L_D015
+                STA $D015
                 STA $0C
                 LDA #$93
                 JSR CBM_CHROUT
-                LDA L_DD00
+                LDA $DD00
                 AND #$FB
-                STA L_DD00
-                LDA L_DD02
+                STA $DD00
+                LDA $DD02
                 ORA #$04
-                STA L_DD02
+                STA $DD02
                 LDA #$00
                 STA $06
                 STA $07
@@ -5585,16 +5585,16 @@ L_BC8B:
                 STA $0B
                 LDA #$03
                 STA $08
-L_BCC6:
+L0_BCC6:
                 LDA $08
                 ASL
                 STA $DE80
                 JSR $1524
                 BIT $0C
-                BMI L_BCF2
+                BMI L0_BCF2
                 LDA $08
                 LSR
-                BCS L_BCF2
+                BCS L0_BCF2
                 LDA #$3D
                 JSR CBM_CHROUT
                 LDA $07
@@ -5606,11 +5606,11 @@ L_BCC6:
                 LDA #$00
                 STA $06
                 STA $07
-L_BCF2:
+L0_BCF2:
                 JSR $154F
-                INC L_D020
+                INC $D020
                 DEC $08
-                BPL L_BCC6
+                BPL L0_BCC6
                 LDA #$62
                 STA $0B
                 JSR $1586
@@ -5637,7 +5637,7 @@ L_BCF2:
                 STY $02
                 STY $04
                 LDX #$40
-L_BD34:
+L0_BD34:
                 LDA ($02),Y
                 STA ($04),Y
                 SEC
@@ -5645,16 +5645,16 @@ L_BD34:
                 CLC
                 ADC $06
                 STA $06
-                BCC L_BD44
+                BCC L0_BD44
                 INC $07
-L_BD44:
+L0_BD44:
                 INY
-                BNE L_BD34
-L_BD47:
+                BNE L0_BD34
+L0_BD47:
                 INC $03
                 INC $05
                 DEX
-                BNE L_BD34
+                BNE L0_BD34
                 RTS
                 LDA #$80
                 STA $03
@@ -5664,26 +5664,26 @@ L_BD47:
                 STY $02
                 STY $04
                 LDX #$40
-L_BD5F:
+L0_BD5F:
                 LDA ($02),Y
                 CMP ($04),Y
-                BEQ L_BD7B
+                BEQ L0_BD7B
                 STA $0A
-                LDA L_DD00
+                LDA $DD00
                 ORA #$04
-                STA L_DD00
+                STA $DD00
                 AND #$FB
-                STA L_DD00
+                STA $DD00
                 LDA ($04),Y
                 STA $09
                 JSR $160B
-L_BD7B:
+L0_BD7B:
                 INY
-                BNE L_BD5F
+                BNE L0_BD5F
                 INC $03
                 INC $05
                 DEX
-                BNE L_BD5F
+                BNE L0_BD5F
                 RTS
                 LDA #$80
                 STA $03
@@ -5691,70 +5691,70 @@ L_BD7B:
                 STY $02
                 LDA #$40
                 STA $0D
-L_BD92:
+L0_BD92:
                 LDX #$0A
-L_BD94:
+L0_BD94:
                 STX $DE80
                 LDA ($02),Y
                 STA $2000,X
                 DEX
                 DEX
-                BPL L_BD94
+                BPL L0_BD94
                 LDX #$0A
-L_BDA2:
+L0_BDA2:
                 STX $DE80
                 LDA ($02),Y
                 CMP $2000,X
-                BEQ L_BDC7
+                BEQ L0_BDC7
                 STA $0A
-                LDA L_DD00
+                LDA $DD00
                 ORA #$04
-                STA L_DD00
+                STA $DD00
                 AND #$FB
-                STA L_DD00
+                STA $DD00
                 TXA
                 LSR
                 STA $08
                 LDA $2000,X
                 STA $09
                 JSR $160B
-L_BDC7:
+L0_BDC7:
                 DEX
                 DEX
-                BPL L_BDA2
-                INC L_D020
+                BPL L0_BDA2
+                INC $D020
                 INY
-                BNE L_BD92
+                BNE L0_BD92
                 INC $03
                 DEC $0D
-                BNE L_BD92
+                BNE L0_BD92
                 RTS
                 LDA #$80
                 STA $03
                 LDY #$00
                 STY $02
                 LDX #$40
-L_BDE2:
+L0_BDE2:
                 TYA
-                EOR L_D012
+                EOR $D012
                 STA $09
                 STA ($02),Y
                 LDA ($02),Y
                 CMP $09
-                BEQ L_BE02
+                BEQ L0_BE02
                 STA $0A
-                LDA L_DD00
+                LDA $DD00
                 ORA #$04
-                STA L_DD00
+                STA $DD00
                 AND #$FB
-                STA L_DD00
+                STA $DD00
                 JSR $160B
-L_BE02:
+L0_BE02:
                 INY
-                BNE L_BDE2
+                BNE L0_BDE2
                 INC $03
                 DEX
-                BNE L_BDE2
+                BNE L0_BDE2
                 RTS
                 LDA #$0D
                 JSR CBM_CHROUT
@@ -5784,79 +5784,76 @@ L_BE02:
                 LSR
                 LSR
                 JSR $164B
-                !byte $68
-                !byte $29
-                !byte $0F
-                !byte $09
-                !byte $30
-                !byte $C9
-                !byte $3A
-                !byte $90
-                !byte $02
-                !byte $69
-                !byte $26
-                !byte $4C
-                !byte $D2
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $FF
+                !by $68
+                !by $29
+                !by $0F
+                !by $09
+                !by $30
+                !by $C9
+                !by $3A
+                !by $90
+                !by $02
+                !by $69
+                !by $26
+                !by $4C
+                !by $D2
+                !by $FF
                 !by $00
                 !by $00
-                !byte $FF
-                !byte $FF
+                !by $FF
+                !by $FF
                 !by $00
                 !by $00
+                !by $FF
+                !by $FF
                 !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
+                !by $00
+                !by $00
+                !by $FF
+                !by $FF
                 !by $00
                 !by $00
                 !by $00
@@ -5882,92 +5879,95 @@ L_BE02:
                 !by $00
                 !by $00
                 !by $00
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
-                BRK
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
                 !by $00
                 !by .COLOR_TEXT_TEXT
                 !by .COLOR_TEXT_BACKGROUND
@@ -5975,196 +5975,186 @@ L_BE02:
                 !by .COLOR_GRAPHIC_TEXT+.COLOR_GRAPHIC_BACKGROUND
                 !by $00
                 !by $00
-                ORA ($00,X)
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $04
-                !byte $01
-                !byte $00
-                !byte $00
-                !byte $41
-                !byte $65
-                !byte $0A
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $FF
-                !byte $1B
-                !byte $33
-                !byte $18
-                !byte $FF
-                !byte $1B
-                !byte $33
-                !byte $17
-                !byte $FF
-                !byte $1B
-                !byte $33
-                !byte $16
-                !byte $FF
-                !byte $1B
-                !byte $33
-                !byte $15
-                !byte $FF
-                !byte $1B
-                !byte $33
-                !byte $01
-                !byte $FF
-                !byte $1B
-                !byte $2A
-                !byte $04
-                !byte $FF
-                !byte $1B
-                !byte $5A
-                !byte $FF
-                !byte $1B
-                !byte $4B
-                !byte $FF
-                !byte $1B
-                !byte $2A
-                !byte $03
-                !byte $FF
-                !byte $1B
-                !byte $40
-                !byte $FF
-                !byte $1B
-                !byte $43
-                !byte $FF
+                !by $01,$00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $04
+                !by $01
+                !by $00
+                !by $00
+                !by $41
+                !by $65
+                !by $0A
+                !by $00
+                !by $00
+                !by $00
+                !by $FF
+                !by $1B
+                !by $33
+                !by $18
+                !by $FF
+                !by $1B
+                !by $33
+                !by $17
+                !by $FF
+                !by $1B
+                !by $33
+                !by $16
+                !by $FF
+                !by $1B
+                !by $33
+                !by $15
+                !by $FF
+                !by $1B
+                !by $33
+                !by $01
+                !by $FF
+                !by $1B
+                !by $2A
+                !by $04
+                !by $FF
+                !by $1B
+                !by $5A
+                !by $FF
+                !by $1B
+                !by $4B
+                !by $FF
+                !by $1B
+                !by $2A
+                !by $03
+                !by $FF
+                !by $1B
+                !by $40
+                !by $FF
+                !by $1B
+                !by $43
+                !by $FF
 }
 
 * = $4000
 
-!pseudopc $C000 {
+!pseudopc $8000 {
                 LDX #$FE
                 TXS
-                !byte $20
-                !byte $EC
-                !byte $AE
-                !byte $20
-                !byte $82
-                !byte $80
-                !byte $20
-                !byte $74
-                !byte $86
-                !byte $20
-                !byte $A5
-                !byte $8B
-                !byte $4C
-                !byte $06
-                !byte $80
-                !byte $64
-                !byte $44
+    JSR $AEEC
+    JSR $8082
+    JSR $8674
+    JSR $8BA5
+    JMP $8006
+                !by $64
+                !by $44
                 JMP ($6372)
-                BVS $C083
-                !byte $6D
-                !byte $74
-                !byte $67
-                !byte $61
-                !byte $73
-                !byte $65
-                JSR L_C17F
+                BVS $8083
+                !by $6D
+                !by $74
+                !by $67
+                !by $61
+                !by $73
+                !by $65
+                JSR $C17F
                 LDX $A7
                 ADC #$5F
                 LDY #$A1
-                !byte $A2
-                !byte $A3
-                !byte $6F
-                !byte $78
-                !byte $75
-                !byte $30
-                !byte $B1
-                !byte $B2
-                !byte $2E
-                !byte $B5
-                !byte $B6
-                !byte $B7
-                !byte $50
-                !byte $BA
-                !byte $B8
-                !byte $C3
-                !byte $66
-                !byte $4D
-                !byte $5E
-                !byte $77
-                !byte $AF
-                !byte $A8
-                !byte $AA
-                !byte $6B
-                !byte $02
-                !byte $96
-                !byte $BD
-                !byte $95
+                !by $A2
+                !by $A3
+                !by $6F
+                !by $78
+                !by $75
+                !by $30
+                !by $B1
+                !by $B2
+                !by $2E
+                !by $B5
+                !by $B6
+                !by $B7
+                !by $50
+                !by $BA
+                !by $B8
+                !by $C3
+                !by $66
+                !by $4D
+                !by $5E
+                !by $77
+                !by $AF
+                !by $A8
+                !by $AA
+                !by $6B
+                !by $02
+                !by $96
+                !by $BD
+                !by $95
                 LSR $82,X
                 ROL $82
                 EOR $AA82
-                !byte $82
-                !byte $EB
+                !by $82
+                !by $EB
                 LDX $81A4
                 LDY $81
                 LDY $81
                 LDY $81
-                !byte $C3
-                !byte $94
-                !byte $C3
-                !byte $94
-                !byte $C3
-                !byte $94
-                !byte $7F
-                !byte $8A
-                !byte $C0
-                !byte $8A
-                !byte $E1
-                !byte $8A
-                !byte $85
-                !byte $82
-                !byte $3D
-                !byte $84
-                !byte $CC
-                !byte $84
-                !byte $D5
-                !byte $83
-                !byte $2E
-                !byte $84
-                !byte $47
-                !byte $86
+                !by $C3
+                !by $94
+                !by $C3
+                !by $94
+                !by $C3
+                !by $94
+                !by $7F
+                !by $8A
+                !by $C0
+                !by $8A
+                !by $E1
+                !by $8A
+                !by $85
+                !by $82
+                !by $3D
+                !by $84
+                !by $CC
+                !by $84
+                !by $D5
+                !by $83
+                !by $2E
+                !by $84
+                !by $47
+                !by $86
                 CPX $F283
-                !byte $83
+                !by $83
                 NOP
                 STA ($E0),Y
                 STA ($EC),Y
                 STA ($4A,X)
-                !byte $83
+                !by $83
                 ADC $81
                 ORA ($84),Y
-                !byte $1A
+                !by $1A
                 STY $B7
                 TXA
                 JSR CBM_GETIN
-                BEQ L_C0A6
+                BEQ L2_80A6
                 LDX $28
                 CPX #$08
-                BNE L_C094
+                BNE L2_8094
                 CMP #$A0
-                BCS L_C094
-                JMP L_8119
-L_C094:
+                BCS L2_8094
+                JMP L0_8119
+L2_8094:
                 LDX #$2D
-L_C096:
+L2_8096:
                 CMP $8012,X
-                BEQ L_C0A7
+                BEQ L2_80A7
                 DEX
-                BPL L_C096
+                BPL L2_8096
                 CMP #$31
-                BCC L_C0A6
+                BCC L2_80A6
                 CMP #$39
-                BCC L_C0B9
-L_C0A6:
+                BCC L2_80B9
+L2_80A6:
                 RTS
-L_C0A7:
+L2_80A7:
                 TXA
                 CMP #$0D
-                BCC L_C0BC
+                BCC L2_80BC
                 TAY
                 ASL
                 TAX
@@ -6174,20 +6164,20 @@ L_C0A7:
                 PHA
                 TYA
                 RTS
-L_C0B9:
+L2_80B9:
                 JMP $81FE
-L_C0BC:
+L2_80BC:
                 PHA
                 CMP #$08
-                BNE L_C0CE
+                BNE L2_80CE
                 LDA #$01
                 STA $7F
                 JSR $AEE2
-                BCC L_C0CE
+                BCC L2_80CE
                 PLA
                 LDA $28
                 PHA
-L_C0CE:
+L2_80CE:
                 LDA #$00
                 STA $81
                 STA $4A
@@ -6198,175 +6188,175 @@ L_C0CE:
                 PLA
                 STA $28
                 TAX
-                !byte $BD
-                !byte $0B
-                !byte $81
-                !byte $85
-                !byte $48
-                !byte $BC
-                !byte $FD
-                !byte $80
-                !byte $24
-                !byte $29
-                !byte $10
-                !byte $04
-                !byte $A9
-                !byte $05
-                !byte $A0
-                !byte $02
-                !byte $8C
-                !byte $15
-                !byte $D0
-                !byte $20
-                !byte $3F
-                !byte $AF
-                !byte $20
-                !byte $9A
-                !byte $86
-                !byte $4C
-                !byte $DE
-                !byte $94
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $03
-                !byte $03
-                !byte $02
-                !byte $02
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
-                !byte $02
+                !by $BD
+                !by $0B
+                !by $81
+                !by $85
+                !by $48
+                !by $BC
+                !by $FD
+                !by $80
+                !by $24
+                !by $29
+                !by $10
+                !by $04
+                !by $A9
+                !by $05
+                !by $A0
+                !by $02
+                !by $8C
+                !by $15
+                !by $D0
+                !by $20
+                !by $3F
+                !by $AF
+                !by $20
+                !by $9A
+                !by $86
+                !by $4C
+                !by $DE
+                !by $94
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $03
+                !by $03
+                !by $02
+                !by $02
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $00
+                !by $02
+                !by $02
+                !by $02
+                !by $02
+                !by $02
                 STA $61
                 LDY $34
-                BNE L_C139
+                BNE L2_8139
                 CMP #$21
-                BCC L_C151
+                BCC L2_8151
                 JSR $869A
-                JSR L_8AE2
+                JSR L0_8AE2
                 JSR $0EE7
                 LDX #$02
                 STX $49
-L_C130:
+L2_8130:
                 LDA $0B,X
                 STA $0F,X
                 DEX
-                BPL L_C130
+                BPL L2_8130
                 LDY #$00
-L_C139:
+L2_8139:
                 CPY #$40
-                BCS L_C151
+                BCS L2_8151
                 LDA $61
                 CMP #$20
-                BCC L_C152
+                BCC L2_8152
                 STA $02C0,Y
                 INC $34
                 LDA $29
                 ORA #$04
                 STA $29
                 JSR $ADB1
-L_C151:
+L2_8151:
                 RTS
-L_C152:
+L2_8152:
                 CMP #$0F
-                BEQ L_C15C
+                BEQ L2_815C
                 JSR $A8B8
-                JMP L_817F
-L_C15C:
+                JMP L0_817F
+L2_815C:
                 CLC
                 JSR $134D
                 JSR $AEAA
-                JMP L_817F
+                JMP L0_817F
                 LDA $34
-                BEQ L_C173
+                BEQ L2_8173
                 DEC $34
-                JSR L_817F
+                JSR L0_817F
                 LDA $34
-                BEQ L_C174
-L_C173:
+                BEQ L2_8174
+L2_8173:
                 RTS
-L_C174:
+L2_8174:
                 LDA #$00
                 STA $34
                 LDA $29
                 AND #$FB
                 STA $29
                 RTS
-L_C17F:
+L2_817F:
                 JSR $0F03
                 LDA $34
-                BEQ L_C1A4
+                BEQ L2_81A4
                 LDX #$02
-L_C188:
+L2_8188:
                 LDA $13,X
                 STA $0F,X
                 DEX
-                BPL L_C188
+                BPL L2_8188
                 LDY #$00
-L_C191:
+L2_8191:
                 LDA $02C0,Y
                 STA $61
                 TYA
                 PHA
                 JSR $ADB1
                 PLA
-                BCS L_C1A4
+                BCS L2_81A4
                 TAY
                 INY
                 CPY $34
-                BCC L_C191
-L_C1A4:
+                BCC L2_8191
+L2_81A4:
                 RTS
                 AND #$03
                 STA $49
                 LDA $34
-                BEQ L_C1B0
-                JMP L_817F
-L_C1B0:
+                BEQ L2_81B0
+                JMP L0_817F
+L2_81B0:
                 LDA $4A
                 AND #$30
-                BEQ L_C1B9
+                BEQ L2_81B9
                 JMP $91F9
-L_C1B9:
+L2_81B9:
                 JSR $0EE7
-L_C1BC:
+L2_81BC:
                 LDY $49
                 TYA
                 LSR
                 TAX
                 LDA $81E5,Y
                 CMP $2A,X
-                BEQ L_C1DF
+                BEQ L2_81DF
                 LDA $2A,X
                 CLC
-                ADC L_81E9,Y
+                ADC L0_81E9,Y
                 STA $2A,X
                 JSR $0F03
                 LDA $CB
                 CMP #$40
-                BNE L_C1BC
+                BNE L2_81BC
                 LDA $3F
                 AND #$05
-                BNE L_C1BC
-L_C1DF:
-                JSR L_89B3
+                BNE L2_81BC
+L2_81DF:
+                JSR L0_89B3
                 JMP $B285
                 EOR $2800
                 BRK
@@ -6377,7 +6367,7 @@ L_C1DF:
                 STA $40
                 LDA #$2E
                 STA $41
-                JSR L_8AEC
+                JSR L0_8AEC
                 JMP $AEFC
                 PHA
                 JSR $0EE7
@@ -6387,16 +6377,16 @@ L_C1DF:
                 DEX
                 LDA $8217,X
                 STA $2A
-                LDA L_821F,X
+                LDA L0_821F,X
                 STA $2B
                 JSR $0F03
-                JMP L_89B3
+                JMP L0_89B3
                 BRK
                 BRK
                 ORA $3219,Y
-                !byte $32
-                !byte $4B
-                !byte $4B
+                !by $32
+                !by $4B
+                !by $4B
                 BRK
                 PLP
                 BRK
@@ -6409,29 +6399,29 @@ L_C1DF:
                 LDX $2A
                 LDY $2B
                 CPX $2C
-                BNE L_C23C
+                BNE L2_823C
                 CPY $2D
-                BNE L_C23C
+                BNE L2_823C
                 LDX $2E
                 LDY $2F
-                BCS L_C244
-L_C23C:
+                BCS L2_8244
+L2_823C:
                 STX $2E
                 STY $2F
                 LDX $2C
                 LDY $2D
-L_C244:
+L2_8244:
                 STX $2A
                 STY $2B
                 JSR $0F03
-                JMP L_89B3
+                JMP L0_89B3
                 LDX $2A
                 LDY $2B
                 STX $2C
                 STY $2D
                 RTS
                 BIT $4A
-                BMI L_C273
+                BMI L2_8273
                 JSR $0EE7
                 LDX #$00
                 LDY #$60
@@ -6443,26 +6433,26 @@ L_C244:
                 SEC
                 JSR $B36C
                 JMP $827E
-L_C273:
+L2_8273:
                 LDA #$60
-                JSR L_92A9
+                JSR L0_92A9
                 JSR $0EF0
                 JMP $0F03
                 LDA $29
                 AND #$08
-                BEQ L_C2AA
-                BNE L_C28C
+                BEQ L2_82AA
+                BNE L2_828C
                 LDA $29
                 EOR #$08
                 STA $29
-L_C28C:
+L2_828C:
                 LDA #$C0
                 STA $02
                 LDA #$5F
                 STA $03
                 LDY #$40
                 LDX #$1C
-L_C298:
+L2_8298:
                 LDA ($02),Y
                 EOR #$80
                 STA ($02),Y
@@ -6470,11 +6460,11 @@ L_C298:
                 CLC
                 ADC #$08
                 TAY
-                BCC L_C298
+                BCC L2_8298
                 INC $03
                 DEX
-                BPL L_C298
-L_C2AA:
+                BPL L2_8298
+L2_82AA:
                 RTS
                 LDA #$00
                 STA $02
@@ -6482,93 +6472,93 @@ L_C2AA:
                 STA $03
                 LDY #$C0
                 LDX #$1C
-L_C2B7:
+L2_82B7:
                 DEY
                 LDA ($02),Y
                 EOR #$FF
                 STA ($02),Y
                 TYA
-                BNE L_C2B7
+                BNE L2_82B7
                 DEC $03
                 DEX
-                BPL L_C2B7
+                BPL L2_82B7
                 RTS
                 BIT $4B
-                BVS L_C2CF
+                BVS L2_82CF
                 DEC $46
-                BVC L_C2D7
-L_C2CF:
+                BVC L2_82D7
+L2_82CF:
                 INC $46
-                BPL L_C2D7
+                BPL L2_82D7
                 STX $46
                 STY $47
-L_C2D7:
+L2_82D7:
                 LDA $46
                 LDX #$00
-L_C2DB:
+L2_82DB:
                 CMP #$19
-                BCC L_C2E4
+                BCC L2_82E4
                 SBC #$19
                 INX
-                BCS L_C2DB
-L_C2E4:
+                BCS L2_82DB
+L2_82E4:
                 STA $1C
-                LDA L_830C,X
+                LDA L0_830C,X
                 STA $45
-                LDA L_8310,X
+                LDA L0_8310,X
                 STA $43
                 TXA
                 PHA
                 LDA $47
                 STA $1D
-                !byte $A2
-                !byte $1C
-                !byte $A0
-                !byte $04
-                !byte $20
-                !byte $18
-                !byte $83
-                !byte $A2
-                !byte $02
-                !byte $20
-                !byte $41
-                !byte $83
-                !byte $68
-                !byte $AA
-                !byte $A5
-                !byte $03
-                !byte $1D
-                !byte $14
-                !byte $83
-                !byte $85
-                !byte $03
-                !byte $60
-                !byte $34
-                !byte $34
-                !byte $37
-                !byte $37
-                !byte $0C
-                !byte $0C
+                !by $A2
+                !by $1C
+                !by $A0
+                !by $04
+                !by $20
+                !by $18
+                !by $83
+                !by $A2
+                !by $02
+                !by $20
+                !by $41
+                !by $83
+                !by $68
+                !by $AA
+                !by $A5
+                !by $03
+                !by $1D
+                !by $14
+                !by $83
+                !by $85
+                !by $03
+                !by $60
+                !by $34
+                !by $34
+                !by $37
+                !by $37
+                !by $0C
+                !by $0C
                 DEY
                 TXA
-                !byte $80
+                !by $80
                 CPY #$80
-                !byte $80
+                !by $80
                 LDA #$00
                 STA $03
                 LDA $00,X
                 ASL
                 ASL
                 ADC $00,X
-L_C322:
+L2_8322:
                 ASL
                 ROL $03
                 DEY
-                BNE L_C322
+                BNE L2_8322
                 ADC $01,X
-                BCC L_C32E
+                BCC L2_832E
                 INC $03
-L_C32E:
+L2_832E:
                 STA $02
                 RTS
                 LDA #$01
@@ -6582,26 +6572,26 @@ L_C32E:
                 STA $01,X
                 RTS
                 LDY #$03
-L_C343:
+L2_8343:
                 ASL $00,X
                 ROL $01,X
                 DEY
-                BNE L_C343
+                BNE L2_8343
                 RTS
                 JSR $0EE7
                 LDA $2A
                 SEC
                 SBC #$0C
-                BCS L_C357
+                BCS L2_8357
                 LDA #$00
-L_C357:
+L2_8357:
                 CMP #$36
-                BCC L_C35D
+                BCC L2_835D
                 LDA #$36
-L_C35D:
+L2_835D:
                 TAX
                 LDA #$00
-                JSR L_837F
+                JSR L0_837F
                 JMP $827E
                 JSR $9EDE
                 LDX #$18
@@ -6617,31 +6607,31 @@ L_C35D:
                 LDX #$00
                 STA $1F
                 LDY #$00
-                JSR L_82D3
+                JSR L0_82D3
                 LDY #$02
                 LDA #$17
                 LDX #$00
                 BIT $1F
-                BPL L_C396
+                BPL L2_8396
                 LDY #$04
                 LDA #$19
                 LDX #$18
-L_C396:
+L2_8396:
                 STY $25
                 STA $27
                 STX $04
                 LDY #$60
                 STY $05
-L_C3A0:
+L2_83A0:
                 LDA $04
                 STA $06
                 LDA $05
                 STA $07
                 LDA #$28
                 BIT $1F
-                BPL L_C3B0
+                BPL L2_83B0
                 LDA #$14
-L_C3B0:
+L2_83B0:
                 STA $26
                 JSR $1038
                 JSR $82CF
@@ -6651,7 +6641,7 @@ L_C3B0:
                 ADC $04
                 STA $04
                 AND #$07
-                BNE L_C3A0
+                BNE L2_83A0
                 LDA $04
                 SEC
                 SBC #$08
@@ -6659,17 +6649,17 @@ L_C3B0:
                 LDX #$04
                 JSR $8331
                 DEC $27
-                BNE L_C3A0
+                BNE L2_83A0
                 RTS
                 JSR $0EE7
                 JSR $8B0E
-                BCS L_C3EA
+                BCS L2_83EA
                 LDA #$00
                 STA $70
                 JSR $0E1B
-                BCS L_C3EA
+                BCS L2_83EA
                 JSR $0E24
-L_C3EA:
+L2_83EA:
                 JMP $AEEC
                 JSR $0EE7
                 JMP $0DA8
@@ -6683,9 +6673,9 @@ L_C3EA:
                 STA $29
                 LDA #$4B
                 CMP $2A
-                BCS L_C40D
+                BCS L2_840D
                 STA $2A
-L_C40D:
+L2_840D:
                 LDA #$C0
                 JMP $0F05
                 LDA $1704
@@ -6703,70 +6693,70 @@ L_C40D:
                 STA $1704
                 JMP $B3B4
                 LDX #$A0
-L_C431:
+L2_8431:
                 DEX
                 LDA $6000,X
                 STA $0D00,X
                 TXA
-                BNE L_C431
-                JMP L_9531
+                BNE L2_8431
+                JMP L0_9531
                 JSR $0EE7
                 LDA #$00
                 STA $71
-                JSR L_8467
-                BCS L_C461
+                JSR L0_8467
+                BCS L2_8461
                 PHA
                 JSR CBM_CLRCHN
                 JSR $AF0D
-                JSR L_8AEC
+                JSR L0_8AEC
                 PLA
-                BCS L_C461
+                BCS L2_8461
                 STA $1F
                 LDX #$08
                 JSR CBM_CHKIN
                 JSR $1134
-L_C461:
-                JSR L_8658
+L2_8461:
+                JSR L0_8658
                 JMP $AEFC
                 PHA
                 JSR $0DE0
                 PLA
                 JSR $0E05
-                BCS L_C4CC
+                BCS L2_84CC
                 LDY #$00
                 JSR $B209
-                BCS L_C4CC
+                BCS L2_84CC
                 JSR CBM_CHRIN
                 LDY $90
-                BNE L_C4A9
+                BNE L2_84A9
                 LDY #$00
                 CMP #$47
-                BEQ L_C4AE
+                BEQ L2_84AE
                 INY
                 CMP #$42
-                BEQ L_C4AE
+                BEQ L2_84AE
                 TAX
                 JSR CBM_CHRIN
                 CPX #$50
-                BNE L_C4A6
+                BNE L2_84A6
                 STA $22
                 JSR CBM_CHRIN
                 STA $23
                 JSR $B156
-L_C49C:
+L2_849C:
                 JSR CBM_CHRIN
                 TAX
-                BNE L_C49C
+                BNE L2_849C
                 LDY #$02
-                BNE L_C4BC
-L_C4A6:
+                BNE L2_84BC
+L2_84A6:
                 STX $71
                 TXA
-L_C4A9:
+L2_84A9:
                 SEC
-                BNE L_C4CC
+                BNE L2_84CC
                 LDY #$41
-L_C4AE:
+L2_84AE:
                 TYA
                 AND #$03
                 TAX
@@ -6774,7 +6764,7 @@ L_C4AE:
                 STA $22
                 LDA $8545,X
                 STA $23
-L_C4BC:
+L2_84BC:
                 LDA $22
                 ASL
                 STA $41
@@ -6785,108 +6775,108 @@ L_C4BC:
                 ORA $1F
                 STA $1F
                 CLC
-L_C4CC:
+L2_84CC:
                 RTS
                 JSR $0EE7
                 LDA #$00
                 STA $71
                 JSR $8552
-                BCS L_C540
+                BCS L2_8540
                 PHA
                 JSR $0DE0
                 LDA #$03
                 JSR $0DF7
                 PLA
-                BCS L_C540
+                BCS L2_8540
                 STA $1F
                 LDY #$01
                 JSR $B209
-                BCS L_C53D
+                BCS L2_853D
                 LDA $1F
                 CMP #$01
-                BNE L_C508
+                BNE L2_8508
                 LDX $0430
                 CPX #$30
-                BNE L_C508
+                BNE L2_8508
                 ORA #$40
                 STA $1F
                 LDA #$00
                 JSR CBM_CHROUT
                 LDA #$20
-                BNE L_C522
-L_C508:
+                BNE L2_8522
+L2_8508:
                 TAX
                 LDA $8547,X
                 JSR CBM_CHROUT
                 CPX #$02
-                BCC L_C525
+                BCC L2_8525
                 LDA $50
                 JSR CBM_CHROUT
                 LDA $51
                 JSR CBM_CHROUT
                 JSR $1238
                 LDA #$00
-L_C522:
+L2_8522:
                 JSR CBM_CHROUT
-L_C525:
+L2_8525:
                 JSR $11DD
                 BIT $1F
-                BVS L_C53D
+                BVS L2_853D
                 LDX #$03
                 LSR $1F
-                BCC L_C534
+                BCC L2_8534
                 LDX #$07
-L_C534:
+L2_8534:
                 LDA $854A,X
                 JSR CBM_CHROUT
                 DEX
-                BPL L_C534
-L_C53D:
-                JSR L_8658
-L_C540:
+                BPL L2_8534
+L2_853D:
+                JSR L0_8658
+L2_8540:
                 JMP $AEEC
-                !byte $32
+                !by $32
                 ORA $2850,Y
-                !byte $47
-                !byte $42
-                BVC $C50A
-                JSR L_9B00
+                !by $47
+                !by $42
+                BVC $850A
+                JSR L0_9B00
                 BRK
                 BRK
                 CPY #$9B
-                JSR L_94D6
+                JSR L0_94D6
                 LDY #$2F
-L_C557:
+L2_8557:
                 LDA $B8E7,Y
                 STA $7DA0,Y
-                LDA L_B917,Y
+                LDA L0_B917,Y
                 STA $7EE0,Y
                 DEY
-                BPL L_C557
+                BPL L2_8557
                 JSR $B285
-L_C569:
-                JSR L_8674
+L2_8569:
+                JSR L0_8674
                 JSR CBM_GETIN
                 CMP #$B3
-                BEQ L_C5BB
+                BEQ L2_85BB
                 LDA $3F
                 AND #$05
-                BEQ L_C569
+                BEQ L2_8569
                 BIT $29
-                BPL L_C5BB
+                BPL L2_85BB
                 LDX #$04
                 LDA $0B
-L_C581:
+L2_8581:
                 LSR $0C
                 ROR
                 DEX
-                BNE L_C581
+                BNE L2_8581
                 SEC
                 SBC #$0E
-                BCC L_C5BB
+                BCC L2_85BB
                 CMP #$02
-                BEQ L_C5B5
-                BCS L_C5BB
+                BEQ L2_85B5
+                BCS L2_85BB
                 PHA
                 TAY
                 LDA $8545,Y
@@ -6897,7 +6887,7 @@ L_C581:
                 STA $50
                 ASL
                 STA $41
-                JSR L_8AEC
+                JSR L0_8AEC
                 LDA $2A
                 STA $4C
                 LDA $2B
@@ -6906,25 +6896,25 @@ L_C581:
                 STA $4B
                 PLA
                 RTS
-L_C5B5:
+L2_85B5:
                 PHA
                 JSR $8B0E
                 PLA
                 RTS
-L_C5BB:
+L2_85BB:
                 SEC
                 RTS
                 CMP $24
-                BNE L_C5C4
-                JMP L_8641
-L_C5C4:
+                BNE L2_85C4
+                JMP L0_8641
+L2_85C4:
                 PHA
                 LDA #$02
                 BIT $1F
-                BEQ L_C5F9
+                BEQ L2_85F9
                 LDA $27
-                BEQ L_C5E2
-L_C5CF:
+                BEQ L2_85E2
+L2_85CF:
                 LDA #$9B
                 JSR CBM_CHROUT
                 LDA #$00
@@ -6932,181 +6922,181 @@ L_C5CF:
                 LDA $24
                 JSR CBM_CHROUT
                 DEC $27
-                BNE L_C5CF
-L_C5E2:
+                BNE L2_85CF
+L2_85E2:
                 LDA $26
-                BEQ L_C63E
+                BEQ L2_863E
                 CMP #$04
-                BCS L_C5F0
+                BCS L2_85F0
                 LDA $24
                 CMP #$9B
-                BNE L_C62C
-L_C5F0:
+                BNE L2_862C
+L2_85F0:
                 LDA #$9B
                 JSR CBM_CHROUT
                 LDA $26
-                BNE L_C621
-L_C5F9:
-                BVC L_C603
+                BNE L2_8621
+L2_85F9:
+                BVC L2_8603
                 LDA $26
                 ORA $27
-                BEQ L_C63E
-                BNE L_C62C
-L_C603:
+                BEQ L2_863E
+                BNE L2_862C
+L2_8603:
                 LDA $27
-                BNE L_C615
+                BNE L2_8615
                 LDA $26
-                BEQ L_C63E
+                BEQ L2_863E
                 CMP #$05
-                BCS L_C615
+                BCS L2_8615
                 LDA $24
                 CMP #$9B
-                BNE L_C62C
-L_C615:
+                BNE L2_862C
+L2_8615:
                 LDA #$9B
                 JSR CBM_CHROUT
                 LDA $26
                 JSR CBM_CHROUT
                 LDA $27
-L_C621:
+L2_8621:
                 JSR CBM_CHROUT
                 LDA #$01
                 STA $26
                 LDA #$00
                 STA $27
-L_C62C:
+L2_862C:
                 LDA $24
                 JSR CBM_CHROUT
                 DEC $26
-                BNE L_C62C
+                BNE L2_862C
                 LDA $27
-                BEQ L_C63E
+                BEQ L2_863E
                 DEC $27
-                JMP L_862C
-L_C63E:
+                JMP L0_862C
+L2_863E:
                 PLA
                 STA $24
                 INC $26
-                BNE L_C647
+                BNE L2_8647
                 INC $27
-L_C647:
+L2_8647:
                 RTS
                 JSR $0DE0
                 LDA #$02
                 JSR $0DF7
-                BCS L_C655
-                JSR L_865D
-L_C655:
+                BCS L2_8655
+                JSR L0_865D
+L2_8655:
                 JMP $AEFF
                 JSR $B222
                 LDA #$00
                 JSR $0E10
-                BCS L_C66B
+                BCS L2_866B
                 LDA $71
-                BEQ L_C673
+                BEQ L2_8673
                 LDA #$0B
                 JSR $0DE9
-L_C66B:
+L2_866B:
                 JSR $AFFC
-L_C66E:
+L2_866E:
                 JSR $0E2D
-                BEQ L_C66E
-L_C673:
+                BEQ L2_866E
+L2_8673:
                 RTS
                 LDA $36
                 AND #$C0
-                BEQ L_C699
+                BEQ L2_8699
                 JSR $869A
                 BIT $36
-                BVC L_C699
+                BVC L2_8699
                 SEI
                 LDA $36
                 AND #$BF
                 STA $36
                 CLI
                 BIT $29
-                BMI L_C699
-                JSR L_89B3
+                BMI L2_8699
+                JSR L0_89B3
                 LDA #$04
                 BIT $29
-                BEQ L_C699
+                BEQ L2_8699
                 JSR $8D41
-L_C699:
+L2_8699:
                 RTS
                 SEI
                 LDX $48
                 LDA #$EF
                 CMP $19
-                BCS L_C6A5
+                BCS L2_86A5
                 STA $19
-L_C6A5:
+L2_86A5:
                 LDA $8784,X
                 CMP $19
-                BCC L_C6AE
+                BCC L2_86AE
                 STA $19
-L_C6AE:
+L2_86AE:
                 LDY #$00
-                LDA L_878E,X
+                LDA L0_878E,X
                 CMP $19
-                BCS L_C6CC
+                BCS L2_86CC
                 LDY #$80
                 LDA $19
                 CMP #$E0
-                BCS L_C6CC
+                BCS L2_86CC
                 LDA #$E0
                 BIT $29
-                BPL L_C6CA
-L_C6C5:
+                BPL L2_86CA
+L2_86C5:
                 LDY #$00
-                LDA L_878E,X
-L_C6CA:
+                LDA L0_878E,X
+L2_86CA:
                 STA $19
-L_C6CC:
+L2_86CC:
                 TYA
                 EOR $29
-                BPL L_C6F9
+                BPL L2_86F9
                 STY $1C
                 LDA $29
                 AND #$7F
                 ORA $1C
                 STA $29
-                BPL L_C6EC
+                BPL L2_86EC
                 LDA $3F
                 AND #$05
-                BNE L_C6C5
+                BNE L2_86C5
                 LDA #$02
-                STA L_D015
+                STA $D015
                 LDA #$03
-                BNE L_C6F6
-L_C6EC:
+                BNE L2_86F6
+L2_86EC:
                 LDX $28
                 LDA $80FD,X
-                STA L_D015
+                STA $D015
                 LDA $48
-L_C6F6:
+L2_86F6:
                 JSR $AF3F
-L_C6F9:
+L2_86F9:
                 LDX $48
                 BIT $29
-                BPL L_C701
+                BPL L2_8701
                 LDX #$00
-L_C701:
+L2_8701:
                 LDA $18
-                BNE L_C710
+                BNE L2_8710
                 LDA $877F,X
                 CMP $17
-                BCC L_C71D
+                BCC L2_871D
                 STA $17
-                BCS L_C71D
-L_C710:
+                BCS L2_871D
+L2_8710:
                 LDA #$01
                 STA $18
-                LDA L_8789,X
+                LDA L0_8789,X
                 CMP $17
-                BCS L_C71D
+                BCS L2_871D
                 STA $17
-L_C71D:
-                JSR L_872B
+L2_871D:
+                JSR L0_872B
                 JSR $8756
                 LDA $36
                 AND #$7F
@@ -7114,8 +7104,8 @@ L_C71D:
                 CLI
                 RTS
                 LDA $19
-                STA L_D001
-                STA L_D003
+                STA $D001
+                STA $D003
                 SEC
                 SBC #$15
                 CLC
@@ -7128,7 +7118,7 @@ L_C71D:
                 SBC #$18
                 CLC
                 ADC $40
-                STA L_D004
+                STA $D004
                 LDA $18
                 ASL
                 ORA $18
@@ -7136,12 +7126,12 @@ L_C71D:
                 RTS
                 LDX $48
                 BIT $29
-                BPL L_C764
+                BPL L2_8764
                 LDX #$00
                 BIT $38
-                BMI L_C764
+                BMI L2_8764
                 LDX #$03
-L_C764:
+L2_8764:
                 LDA $19
                 SEC
                 SBC $8784,X
@@ -7153,144 +7143,145 @@ L_C764:
                 SBC $877F,X
                 STA $0B
                 LDA $18
-                !byte $E9
-                !byte $00
-                !byte $85
-                !byte $0C
-                !byte $60
-                !byte $0E
-                !byte $26
-                !byte $18
-                !byte $C6
-                !byte $30
-                !byte $28
-                !byte $28
-                !byte $32
+                !by $E9
+                !by $00
+                !by $85
+                !by $0C
+                !by $60
+                !by $0E
+                !by $26
+                !by $18
+                !by $C6
+                !by $30
+                !by $28
+                !by $28
+                !by $32
                 PLP
-                !byte $32
+                !by $32
                 EOR $40C5
                 EOR $DFD0
-                !byte $EF
+                !by $EF
                 CMP $EF,X
-                !byte $FA
+                !by $FA
+L2_8793:
                 LDA $36
                 AND #$C0
-                BEQ L_C7C4
+                BEQ L2_87C4
                 JSR $87C5
                 BIT $36
-                BVC L_C7C4
+                BVC L2_87C4
                 SEI
                 LDA $36
                 AND #$BF
                 STA $36
                 CLI
                 BIT $29
-                BMI L_C7C4
-                JSR L_89CA
+                BMI L2_87C4
+                JSR L0_89CA
                 LDA #$04
                 BIT $29
-                BEQ L_C7C4
+                BEQ L2_87C4
                 LDX #$03
-L_C7B7:
+L2_87B7:
                 LDA $13,X
                 STA $0F,X
                 DEX
-                BPL L_C7B7
+                BPL L2_87B7
                 JSR $9F11
                 JSR $8DDD
-L_C7C4:
+L2_87C4:
                 RTS
                 SEI
                 LDX $48
                 LDA $18
-                BNE L_C7D7
+                BNE L2_87D7
                 LDA $877F,X
                 CMP $17
-                BCC L_C7E7
+                BCC L2_87E7
                 STA $17
-                BCS L_C7E7
-L_C7D7:
+                BCS L2_87E7
+L2_87D7:
                 LDA #$01
                 STA $18
                 LDA #$4D
                 CMP $17
-                BCS L_C7E3
+                BCS L2_87E3
                 STA $17
-L_C7E3:
+L2_87E3:
                 LDY #$80
-                BNE L_C813
-L_C7E7:
+                BNE L2_8813
+L2_87E7:
                 LDY #$00
-                LDA L_8789,X
+                LDA L0_8789,X
                 CPX #$04
-                BNE L_C7F2
+                BNE L2_87F2
                 SBC $40
-L_C7F2:
+L2_87F2:
                 CMP $17
-                BCS L_C813
+                BCS L2_8813
                 LDY #$80
                 LDA $17
                 CMP #$C6
-                BCS L_C813
+                BCS L2_8813
                 LDA #$C6
                 BIT $29
-                BPL L_C811
-L_C804:
+                BPL L2_8811
+L2_8804:
                 LDY #$00
                 STY $18
-                LDA L_8789,X
+                LDA L0_8789,X
                 CPX #$04
-                BNE L_C811
+                BNE L2_8811
                 SBC $40
-L_C811:
+L2_8811:
                 STA $17
-L_C813:
+L2_8813:
                 TYA
                 EOR $29
-                BPL L_C841
+                BPL L2_8841
                 STY $1C
                 LDA $29
                 AND #$7F
                 ORA $1C
                 STA $29
-                BPL L_C831
+                BPL L2_8831
                 BIT $38
-                BMI L_C804
+                BMI L2_8804
                 LDA #$02
-                STA L_D015
+                STA $D015
                 LDA #$03
-                BNE L_C83E
-L_C831:
+                BNE L2_883E
+L2_8831:
                 LDX #$02
                 LDA $48
                 CMP #$01
-                BEQ L_C83B
+                BEQ L2_883B
                 LDX #$06
-L_C83B:
-                STX L_D015
-L_C83E:
+L2_883B:
+                STX $D015
+L2_883E:
                 JSR $AF3F
-L_C841:
+L2_8841:
                 LDX $48
                 BIT $29
-                BPL L_C849
+                BPL L2_8849
                 LDX #$03
-L_C849:
+L2_8849:
                 LDA $8784,X
                 CMP $19
-                BCC L_C852
+                BCC L2_8852
                 STA $19
-L_C852:
-                LDA L_878E,X
+L2_8852:
+                LDA L0_878E,X
                 CPX #$04
-                BNE L_C85B
+                BNE L2_885B
                 SBC $41
-L_C85B:
+L2_885B:
                 CMP $19
-                BCS L_C861
+                BCS L2_8861
                 STA $19
-L_C861:
-                JSR L_872B
+L2_8861:
+                JSR L0_872B
                 JSR $8756
                 LDA $36
                 AND #$7F
@@ -7298,56 +7289,56 @@ L_C861:
                 CLI
                 RTS
                 LDA #$FF
-                STA L_DC00
+                STA $DC00
                 LDA $36
                 AND #$18
-                BNE L_C897
+                BNE L2_8897
                 LDX $D419
                 CPX #$FF
-                BEQ L_C8D0
+                BEQ L2_88D0
                 LDX #$00
-L_C883:
+L2_8883:
                 NOP
                 NOP
                 INX
-                BNE L_C883
+                BNE L2_8883
                 LDA #$08
-                LDX L_D41A
+                LDX $D41A
                 CPX #$FF
-                BNE L_C893
+                BNE L2_8893
                 LDA #$10
-L_C893:
+L2_8893:
                 ORA $36
                 STA $36
-L_C897:
+L2_8897:
                 AND #$08
-                BEQ L_C8DD
+                BEQ L2_88DD
                 LDX #$01
-L_C89D:
+L2_889D:
                 LDA $D419,X
                 TAY
                 SEC
                 SBC $3B,X
                 AND #$7F
                 CMP #$40
-                BCS L_C8AF
+                BCS L2_88AF
                 LSR
-                BEQ L_C8BB
-                BNE L_C8B6
-L_C8AF:
+                BEQ L2_88BB
+                BNE L2_88B6
+L2_88AF:
                 EOR #$7F
-                BEQ L_C8BB
+                BEQ L2_88BB
                 LSR
                 EOR #$FF
-L_C8B6:
+L2_88B6:
                 PHA
                 TYA
                 STA $3B,X
                 PLA
-L_C8BB:
+L2_88BB:
                 STA $39,X
                 DEX
-                BPL L_C89D
+                BPL L2_889D
                 LDA #$00
                 SEC
                 SBC $3A
@@ -7356,30 +7347,30 @@ L_C8BB:
                 EOR #$FF
                 LSR
                 JMP $8916
-L_C8D0:
+L2_88D0:
                 ASL $3F
                 ASL $3F
                 LDA #$00
                 STA $3A
                 STA $39
                 JMP $8923
-L_C8DD:
+L2_88DD:
                 LDA #$00
                 STA $DC02
                 LDA #$10
-                STA L_DC03
+                STA $DC03
                 LDX #$00
                 LDY #$08
-L_C8EB:
+L2_88EB:
                 LDA #$00
-                JSR L_8975
+                JSR L0_8975
                 ASL
                 ASL
                 ASL
                 ASL
                 STA $39,X
                 LDA #$10
-                JSR L_8975
+                JSR L0_8975
                 AND #$0F
                 ORA $39,X
                 CLC
@@ -7387,86 +7378,86 @@ L_C8EB:
                 STA $39,X
                 INX
                 CPX #$02
-                BNE L_C8EB
+                BNE L2_88EB
                 LDA #$00
-                STA L_DC03
+                STA $DC03
                 LDX $D419
                 CPX #$FF
-                BEQ L_C916
+                BEQ L2_8916
                 CLC
-L_C916:
+L2_8916:
                 ROL $3F
                 CLC
                 LDA $DC01
                 AND #$10
-                BNE L_C921
+                BNE L2_8921
                 SEC
-L_C921:
+L2_8921:
                 ROL $3F
-                LDA L_DC00
+                LDA $DC00
                 EOR #$FF
                 LDX #$FF
                 STX $DC02
                 PHA
                 CLC
                 AND #$10
-                BEQ L_C934
+                BEQ L2_8934
                 SEC
-L_C934:
+L2_8934:
                 ROL $3F
                 PLA
                 AND #$0F
-                BEQ L_C965
+                BEQ L2_8965
                 LDX $3E
-                BNE L_C962
+                BNE L2_8962
                 LSR
-                BCC L_C944
+                BCC L2_8944
                 DEC $3A
-L_C944:
+L2_8944:
                 LSR
-                BCC L_C949
+                BCC L2_8949
                 INC $3A
-L_C949:
+L2_8949:
                 LSR
-                BCC L_C94E
+                BCC L2_894E
                 DEC $39
-L_C94E:
+L2_894E:
                 LSR
-                BCC L_C953
+                BCC L2_8953
                 INC $39
-L_C953:
+L2_8953:
                 LDX $3D
-                BEQ L_C974
+                BEQ L2_8974
                 LDA $36
                 LSR
-                BCC L_C95D
+                BCC L2_895D
                 DEX
-L_C95D:
+L2_895D:
                 STX $3D
                 STX $3E
                 RTS
-L_C962:
+L2_8962:
                 DEC $3E
                 RTS
-L_C965:
+L2_8965:
                 LDX #$01
                 LDA $36
                 LSR
-                BCC L_C96E
+                BCC L2_896E
                 LDX #$0A
-L_C96E:
+L2_896E:
                 STX $3D
                 LDA #$00
                 STA $3E
-L_C974:
+L2_8974:
                 RTS
                 STA $DC01
-L_C978:
+L2_8978:
                 NOP
                 NOP
                 NOP
                 DEY
-                BNE L_C978
+                BNE L2_8978
                 LDY #$05
                 LDA $DC01
                 RTS
@@ -7474,37 +7465,37 @@ L_C978:
                 PHA
                 LDY #$00
                 TXA
-                BPL L_C98C
+                BPL L2_898C
                 DEY
-L_C98C:
+L2_898C:
                 CLC
                 ADC $17
                 TAX
                 TYA
                 ADC $18
-                BPL L_C998
+                BPL L2_8998
                 LDA #$00
                 TAX
-L_C998:
+L2_8998:
                 STX $17
                 AND #$01
                 STA $18
                 PLA
                 CLC
-                BMI L_C9AA
+                BMI L2_89AA
                 ADC $19
-                BCC L_C9B0
+                BCC L2_89B0
                 LDA #$FF
-                BNE L_C9B0
-L_C9AA:
+                BNE L2_89B0
+L2_89AA:
                 ADC $19
-                BCS L_C9B0
+                BCS L2_89B0
                 LDA #$00
-L_C9B0:
+L2_89B0:
                 STA $19
                 RTS
                 BIT $29
-                BVS L_C9C9
+                BVS L2_89C9
                 LDX #$00
                 LDY $2B
                 LDA #$60
@@ -7513,7 +7504,7 @@ L_C9B0:
                 LDY $2A
                 LDA #$60
                 JSR $89D9
-L_C9C9:
+L2_89C9:
                 RTS
                 LDA #$E0
                 LDY #$00
@@ -7525,21 +7516,21 @@ L_C9C9:
                 STA $1F
                 LDA $8A5D,X
                 STA $06
-                LDA L_8A5E,X
+                LDA L0_8A5E,X
                 STA $07
                 TYA
                 JSR $8A6B
                 ASL $1F
-                BCC L_C9F6
+                BCC L2_89F6
                 LDY #$02
-L_C9EF:
+L2_89EF:
                 ASL $1A
                 ROL $1B
                 DEY
-                BNE L_C9EF
-L_C9F6:
+                BNE L2_89EF
+L2_89F6:
                 ASL $1F
-                BCC L_CA16
+                BCC L2_8A16
                 LDA $1A
                 SEC
                 SBC $30,X
@@ -7547,7 +7538,7 @@ L_C9F6:
                 LDA $1B
                 SBC $31,X
                 STA $1B
-                BCS L_CA16
+                BCS L2_8A16
                 LDA #$00
                 SEC
                 SBC $1A
@@ -7555,13 +7546,13 @@ L_C9F6:
                 LDA #$00
                 SBC $1B
                 STA $1B
-L_CA16:
+L2_8A16:
                 LDY #$1F
                 ASL $1F
-                BCC L_CA4A
+                BCC L2_8A4A
                 LDA $29
                 AND #$10
-                BEQ L_CA4A
+                BEQ L2_8A4A
                 TXA
                 LSR
                 LSR
@@ -7586,7 +7577,7 @@ L_CA16:
                 ADC #$00
                 STA $1B
                 LDY #$6D
-L_CA4A:
+L2_8A4A:
                 STY $0200
                 JSR $B2C0
                 LDX #$00
@@ -7597,7 +7588,7 @@ L_CA4A:
                 JMP $B242
                 SBC ($7D,X)
                 JSR $517F
-                !byte $5A
+                !by $5A
                 EOR ($5A),Y
                 EOR ($5A),Y
                 EOR ($53),Y
@@ -7629,9 +7620,9 @@ L_CA4A:
                 LDY $1B
                 STX $32
                 STY $33
-                JMP L_89B3
+                JMP L0_89B3
                 LDX #$02
-L_CAA3:
+L2_8AA3:
                 LDA #$00
                 STA $31,X
                 LDA $0B,X
@@ -7642,17 +7633,17 @@ L_CAA3:
                 STA $30,X
                 DEX
                 DEX
-                BPL L_CAA3
-                JMP L_89CA
+                BPL L2_8AA3
+                JMP L0_89CA
                 LDA $29
                 EOR #$10
                 STA $29
-                JMP L_89B3
+                JMP L0_89B3
                 LDY $48
                 BIT $29
-                BPL L_CAC9
+                BPL L2_8AC9
                 LDY #$00
-L_CAC9:
+L2_8AC9:
                 SEI
                 LDA $13
                 CLC
@@ -7664,20 +7655,20 @@ L_CAC9:
                 LDA $15
                 ADC $8784,Y
                 STA $19
-                JMP L_867A
+                JMP L0_867A
                 LDX #$03
-L_CAE4:
+L2_8AE4:
                 LDA $0B,X
                 STA $13,X
                 DEX
-                BPL L_CAE4
+                BPL L2_8AE4
                 RTS
                 JSR $8366
                 LDA #$04
                 STA $48
                 JSR $AF3F
                 LDA #$06
-                STA L_D015
+                STA $D015
                 SEI
                 LDA $2B
                 ASL
@@ -7688,15 +7679,15 @@ L_CAE4:
                 ADC #$32
                 STA $19
                 LDA #$90
-                BNE L_CB1F
+                BNE L2_8B1F
                 JSR $8366
                 LDA #$01
                 STA $48
                 JSR $AF3F
                 LDA #$02
-                STA L_D015
+                STA $D015
                 LDA #$98
-L_CB1F:
+L2_8B1F:
                 STA $38
                 SEI
                 LDA #$00
@@ -7706,36 +7697,36 @@ L_CB1F:
                 STA $36
                 CLI
                 JSR $B285
-L_CB30:
+L2_8B30:
                 JSR $8793
                 JSR CBM_GETIN
                 CMP #$B3
-                BEQ L_CB95
+                BEQ L2_8B95
                 CMP #$30
-                BEQ L_CB60
+                BEQ L2_8B60
                 LDA $3F
                 AND #$05
-                BEQ L_CB30
+                BEQ L2_8B30
                 JSR $B285
                 LDA #$08
                 BIT $38
-                BEQ L_CB8A
+                BEQ L2_8B8A
                 LDA $29
                 EOR #$04
                 STA $29
                 AND #$04
-                BEQ L_CB66
+                BEQ L2_8B66
                 JSR $9F0D
-                JSR L_8AE2
-                JMP L_8B30
-L_CB60:
-                JSR L_8AA1
-                JMP L_8B30
-L_CB66:
+                JSR L0_8AE2
+                JMP L0_8B30
+L2_8B60:
+                JSR L0_8AA1
+                JMP L0_8B30
+L2_8B66:
                 JSR $9282
                 LDX #$02
                 LDY #$00
-L_CB6D:
+L2_8B6D:
                 LDA $0B,X
                 LSR
                 STA $004C,Y
@@ -7750,18 +7741,18 @@ L_CB6D:
                 INY
                 DEX
                 DEX
-                BPL L_CB6D
-                BMI L_CB94
-L_CB8A:
+                BPL L2_8B6D
+                BMI L2_8B94
+L2_8B8A:
                 LDA $0B
                 LSR
                 STA $2B
                 LDA $0D
                 LSR
                 STA $2A
-L_CB94:
+L2_8B94:
                 CLC
-L_CB95:
+L2_8B95:
                 LDA $29
                 AND #$FB
                 STA $29
@@ -7773,34 +7764,34 @@ L_CB95:
                 RTS
                 LDA $3F
                 AND #$05
-                BEQ L_CBEF
+                BEQ L2_8BEF
                 JSR $869A
                 LDA $29
-                BMI L_CBEC
+                BMI L2_8BEC
                 AND #$02
-                BNE L_CBDF
+                BNE L2_8BDF
                 LDA #$00
                 LDX $28
                 CPX #$02
-                BCS L_CBCE
-                JSR L_9092
-                JSR L_8C82
+                BCS L2_8BCE
+                JSR L0_9092
+                JSR L0_8C82
                 LDY #$00
                 EOR ($02),Y
                 AND $0A
-                BEQ L_CBCE
+                BEQ L2_8BCE
                 LDA #$01
-L_CBCE:
+L2_8BCE:
                 LDX $028D
-                BEQ L_CBD5
+                BEQ L2_8BD5
                 EOR #$01
-L_CBD5:
+L2_8BD5:
                 LSR $29
                 ASL $29
                 ORA $29
                 ORA #$02
                 STA $29
-L_CBDF:
+L2_8BDF:
                 LDA $28
                 ASL
                 TAX
@@ -7809,63 +7800,63 @@ L_CBDF:
                 LDA $8C05,X
                 PHA
                 RTS
-L_CBEC:
+L2_8BEC:
                 JMP $958C
-L_CBEF:
+L2_8BEF:
                 LDA $29
                 AND #$FD
                 STA $29
                 LDA $3F
                 AND #$12
                 CMP #$02
-                BNE L_CC04
+                BNE L2_8C04
                 LDA #$FF
                 STA $3F
                 JSR $95BE
-L_CC04:
+L2_8C04:
                 RTS
-                !byte $32
-                STY L_8C55
+                !by $32
+                STY L0_8C55
                 ROL
                 STA $8D2A
                 ROL
                 STA $8F9E
                 AND ($8F),Y
-                !byte $9C
+                !by $9C
                 STA ($73),Y
                 STA ($DE,X)
-                STY L_8C97
+                STY L0_8C97
                 STY $8C,X
-                !byte $9B
-                STY L_9643
+                !by $9B
+                STY L0_9643
                 LDX #$02
-L_CC23:
+L2_8C23:
                 LDA $0B,X
-                CMP L_8C52,X
+                CMP L0_8C52,X
                 LDA $0C,X
-                SBC L_8C53,X
-                BCS L_CC51
+                SBC L0_8C53,X
+                BCS L2_8C51
                 DEX
                 DEX
-                BPL L_CC23
-                JSR L_9092
+                BPL L2_8C23
+                JSR L0_9092
                 LDY #$00
                 LDA $29
                 LSR
                 ROR $1F
-                JSR L_8C82
+                JSR L0_8C82
                 EOR $1F
                 ASL
                 LDA $0A
-                BCC L_CC4D
+                BCC L2_8C4D
                 EOR #$FF
                 AND ($02),Y
-                BCS L_CC4F
-L_CC4D:
+                BCS L2_8C4F
+L2_8C4D:
                 ORA ($02),Y
-L_CC4F:
+L2_8C4F:
                 STA ($02),Y
-L_CC51:
+L2_8C51:
                 RTS
                 RTI
                 ORA ($B8,X)
@@ -7874,171 +7865,171 @@ L_CC51:
                 STA $27
                 DEC $0D
                 LDA $0B
-                BNE L_CC62
+                BNE L2_8C62
                 DEC $0C
-L_CC62:
+L2_8C62:
                 DEC $0B
-L_CC64:
+L2_8C64:
                 LDA #$03
                 STA $26
                 LDA $0D
                 PHA
-L_CC6B:
-                JSR L_8C21
+L2_8C6B:
+                JSR L0_8C21
                 INC $0D
                 DEC $26
-                BNE L_CC6B
+                BNE L2_8C6B
                 PLA
                 STA $0D
                 INC $0B
-                BNE L_CC7D
+                BNE L2_8C7D
                 INC $0C
-L_CC7D:
+L2_8C7D:
                 DEC $27
-                BNE L_CC64
+                BNE L2_8C64
                 RTS
                 LDA $29
                 AND #$08
-                BEQ L_CC94
+                BEQ L2_8C94
                 LDA $02
                 AND #$07
-                BEQ L_CC90
+                BEQ L2_8C90
                 LDA $0A
-L_CC90:
+L2_8C90:
                 EOR $0A
                 AND #$80
-L_CC94:
+L2_8C94:
                 RTS
                 JSR $8C9C
                 LDA #$00
-                BEQ L_CC9E
+                BEQ L2_8C9E
                 LDA #$80
-L_CC9E:
+L2_8C9E:
                 STA $1F
                 LDA $0D
                 PHA
                 LDX #$00
-L_CCA5:
-                JSR L_9092
+L2_8CA5:
+                JSR L0_9092
                 LDA #$18
                 STA $20
                 LDY #$00
-L_CCAE:
+L2_8CAE:
                 LDA $7F40,X
                 STA $0200,Y
                 INX
                 INY
                 CPY #$03
-                BNE L_CCAE
+                BNE L2_8CAE
                 LDY #$00
-L_CCBC:
+L2_8CBC:
                 BIT $1F
-                BMI L_CCCB
+                BMI L2_8CCB
                 ROL $0202
                 ROL $0201
                 ROL $0200
-                BCC L_CCCE
-L_CCCB:
-                JSR L_8C3D
-L_CCCE:
-                JSR L_8D20
+                BCC L2_8CCE
+L2_8CCB:
+                JSR L0_8C3D
+L2_8CCE:
+                JSR L0_8D20
                 DEC $20
-                BNE L_CCBC
+                BNE L2_8CBC
                 INC $0D
                 CPX #$3F
-                BNE L_CCA5
+                BNE L2_8CA5
                 PLA
                 STA $0D
                 RTS
                 JSR $8CEA
                 LDA #$0A
-                JSR L_80DE
+                JSR L0_80DE
                 JMP $B285
                 LDA $0D
                 PHA
                 LDX #$00
-L_CCEF:
-                JSR L_9092
+L2_8CEF:
+                JSR L0_9092
                 LDA #$18
                 STA $20
                 LDY #$00
-L_CCF8:
-                JSR L_8C82
+L2_8CF8:
+                JSR L0_8C82
                 CLC
                 EOR ($02),Y
                 AND $0A
-                BEQ L_CD03
+                BEQ L2_8D03
                 SEC
-L_CD03:
+L2_8D03:
                 ROL $7F42,X
                 ROL $7F41,X
                 ROL $7F40,X
-                JSR L_8D20
+                JSR L0_8D20
                 DEC $20
-                BNE L_CCF8
+                BNE L2_8CF8
                 INC $0D
                 INX
                 INX
                 INX
                 CPX #$3F
-                BNE L_CCEF
+                BNE L2_8CEF
                 PLA
                 STA $0D
                 RTS
                 LSR $0A
-                BCC L_CD2A
+                BCC L2_8D2A
                 ROR $0A
                 TYA
                 ADC #$08
                 TAY
-L_CD2A:
+L2_8D2A:
                 RTS
                 JSR $B285
                 LDA $29
                 EOR #$04
                 PHA
                 AND #$04
-                BEQ L_CD3D
+                BEQ L2_8D3D
                 JSR $0EE7
-                JSR L_8AE2
-L_CD3D:
+                JSR L0_8AE2
+L2_8D3D:
                 PLA
                 STA $29
                 RTS
                 LDA $28
                 CMP #$08
-                BNE L_CD4D
-                JSR L_8AE2
-                JMP L_817F
-L_CD4D:
+                BNE L2_8D4D
+                JSR L0_8AE2
+                JMP L0_817F
+L2_8D4D:
                 LDX #$03
-L_CD4F:
+L2_8D4F:
                 LDA $13,X
                 STA $0F,X
                 DEX
-                BPL L_CD4F
+                BPL L2_8D4F
                 JSR $0F03
                 LDA $28
                 CMP #$02
-                BEQ L_CD70
+                BEQ L2_8D70
                 CMP #$03
-                BNE L_CD66
+                BNE L2_8D66
                 JMP $8DDD
-L_CD66:
+L2_8D66:
                 CMP #$04
-                BNE L_CD6D
+                BNE L2_8D6D
                 JMP $8E26
-L_CD6D:
-                JMP L_924F
-L_CD70:
+L2_8D6D:
+                JMP L0_924F
+L2_8D70:
                 LDA $0D
                 PHA
                 LDA $0B
                 PHA
                 LDA $0C
                 PHA
-                JSR L_9092
-                JSR L_916F
+                JSR L0_9092
+                JSR L0_916F
                 LDA $06
                 SEC
                 SBC $04
@@ -8052,22 +8043,22 @@ L_CD70:
                 ROR
                 STA $09
                 ROR $08
-L_CD93:
-                JSR L_8C36
+L2_8D93:
+                JSR L0_8C36
                 LDA $0B
                 CMP $0F
-                BNE L_CDA8
+                BNE L2_8DA8
                 LDA $0C
                 CMP $10
-                BNE L_CDA8
+                BNE L2_8DA8
                 LDA $0D
                 CMP $11
-                BEQ L_CDD3
-L_CDA8:
+                BEQ L2_8DD3
+L2_8DA8:
                 BIT $09
-                BMI L_CDC1
+                BMI L2_8DC1
                 JSR $9131
-                BCC L_CDD3
+                BCC L2_8DD3
                 LDA $08
                 SEC
                 SBC $04
@@ -8076,17 +8067,17 @@ L_CDA8:
                 SBC $05
                 STA $09
                 JMP $8D93
-L_CDC1:
+L2_8DC1:
                 JSR $90E6
-                BCC L_CDD3
+                BCC L2_8DD3
                 LDA $08
                 CLC
                 ADC $06
                 STA $08
-                BCC L_CD93
+                BCC L2_8D93
                 INC $09
-                BCS L_CD93
-L_CDD3:
+                BCS L2_8D93
+L2_8DD3:
                 PLA
                 STA $0C
                 PLA
@@ -8135,51 +8126,51 @@ L_CDD3:
                 PLA
                 STA $0F
                 RTS
-                JSR L_916F
+                JSR L0_916F
                 LDA $04
                 CMP $06
-                BCS L_CE31
+                BCS L2_8E31
                 LDA $06
-L_CE31:
+L2_8E31:
                 TAX
-                BEQ L_CE7C
+                BEQ L2_8E7C
                 STA $08
                 LDX $04
-                BNE L_CE3C
+                BNE L2_8E3C
                 STA $04
-L_CE3C:
+L2_8E3C:
                 LDX $06
-                BNE L_CE42
+                BNE L2_8E42
                 STA $06
-L_CE42:
+L2_8E42:
                 LDA $04
                 STA $0F
                 LDA #$00
                 STA $11
-                JSR L_8E7D
-L_CE4D:
+                JSR L0_8E7D
+L2_8E4D:
                 JSR $8EEC
                 LDA $0F
-                BEQ L_CE7C
+                BEQ L2_8E7C
                 INC $11
                 LDA #$02
-                JSR L_8E7D
+                JSR L0_8E7D
                 DEC $11
                 DEC $0F
                 LDA #$04
-                JSR L_8E7D
+                JSR L0_8E7D
                 INC $0F
                 LDA $0202
                 CMP $0204
                 LDA $0203
                 SBC $0205
-                BCS L_CE78
+                BCS L2_8E78
                 INC $11
-                BCC L_CE4D
-L_CE78:
+                BCC L2_8E4D
+L2_8E78:
                 DEC $0F
-                BCS L_CE4D
-L_CE7C:
+                BCS L2_8E4D
+L2_8E7C:
                 RTS
                 STA $24
                 LDY $0F
@@ -8199,14 +8190,14 @@ L_CE7C:
                 ADC $1B
                 STA $0201,X
                 TXA
-                BEQ L_CEC6
+                BEQ L2_8EC6
                 LDA $0200,X
                 SEC
                 SBC $0200
                 PHA
                 LDA $0201,X
                 SBC $0201
-                BCS L_CEBF
+                BCS L2_8EBF
                 TAY
                 PLA
                 EOR #$FF
@@ -8215,14 +8206,14 @@ L_CE7C:
                 TYA
                 EOR #$FF
                 ADC #$00
-L_CEBF:
+L2_8EBF:
                 STA $0201,X
                 PLA
                 STA $0200,X
-L_CEC6:
+L2_8EC6:
                 RTS
                 CMP $08
-                BEQ L_CEE7
+                BEQ L2_8EE7
                 PHA
                 LDX $08
                 JSR $B336
@@ -8239,7 +8230,7 @@ L_CEC6:
                 STA $1D
                 JSR $A429
                 LDY $1C
-L_CEE7:
+L2_8EE7:
                 TYA
                 TAX
                 JMP $B336
@@ -8258,7 +8249,7 @@ L_CEE7:
                 LDA #$00
                 ROL
                 STA $0E
-                JSR L_8C21
+                JSR L0_8C21
                 LDA $13
                 SEC
                 SBC $0F
@@ -8266,7 +8257,7 @@ L_CEE7:
                 LDA $14
                 SBC #$00
                 STA $0C
-                JSR L_8C21
+                JSR L0_8C21
                 LDA $15
                 SEC
                 SBC $11
@@ -8274,36 +8265,36 @@ L_CEE7:
                 LDA #$00
                 SBC #$00
                 STA $0E
-                JSR L_8C21
+                JSR L0_8C21
                 PLA
                 STA $0C
                 PLA
                 STA $0B
-                JMP L_8C21
+                JMP L0_8C21
                 LDA #$0A
                 STA $25
                 LDX #$03
-L_CF38:
+L2_8F38:
                 LDA $0B,X
                 STA $0F,X
                 DEX
-                BPL L_CF38
-L_CF3F:
+                BPL L2_8F38
+L2_8F3F:
                 LDA $A2
                 LSR
-                LDY L_D012
+                LDY $D012
                 LDX #$00
                 JSR $8F80
                 TAX
-                BPL L_CF4F
+                BPL L2_8F4F
                 DEC $0C
-L_CF4F:
+L2_8F4F:
                 ADC $0B
                 STA $0B
-                BCC L_CF57
+                BCC L2_8F57
                 INC $0C
-L_CF57:
-                LDA L_D012
+L2_8F57:
+                LDA $D012
                 EOR $A2
                 LDY $A2
                 LDX #$02
@@ -8312,18 +8303,18 @@ L_CF57:
                 STA $0D
                 LDA $04
                 ADC $06
-                BCS L_CF72
-                BMI L_CF72
-                JSR L_8C21
-L_CF72:
+                BCS L2_8F72
+                BMI L2_8F72
+                JSR L0_8C21
+L2_8F72:
                 LDX #$03
-L_CF74:
+L2_8F74:
                 LDA $0F,X
                 STA $0B,X
                 DEX
-                BPL L_CF74
+                BPL L2_8F74
                 DEC $25
-                BNE L_CF3F
+                BNE L2_8F3F
                 RTS
                 STX $02
                 STY $1C
@@ -8342,19 +8333,19 @@ L_CF74:
                 STA $05,X
                 PLP
                 PLA
-                BCC L_CF9E
+                BCC L2_8F9E
                 EOR #$FF
-L_CF9E:
+L2_8F9E:
                 RTS
                 JSR $0EE7
                 JSR $827E
-                JSR L_9092
+                JSR L0_9092
                 LDY #$00
                 LDA ($02),Y
                 AND $0A
-                BEQ L_CFB2
+                BEQ L2_8FB2
                 LDA #$FF
-L_CFB2:
+L2_8FB2:
                 STA $24
                 LDA #$01
                 JSR $90E8
@@ -8370,7 +8361,7 @@ L_CFB2:
                 STX $04
                 TSX
                 CPX #$1C
-                BCC L_D03B
+                BCC L2_903B
                 LDA $1C
                 PHA
                 LDA $1D
@@ -8383,24 +8374,24 @@ L_CFB2:
                 STA $1C
                 LDA $11
                 STA $1D
-L_CFE9:
+L2_8FE9:
                 JSR $90E6
-                BCC L_D02F
-                JSR L_903C
-                BCC L_D02F
+                BCC L2_902F
+                JSR L0_903C
+                BCC L2_902F
                 LDA $0D
                 PHA
                 LDA $11
                 PHA
-L_CFF9:
-                JSR L_903C
-                BCC L_D003
+L2_8FF9:
+                JSR L0_903C
+                BCC L2_9003
                 JSR $8FD0
-L_D001:
-                BCC L_CFF9
-L_D003:
+L2_9001:
+                BCC L2_8FF9
+L2_9003:
                 PLA
-L_D004:
+L2_9004:
                 STA $1D
                 PLA
                 STA $1C
@@ -8408,28 +8399,28 @@ L_D004:
                 EOR #$01
                 STA $49
                 JSR $90E6
-L_D012:
-                JSR L_903C
-L_D015:
-                BCC L_D01C
-L_D017:
+L2_9012:
+                JSR L0_903C
+L2_9015:
+                BCC L2_901C
+L2_9017:
                 JSR $8FD0
-                BCC L_D012
-L_D01C:
+                BCC L2_9012
+L2_901C:
                 LDA $49
                 EOR #$01
-L_D020:
+L2_9020:
                 STA $49
                 JSR $90E6
                 LDA $3F
-L_D027:
+L2_9027:
                 AND #$07
-L_D029:
-                BEQ L_CFE9
+L2_9029:
+                BEQ L2_8FE9
                 LDX $04
                 TXS
                 RTS
-L_D02F:
+L2_902F:
                 PLA
                 STA $0C
                 PLA
@@ -8438,28 +8429,28 @@ L_D02F:
                 STA $1D
                 PLA
                 STA $1C
-L_D03B:
+L2_903B:
                 RTS
                 LDA $1C
                 STA $0D
                 LDA $1D
                 STA $11
-                JSR L_9092
-L_D047:
+                JSR L0_9092
+L2_9047:
                 JSR $9089
-                BNE L_D07F
-L_D04C:
+                BNE L2_907F
+L2_904C:
                 JSR $9137
-                BCC L_D059
+                BCC L2_9059
                 JSR $9089
-                BEQ L_D04C
+                BEQ L2_904C
                 JSR $914C
-L_D059:
+L2_9059:
                 LDA $0D
                 TAX
-L_D05C:
+L2_905C:
                 JSR $9089
-                BNE L_D074
+                BNE L2_9074
                 LDA ($02),Y
                 EOR $24
                 ORA $0A
@@ -8468,19 +8459,19 @@ L_D05C:
                 JSR $914C
                 LDA $0D
                 CMP #$B8
-                BCC L_D05C
-L_D074:
+                BCC L2_905C
+L2_9074:
                 JSR $9137
                 LDA $0D
                 STA $11
                 STX $0D
                 SEC
                 RTS
-L_D07F:
+L2_907F:
                 JSR $914C
                 LDA $11
                 CMP $0D
-                BCS L_D047
+                BCS L2_9047
                 RTS
                 LDY #$00
                 LDA ($02),Y
@@ -8508,124 +8499,124 @@ L_D07F:
                 STA $1E
                 LDA $38
                 AND #$10
-                BEQ L_D0B9
+                BEQ L2_90B9
                 LDA #$18
-L_D0B9:
+L2_90B9:
                 ADC $0B
                 AND #$F8
                 ADC $1E
                 ADC $02
                 STA $02
                 LDA $0C
-                !byte $65
-                !byte $03
-                !byte $85
-                !byte $03
-                !byte $A5
-                !byte $0B
-                !byte $29
-                !byte $07
-                !byte $A8
-                !byte $B9
-                !byte $D4
-                !byte $90
-                !byte $85
-                !byte $0A
-                !byte $60
-                !byte $80
-                !byte $40
-                !byte $20
-                !byte $10
-                !byte $08
-                !byte $04
-                !byte $02
+                !by $65
+                !by $03
+                !by $85
+                !by $03
+                !by $A5
+                !by $0B
+                !by $29
+                !by $07
+                !by $A8
+                !by $B9
+                !by $D4
+                !by $90
+                !by $85
+                !by $0A
+                !by $60
+                !by $80
+                !by $40
+                !by $20
+                !by $10
+                !by $08
+                !by $04
+                !by $02
                 ORA ($14,X)
-                !byte $14
+                !by $14
                 ORA $12
                 AND $1902
-                !byte $14
+                !by $14
                 ORA $60
                 LDA $49
                 LSR
-                BCC L_D10C
+                BCC L2_910C
                 LDA $0B
                 ORA $0C
-                BEQ L_D12F
+                BEQ L2_912F
                 LDA $0B
-                BNE L_D0F7
+                BNE L2_90F7
                 DEC $0C
-L_D0F7:
+L2_90F7:
                 DEC $0B
                 ASL $0A
-                BCC L_D10A
+                BCC L2_910A
                 ROL $0A
                 LDA $02
                 SEC
                 SBC #$08
                 STA $02
-                BCS L_D10A
+                BCS L2_910A
                 DEC $03
-L_D10A:
+L2_910A:
                 SEC
                 RTS
-L_D10C:
+L2_910C:
                 LDA $0C
-                BEQ L_D116
+                BEQ L2_9116
                 LDA $0B
                 CMP #$3F
-                BEQ L_D12F
-L_D116:
+                BEQ L2_912F
+L2_9116:
                 INC $0B
-                BNE L_D11C
+                BNE L2_911C
                 INC $0C
-L_D11C:
+L2_911C:
                 LSR $0A
-                BCC L_D12D
+                BCC L2_912D
                 ROR $0A
                 LDA $02
                 CLC
                 ADC #$08
                 STA $02
-                BCC L_D12D
+                BCC L2_912D
                 INC $03
-L_D12D:
+L2_912D:
                 SEC
                 RTS
-L_D12F:
+L2_912F:
                 CLC
                 RTS
                 LDA $49
                 AND #$02
-                BEQ L_D14C
+                BEQ L2_914C
                 LDA $0D
-                BEQ L_D12F
+                BEQ L2_912F
                 DEC $0D
                 AND #$07
-                BEQ L_D145
+                BEQ L2_9145
                 DEC $02
                 SEC
                 RTS
-L_D145:
+L2_9145:
                 LDA #$FE
                 PHA
                 LDA #$C7
-                BNE L_D163
-L_D14C:
+                BNE L2_9163
+L2_914C:
                 LDA $0D
                 CMP #$C7
-                BEQ L_D12F
+                BEQ L2_912F
                 INC $0D
                 LDA $0D
                 AND #$07
-                BEQ L_D15E
+                BEQ L2_915E
                 INC $02
                 SEC
                 RTS
-L_D15E:
+L2_915E:
                 LDA #$01
                 PHA
                 LDA #$39
-L_D163:
+L2_9163:
                 CLC
                 ADC $02
                 STA $02
@@ -8637,11 +8628,11 @@ L_D163:
                 LDA $0D
                 SEC
                 SBC $11
-                BCS L_D17B
+                BCS L2_917B
                 EOR #$FF
                 ADC #$01
                 CLC
-L_D17B:
+L2_917B:
                 STA $06
                 ROL $49
                 LDA $0B
@@ -8650,7 +8641,7 @@ L_D17B:
                 STA $04
                 LDA $0C
                 SBC $10
-                BCS L_D198
+                BCS L2_9198
                 LDA $0F
                 SEC
                 SBC $0B
@@ -8658,23 +8649,23 @@ L_D17B:
                 LDA $10
                 SBC $0C
                 CLC
-L_D198:
+L2_9198:
                 STA $05
                 ROL $49
                 RTS
                 JSR $B285
                 BIT $4A
-                BMI L_D1DD
+                BMI L2_91DD
                 LDA $29
                 EOR #$04
                 PHA
                 AND #$04
-                BEQ L_D1B6
+                BEQ L2_91B6
                 JSR $0EE7
                 PLA
                 STA $29
-                JMP L_8AE2
-L_D1B6:
+                JMP L0_8AE2
+L2_91B6:
                 PLA
                 STA $29
                 JSR $0F03
@@ -8688,80 +8679,80 @@ L_D1B6:
                 SEC
                 JSR $B36C
                 LDA #$3F
-                JSR L_92A9
+                JSR L0_92A9
                 LDA #$A0
                 STA $4A
-                JSR L_94D6
+                JSR L0_94D6
                 JMP $0F03
-L_D1DD:
+L2_91DD:
                 LDA #$00
-                BEQ L_D1F3
+                BEQ L2_91F3
                 LDA $4A
-                BPL L_D1F8
+                BPL L2_91F8
                 AND #$EF
                 EOR #$20
-                BMI L_D1F3
+                BMI L2_91F3
                 LDA $4A
-                BPL L_D1F8
+                BPL L2_91F8
                 AND #$DF
                 EOR #$10
-L_D1F3:
+L2_91F3:
                 STA $4A
-                JSR L_94D6
-L_D1F8:
+                JSR L0_94D6
+L2_91F8:
                 RTS
                 LDA $4A
                 AND #$10
-                BNE L_D23A
-L_D1FF:
+                BNE L2_923A
+L2_91FF:
                 LDY $49
-                LDX L_9232,Y
+                LDX L0_9232,Y
                 LDA $9236,X
                 CMP $4C,X
-                BEQ L_D22F
+                BEQ L2_922F
                 TYA
                 LSR
                 TXA
                 AND #$01
                 TAX
-                BCC L_D219
+                BCC L2_9219
                 DEC $4C,X
                 DEC $4E,X
-                BCS L_D21D
-L_D219:
+                BCS L2_921D
+L2_9219:
                 INC $4C,X
                 INC $4E,X
-L_D21D:
+L2_921D:
                 JSR $944E
                 JSR $0F03
                 LDA $3F
                 AND #$05
-                BNE L_D1FF
+                BNE L2_91FF
                 LDA $CB
                 CMP #$40
-                BNE L_D1FF
-L_D22F:
+                BNE L2_91FF
+L2_922F:
                 JMP $B285
-                !byte $02
+                !by $02
                 BRK
-                !byte $03
+                !by $03
                 ORA ($00,X)
                 BRK
                 ASL $27,X
-L_D23A:
+L2_923A:
                 JSR $9380
                 JSR $0F03
                 LDA $3F
                 AND #$05
-                BNE L_D23A
+                BNE L2_923A
                 LDA $CB
                 CMP #$40
-                BNE L_D23A
+                BNE L2_923A
                 JMP $B285
                 JSR $9282
                 LDX #$00
                 LDY #$01
-L_D256:
+L2_9256:
                 LDA $0C,X
                 LSR
                 LDA $0B,X
@@ -8785,15 +8776,15 @@ L_D256:
                 INX
                 INX
                 DEY
-                BPL L_D256
+                BPL L2_9256
                 JMP $8DDD
                 LDX #$02
-L_D284:
+L2_9284:
                 LDA $0B,X
                 CMP $0F,X
                 LDA $0C,X
                 SBC $10,X
-                BCC L_D2A2
+                BCC L2_92A2
                 LDA $0F,X
                 PHA
                 LDA $0B,X
@@ -8806,11 +8797,11 @@ L_D284:
                 STA $10,X
                 PLA
                 STA $0C,X
-L_D2A2:
+L2_92A2:
                 ROR $4B
                 DEX
                 DEX
-                BPL L_D284
+                BPL L2_9284
                 RTS
                 PHA
                 EOR #$60
@@ -8818,19 +8809,19 @@ L_D2A2:
                 JSR $827E
                 LDA $4C
                 BIT $4B
-                BVS L_D2B9
+                BVS L2_92B9
                 LDA $4E
-L_D2B9:
+L2_92B9:
                 STA $22
                 LDA $4D
                 BIT $4B
-                BMI L_D2C3
+                BMI L2_92C3
                 LDA $4F
-L_D2C3:
+L2_92C3:
                 STA $23
                 LDX #$22
                 LDY #$03
-                JSR L_8318
+                JSR L0_8318
                 LDX #$02
                 JSR $8341
                 LDA $02
@@ -8843,7 +8834,7 @@ L_D2C3:
                 STA $09
                 LDX #$4C
                 LDY #$03
-                JSR L_8318
+                JSR L0_8318
                 LDX #$02
                 JSR $8341
                 LDA $02
@@ -8854,45 +8845,45 @@ L_D2C3:
                 STA $07
                 LDA $50
                 STA $22
-L_D2FB:
+L2_92FB:
                 LDX $51
-L_D2FD:
+L2_92FD:
                 LDY #$07
-L_D2FF:
+L2_92FF:
                 STY $1C
                 LDA $1F
-                BEQ L_D318
+                BEQ L2_9318
                 LDA ($02),Y
                 BIT $4B
-                BMI L_D30E
+                BMI L2_930E
                 JSR $9371
-L_D30E:
+L2_930E:
                 BIT $4B
-                BVS L_D318
+                BVS L2_9318
                 PHA
                 TYA
                 EOR #$07
                 TAY
                 PLA
-L_D318:
+L2_9318:
                 STA ($04),Y
                 LDY $1C
                 DEY
-                BPL L_D2FF
+                BPL L2_92FF
                 LDA $02
                 CLC
                 ADC #$08
                 STA $02
-                BCC L_D32A
+                BCC L2_932A
                 INC $03
-L_D32A:
+L2_932A:
                 LDA #$08
                 LDY #$00
                 BIT $4B
-                BMI L_D336
+                BMI L2_9336
                 LDA #$F8
                 LDY #$FF
-L_D336:
+L2_9336:
                 CLC
                 ADC $04
                 STA $04
@@ -8900,7 +8891,7 @@ L_D336:
                 ADC $05
                 STA $05
                 DEX
-                BPL L_D2FD
+                BPL L2_92FD
                 LDX #$06
                 JSR $8331
                 LDA $06
@@ -8910,10 +8901,10 @@ L_D336:
                 LDA #$40
                 LDY #$01
                 BIT $4B
-                BVS L_D35C
+                BVS L2_935C
                 LDA #$C0
                 LDY #$FE
-L_D35C:
+L2_935C:
                 CLC
                 ADC $08
                 STA $08
@@ -8923,35 +8914,35 @@ L_D35C:
                 STA $09
                 STA $05
                 DEC $22
-                BPL L_D2FB
+                BPL L2_92FB
                 JMP $827E
                 STA $1D
                 STY $1C
                 LDY #$08
-L_D377:
+L2_9377:
                 ROL $1D
                 ROR
                 DEY
-                BNE L_D377
+                BNE L2_9377
                 LDY $1C
                 RTS
                 LDX #$07
-L_D382:
-                LDA L_9446,X
+L2_9382:
+                LDA L0_9446,X
                 STA $02,X
                 DEX
-                BPL L_D382
+                BPL L2_9382
                 LDX #$1C
                 STX $26
                 LDA $49
                 CMP #$01
-                BNE L_D3C8
+                BNE L2_93C8
                 LDY #$40
-L_D396:
+L2_9396:
                 TYA
                 AND #$07
                 CMP #$07
-                BNE L_D3B7
+                BNE L2_93B7
                 TYA
                 CLC
                 ADC $06
@@ -8963,31 +8954,31 @@ L_D396:
                 ROL $1C
                 SBC #$5B
                 LDA #$00
-                BCS L_D3BB
+                BCS L2_93BB
                 LDA ($06),Y
-                BCC L_D3BB
-L_D3B7:
+                BCC L2_93BB
+L2_93B7:
                 INY
                 LDA ($02),Y
                 DEY
-L_D3BB:
+L2_93BB:
                 STA ($02),Y
                 INY
-                BNE L_D396
+                BNE L2_9396
                 INC $03
                 INC $07
                 DEX
-                BPL L_D396
+                BPL L2_9396
                 RTS
-L_D3C8:
+L2_93C8:
                 CMP #$00
-                BNE L_D3F7
+                BNE L2_93F7
                 LDY #$C0
-L_D3CE:
+L2_93CE:
                 DEY
                 TYA
                 AND #$07
-                BNE L_D3E6
+                BNE L2_93E6
                 TYA
                 CLC
                 ADC $08
@@ -8995,79 +8986,79 @@ L_D3CE:
                 ADC $09
                 CMP #$3F
                 LDA #$00
-                BCC L_D3EA
+                BCC L2_93EA
                 LDA ($08),Y
-                BCS L_D3EA
-L_D3E6:
+                BCS L2_93EA
+L2_93E6:
                 DEY
                 LDA ($04),Y
                 INY
-L_D3EA:
+L2_93EA:
                 STA ($04),Y
                 TYA
-                BNE L_D3CE
+                BNE L2_93CE
                 DEC $05
                 DEC $09
                 DEX
-                BPL L_D3CE
+                BPL L2_93CE
                 RTS
-L_D3F7:
+L2_93F7:
                 CMP #$03
-                BNE L_D421
+                BNE L2_9421
                 LDY #$C0
                 LDX #$00
-L_D3FF:
+L2_93FF:
                 TYA
                 AND #$07
-                BNE L_D40F
+                BNE L2_940F
                 DEX
-                BPL L_D40D
+                BPL L2_940D
                 LDA #$00
                 STA $1C
                 LDX #$27
-L_D40D:
+L2_940D:
                 ROL $1C
-L_D40F:
+L2_940F:
                 DEY
                 LDA ($04),Y
                 ROL
                 STA ($04),Y
                 ROL $1C
                 TYA
-                BNE L_D3FF
-L_D41A:
+                BNE L2_93FF
+L2_941A:
                 DEC $05
                 DEC $26
-                BPL L_D3FF
+                BPL L2_93FF
                 RTS
-L_D421:
+L2_9421:
                 LDY #$40
                 LDX #$00
-L_D425:
+L2_9425:
                 TYA
                 AND #$07
-                BNE L_D435
+                BNE L2_9435
                 DEX
-                BPL L_D433
+                BPL L2_9433
                 LDA #$00
                 STA $1C
                 LDX #$27
-L_D433:
+L2_9433:
                 ROR $1C
-L_D435:
+L2_9435:
                 LDA ($02),Y
                 ROR
                 STA ($02),Y
                 ROR $1C
                 INY
-                BNE L_D425
+                BNE L2_9425
                 INC $03
                 DEC $26
-                BPL L_D425
+                BPL L2_9425
                 RTS
                 CPY #$3E
                 BRK
-                !byte $5B
+                !by $5B
                 SBC $C73F,Y
                 EOR $49A5,Y
                 ASL
@@ -9075,81 +9066,81 @@ L_D435:
                 ASL
                 TAY
                 LDX #$00
-L_D457:
+L2_9457:
                 LDA $94AC,Y
                 STA $02,X
                 INY
                 INX
                 CPX #$05
-                BNE L_D457
+                BNE L2_9457
                 TAX
-                LDA L_94AD,Y
+                LDA L0_94AD,Y
                 TAY
                 LDA $49
                 LSR
-                BCC L_D47C
-L_D46C:
+                BCC L2_947C
+L2_946C:
                 LDA ($02),Y
                 STA ($04),Y
                 INY
-                BNE L_D46C
+                BNE L2_946C
                 INC $03
                 INC $05
                 DEX
-                BPL L_D46C
-                BMI L_D493
-L_D47C:
+                BPL L2_946C
+                BMI L2_9493
+L2_947C:
                 DEY
                 LDA ($02),Y
                 STA ($04),Y
                 TYA
-                BNE L_D47C
+                BNE L2_947C
                 DEC $03
                 DEC $05
                 DEX
-                BPL L_D47C
+                BPL L2_947C
                 LDX #$00
                 LDY #$3F
                 STX $04
                 STY $05
-L_D493:
+L2_9493:
                 LDY #$07
                 LDA $49
                 LSR
-                BNE L_D4A4
+                BNE L2_94A4
                 TAY
                 STA ($04),Y
-                !byte $88
-                !byte $D0
-                !byte $FB
-                !byte $E6
-                !byte $05
-                !byte $A0
-                !byte $3F
-L_D4A4:
-                !byte $A9
-                !byte $00
-                !byte $91
-                !byte $04
-                !byte $88
-                !byte $10
-                !byte $FB
-                !byte $60
-                !byte $00
-                !byte $5A
-                !byte $40
-                !byte $5B
-                !byte $1B
-                !byte $80
-                !byte $C0
-                !byte $3F
-                !byte $80
+                !by $88
+                !by $D0
+                !by $FB
+                !by $E6
+                !by $05
+                !by $A0
+                !by $3F
+L2_94A4:
+                !by $A9
+                !by $00
+                !by $91
+                !by $04
+                !by $88
+                !by $10
+                !by $FB
+                !by $60
+                !by $00
+                !by $5A
+                !by $40
+                !by $5B
+                !by $1B
+                !by $80
+                !by $C0
+                !by $3F
+                !by $80
                 ROL $801B,X
                 BRK
-                !byte $5B
+                !by $5B
                 PHP
-                !byte $5B
-                !byte $1C
+                !by $5B
+                !by $1C
                 CLV
                 CPY #$3E
                 CLV
@@ -9157,10 +9148,10 @@ L_D4A4:
                 AND #$03
                 STA $35
                 BIT $4A
-                BPL L_D4CF
+                BPL L2_94CF
                 JSR $0F03
-L_D4CF:
-                JMP L_94D6
+L2_94CF:
+                JMP L0_94D6
                 BIT $11
                 EOR ($31),Y
                 LDA $29
@@ -9168,15 +9159,15 @@ L_D4CF:
                 ORA #$20
                 STA $29
                 BIT $29
-                BVS L_D537
+                BVS L2_9537
                 LDX $0E39
                 LDY $0E3A
                 LDA $29
                 AND #$20
-                BEQ L_D4F4
+                BEQ L2_94F4
                 LDX $0E3B
                 LDY $0E3C
-L_D4F4:
+L2_94F4:
                 STX $02
                 STY $03
                 LDX #$C0
@@ -9187,66 +9178,66 @@ L_D4F4:
                 LDY #$28
                 CLC
                 JSR $B36C
-                JSR L_89B3
+                JSR L0_89B3
                 LDA $29
                 AND #$20
-                BNE L_D518
+                BNE L2_9518
                 LDX $28
                 INX
                 TXA
-                JMP L_9570
-L_D518:
+                JMP L0_9570
+L2_9518:
                 LDA $4A
                 AND #$30
-                BEQ L_D529
+                BEQ L2_9529
                 LDX #$07
                 AND #$10
-                BEQ L_D525
+                BEQ L2_9525
                 INX
-L_D525:
+L2_9525:
                 TXA
-                JSR L_9570
-L_D529:
+                JSR L0_9570
+L2_9529:
                 LDA $35
                 CLC
                 ADC #$09
-                JMP L_9570
+                JMP L0_9570
                 LDA $29
                 ORA #$40
                 STA $29
-L_D537:
+L2_9537:
                 LDX #$03
-L_D539:
-                LDA L_956C,X
+L2_9539:
+                LDA L0_956C,X
                 STA $02,X
                 DEX
-                BPL L_D539
+                BPL L2_9539
                 LDX #$00
                 STX $26
                 LDY #$00
-L_D547:
+L2_9547:
                 LDA #$FF
-                BNE L_D54E
-L_D54B:
+                BNE L2_954E
+L2_954B:
                 LDA $0D00,X
-L_D54E:
+L2_954E:
                 STA ($02),Y
                 LDA $0D00,X
                 STA ($04),Y
                 INX
                 INY
-                BNE L_D55D
+                BNE L2_955D
                 INC $03
                 INC $05
-L_D55D:
+L2_955D:
                 TYA
                 AND #$07
-                BNE L_D54B
+                BNE L2_954B
                 TXA
                 LDX $26
                 STA $26
                 CPX #$A0
-                BNE L_D547
+                BNE L2_9547
                 RTS
                 CPY #$7C
                 BRK
@@ -9255,7 +9246,7 @@ L_D55D:
                 ASL
                 TAY
                 LDX #$10
-L_D577:
+L2_9577:
                 LDA $7CC0,Y
                 EOR #$FF
                 STA $7CC0,Y
@@ -9264,82 +9255,82 @@ L_D577:
                 STA $7E00,Y
                 INY
                 DEX
-                BNE L_D577
+                BNE L2_9577
                 RTS
                 LDA $19
                 CMP #$EF
-                BCS L_D5BE
+                BCS L2_95BE
                 LDX #$04
                 LDA $0B
-L_D596:
+L2_9596:
                 LSR $0C
                 ROR
                 DEX
-                BNE L_D596
+                BNE L2_9596
                 TAX
                 BIT $29
-                BVS L_D5B8
+                BVS L2_95B8
                 LDA $29
                 AND #$20
-                BEQ L_D5AC
+                BEQ L2_95AC
                 TXA
                 CLC
                 ADC #$14
                 TAX
-L_D5AC:
+L2_95AC:
                 JMP ($0E3F)
-                LDA L_95DB,X
-                JSR L_8094
+                LDA L0_95DB,X
+                JSR L0_8094
                 JMP $B285
-L_D5B8:
+L2_95B8:
                 JSR $10A5
                 JMP $B285
-L_D5BE:
+L2_95BE:
                 LDA $29
                 CLC
                 ADC #$20
                 AND #$60
                 CMP #$60
-                BNE L_D5CB
+                BNE L2_95CB
                 LDA #$00
-L_D5CB:
+L2_95CB:
                 STA $1C
-                !byte $A5
-                !byte $29
-                !byte $29
-                !byte $9F
-                !byte $05
-                !byte $1C
-                !byte $85
-                !byte $29
-                !byte $20
-                !byte $DE
-                !byte $94
-                !byte $4C
-                !byte $85
-                !byte $B2
-                !byte $5F
-                !byte $64
-                !byte $44
-                !byte $6C
-                !byte $72
-                !byte $63
-                !byte $70
-                !byte $6A
-                !byte $6D
-                !byte $74
-                !byte $67
-                !byte $61
-                !byte $73
-                !byte $65
-                !byte $20
-                !byte $77
-                !byte $B8
-                !byte $C3
-                !byte $6B
-                !byte $6B
-                !byte $5F
-                !byte $C1
+                !by $A5
+                !by $29
+                !by $29
+                !by $9F
+                !by $05
+                !by $1C
+                !by $85
+                !by $29
+                !by $20
+                !by $DE
+                !by $94
+                !by $4C
+                !by $85
+                !by $B2
+                !by $5F
+                !by $64
+                !by $44
+                !by $6C
+                !by $72
+                !by $63
+                !by $70
+                !by $6A
+                !by $6D
+                !by $74
+                !by $67
+                !by $61
+                !by $73
+                !by $65
+                !by $20
+                !by $77
+                !by $B8
+                !by $C3
+                !by $6B
+                !by $6B
+                !by $5F
+                !by $C1
                 LSR $A1A3,X
                 LDY #$A2
                 EOR $6F66
@@ -9347,28 +9338,28 @@ L_D5CB:
                 ADC $2E,X
                 ADC #$B5
                 LDX $BA,Y
-                !byte $B7
-                !byte $6B
-                !byte $6B
+                !by $B7
+                !by $6B
+                !by $6B
                 LDA $28
                 CMP #$09
-                BCC L_D60D
+                BCC L2_960D
                 CMP #$0D
-                BCC L_D612
-L_D60D:
+                BCC L2_9612
+L2_960D:
                 LDA #$0D
-                JMP L_80BC
-L_D612:
-                JSR L_8AE2
+                JMP L0_80BC
+L2_9612:
+                JSR L0_8AE2
                 JSR $0EE7
                 LDA #$8C
-                STA L_D001
+                STA $D001
                 LDA #$14
                 STA $D000
                 LDA #$01
                 STA $D010
                 LDA #$01
-                STA L_D015
+                STA $D015
                 LDA #$1A
                 STA $02
                 LDA #$5C
@@ -9376,10 +9367,10 @@ L_D612:
                 LDX #$16
                 LDY #$0D
                 LDA $1704
-                JSR L_9961
+                JSR L0_9961
                 JSR $B3CD
                 JMP $96AD
-                JSR L_8AE2
+                JSR L0_8AE2
                 JSR $0EE7
                 JSR $AFE4
                 JSR $8CEA
@@ -9391,13 +9382,13 @@ L_D612:
                 LDA #$00
                 SBC $14
                 TYA
-                BCS L_D662
+                BCS L2_9662
                 LDA #$00
-L_D662:
+L2_9662:
                 CMP #$D0
-                BCC L_D668
+                BCC L2_9668
                 LDA #$D0
-L_D668:
+L2_9668:
                 AND #$F8
                 STA $1C
                 CLC
@@ -9412,7 +9403,7 @@ L_D668:
                 ORA $1D
                 STA $D010
                 LDA #$03
-                STA L_D015
+                STA $D015
                 LDA #$C0
                 STA $04
                 SEC
@@ -9424,46 +9415,46 @@ L_D668:
                 STA $03
                 LDX #$1C
                 LDY #$00
-L_D69E:
+L2_969E:
                 DEY
                 LDA ($02),Y
                 STA ($04),Y
                 TYA
-                BNE L_D69E
+                BNE L2_969E
                 DEC $03
                 DEC $05
                 DEX
-                BNE L_D69E
-                JSR L_9863
+                BNE L2_969E
+                JSR L0_9863
                 JSR $B285
-                JSR L_96C9
+                JSR L0_96C9
                 JSR $AEEC
-                JSR L_8AC1
+                JSR L0_8AC1
                 LDA $28
                 CMP #$0D
-                BNE L_D6C8
-                JSR L_8C95
+                BNE L2_96C8
+                JSR L0_8C95
                 JSR $AFF0
-L_D6C8:
+L2_96C8:
                 RTS
                 JSR $96D5
                 JSR $97DA
-                JSR L_993A
-                JMP L_96C9
+                JSR L0_993A
+                JMP L0_96C9
                 JSR $0E2D
-                BNE L_D6DB
+                BNE L2_96DB
                 RTS
-L_D6DB:
+L2_96DB:
                 CMP #$20
-                BNE L_D6E2
+                BNE L2_96E2
                 PLA
                 PLA
                 RTS
-L_D6E2:
+L2_96E2:
                 CMP #$6D
-                BNE L_D70B
+                BNE L2_970B
                 LDY #$3C
-L_D6E8:
+L2_96E8:
                 LDA $7F40,Y
                 JSR $9371
                 STA $0382,Y
@@ -9476,50 +9467,50 @@ L_D6E8:
                 DEY
                 DEY
                 DEY
-                BPL L_D6E8
-                JMP L_9768
-L_D70B:
+                BPL L2_96E8
+                JMP L0_9768
+L2_970B:
                 CMP #$74
-                BNE L_D723
+                BNE L2_9723
                 LDY #$00
                 LDX #$3E
-L_D713:
+L2_9713:
                 LDA $7F40,Y
                 JSR $9371
                 STA $0380,X
                 INY
                 DEX
-                BPL L_D713
-                JMP L_9768
-L_D723:
+                BPL L2_9713
+                JMP L0_9768
+L2_9723:
                 CMP #$72
-                BNE L_D776
+                BNE L2_9776
                 LDA #$02
                 STA $27
-L_D72B:
+L2_972B:
                 LDY $27
                 STY $08
-                LDX L_996C,Y
-                LDA L_996F,Y
+                LDX L0_996C,Y
+                LDA L0_996F,Y
                 STA $20
                 LDA #$03
                 STA $26
-L_D73B:
+L2_973B:
                 LDA #$08
                 STA $21
-L_D73F:
+L2_973F:
                 LDY $20
                 TXA
                 PHA
                 LDA #$00
-L_D745:
+L2_9745:
                 ROL $7F40,X
                 ROR
                 INX
                 INX
                 INX
                 DEY
-                BNE L_D745
+                BNE L2_9745
                 LDY $08
                 STA $0380,Y
                 INY
@@ -9529,103 +9520,103 @@ L_D745:
                 PLA
                 TAX
                 DEC $21
-                BNE L_D73F
+                BNE L2_973F
                 INX
                 DEC $26
-                BNE L_D73B
+                BNE L2_973B
                 DEC $27
-                BPL L_D72B
+                BPL L2_972B
                 LDY #$3E
-L_D76A:
+L2_976A:
                 LDA $0380,Y
                 STA $7F40,Y
                 DEY
-                BPL L_D76A
-                JMP L_98DB
-L_D776:
+                BPL L2_976A
+                JMP L0_98DB
+L2_9776:
                 CMP #$69
-                BNE L_D78A
+                BNE L2_978A
                 LDY #$3E
-L_D77C:
+L2_977C:
                 LDA $7F40,Y
                 EOR #$FF
                 STA $7F40,Y
                 DEY
-                BPL L_D77C
-                JMP L_98DB
-L_D78A:
+                BPL L2_977C
+                JMP L0_98DB
+L2_978A:
                 CMP #$C1
-                BNE L_D794
+                BNE L2_9794
                 JSR $AFD9
-                JMP L_98DB
-L_D794:
+                JMP L0_98DB
+L2_9794:
                 CMP #$A0
-                BNE L_D7AC
+                BNE L2_97AC
                 LDA $0D
                 CMP #$14
-                BCC L_D7A8
+                BCC L2_97A8
                 CMP #$16
-                BCS L_D7D9
+                BCS L2_97D9
                 LDA $3F
                 AND #$05
-                BNE L_D7D9
-L_D7A8:
+                BNE L2_97D9
+L2_97A8:
                 INC $0D
-                BPL L_D7D0
-L_D7AC:
+                BPL L2_97D0
+L2_97AC:
                 CMP #$A1
-                BNE L_D7B8
+                BNE L2_97B8
                 LDA $0D
-                BEQ L_D7D9
+                BEQ L2_97D9
                 DEC $0D
-                BPL L_D7D0
-L_D7B8:
+                BPL L2_97D0
+L2_97B8:
                 CMP #$A2
-                BNE L_D7C6
+                BNE L2_97C6
                 LDA $0B
                 CMP #$17
-                BCS L_D7D9
+                BCS L2_97D9
                 INC $0B
-                BPL L_D7D0
-L_D7C6:
+                BPL L2_97D0
+L2_97C6:
                 CMP #$A3
-                BNE L_D7D9
+                BNE L2_97D9
                 LDA $0B
-                BEQ L_D7D9
+                BEQ L2_97D9
                 DEC $0B
-L_D7D0:
+L2_97D0:
                 LDA $24
                 LDY #$29
                 STA ($04),Y
-                JSR L_991C
-L_D7D9:
+                JSR L0_991C
+L2_97D9:
                 RTS
                 LDA $3F
                 AND #$05
-                BEQ L_D83C
+                BEQ L2_983C
                 LDA $0D
                 CMP #$15
-                BCS L_D843
+                BCS L2_9843
                 LDA $29
                 AND #$02
-                BNE L_D808
+                BNE L2_9808
                 LDA $033E
                 EOR $24
                 AND #$0F
-                BEQ L_D7F7
+                BEQ L2_97F7
                 LDA #$01
-L_D7F7:
+L2_97F7:
                 LDX $028D
-                BEQ L_D7FE
+                BEQ L2_97FE
                 EOR #$01
-L_D7FE:
+L2_97FE:
                 LSR $29
-L_D800:
+L2_9800:
                 ASL $29
                 ORA $29
                 ORA #$02
                 STA $29
-L_D808:
+L2_9808:
                 JSR $90C9
                 LDA $0B
                 LSR
@@ -9633,34 +9624,34 @@ L_D808:
                 LSR
                 LDY #$03
                 CLC
-L_D813:
+L2_9813:
                 ADC $0D
                 DEY
-                BNE L_D813
+                BNE L2_9813
                 TAY
                 LDA $29
                 LSR
                 LDA $0A
-                BCS L_D82A
+                BCS L2_982A
                 ORA $7F40,Y
                 STA $7F40,Y
                 LDX #$01
-                BNE L_D834
-L_D82A:
+                BNE L2_9834
+L2_982A:
                 EOR #$FF
                 AND $7F40,Y
                 STA $7F40,Y
                 LDX #$00
-L_D834:
+L2_9834:
                 LDA $033E,X
                 STA $24
-                JMP L_993A
-L_D83C:
+                JMP L0_993A
+L2_983C:
                 LDA $29
                 AND #$FD
                 STA $29
                 RTS
-L_D843:
+L2_9843:
                 LDA $1704
                 LDY #$29
                 STA ($04),Y
@@ -9669,18 +9660,18 @@ L_D843:
                 LSR
                 TAX
                 LDA $9857,X
-                JMP L_96D8
+                JMP L0_96D8
                 BRK
                 BRK
                 BRK
                 JSR $746D
-                !byte $72
+                !by $72
                 ADC #$C1
                 BRK
                 BRK
                 BRK
                 LDA $1704
-                JSR L_9961
+                JSR L0_9961
                 STA $033E
                 LDA $1704
                 LSR
@@ -9707,34 +9698,34 @@ L_D843:
                 STA $03
                 LDA #$15
                 STA $27
-L_D89D:
+L2_989D:
                 LDA #$18
                 STA $26
                 LDA #$81
                 LDY #$01
-L_D8A5:
+L2_98A5:
                 LDX #$06
-L_D8A7:
+L2_98A7:
                 STA ($02),Y
                 INY
                 DEX
-                BNE L_D8A7
+                BNE L2_98A7
                 INY
                 INY
                 DEC $26
-                BNE L_D8A5
+                BNE L2_98A5
                 LDX #$02
                 JSR $8331
                 DEC $27
-                BNE L_D89D
+                BNE L2_989D
                 LDY #$5F
-L_D8BE:
-                LDA L_B947,Y
+L2_98BE:
+                LDA L0_B947,Y
                 STA $7BB8,Y
                 LDA $B9A7,Y
                 STA $7CF8,Y
                 DEY
-                BPL L_D8BE
+                BPL L2_98BE
                 LDA #$02
                 JSR $AF3F
                 JSR $B02A
@@ -9747,17 +9738,17 @@ L_D8BE:
                 STA $02
                 LDA #$5F
                 STA $03
-L_D8E7:
+L2_98E7:
                 LDY #$02
-L_D8E9:
+L2_98E9:
                 LDX $26
                 LDA $7F40,X
                 STA $0380,Y
                 DEC $26
                 DEY
-                BPL L_D8E9
+                BPL L2_98E9
                 LDY #$17
-L_D8F8:
+L2_98F8:
                 LSR $0380
                 ROR $0381
                 ROR $0382
@@ -9767,21 +9758,21 @@ L_D8F8:
                 LDA $033E,X
                 STA ($02),Y
                 DEY
-                BPL L_D8F8
+                BPL L2_98F8
                 SEC
                 LDA $02
                 SBC #$28
                 STA $02
-                BCS L_D918
+                BCS L2_9918
                 DEC $03
-L_D918:
+L2_9918:
                 LDA $26
-                BPL L_D8E7
+                BPL L2_98E7
                 LDA $0B
                 STA $0E
                 LDX #$0D
                 LDY #$03
-                JSR L_8318
+                JSR L0_8318
                 LDA $02
                 STA $04
                 LDA $03
@@ -9820,135 +9811,129 @@ L_D918:
                 ASL
                 ASL
                 ORA $1C
-                !byte $60
-                !byte $27
-                !byte $0F
-                !byte $00
-                !byte $08
-                !byte $08
-                !byte $05
-                !byte $A2
-                !byte $FE
-                !byte $9A
-                !byte $20
-                !byte $F8
-                !byte $9F
-                !byte $20
-                !byte $C0
-                !byte $99
-                !byte $20
-                !byte $93
-                !byte $87
-                !byte $20
-                !byte $2B
-                !byte $9A
-                !byte $4C
-                !byte $78
-                !byte $99
-                !byte $62
-                !byte $B5
-                !byte $65
-                !byte $73
-                !byte $74
-                !byte $C3
-                !byte $B9
-                !byte $5F
-                !byte $31
-                !byte $32
-                !byte $33
-                !byte $C1
-                !byte $76
-                !byte $66
-                !byte $B7
-                !byte $61
-                !byte $A8
-                !byte $AA
-                !byte $30
-                !byte $B8
-                !byte $E3
-                !byte $99
-                !byte $6D
-                !byte $9B
-                !byte $E3
-                !byte $99
-                !byte $1F
-                !byte $9C
-                !byte $6F
-                !byte $9C
-                !byte $B3
-                !byte $0D
-                !byte $AD
-                !byte $0D
-                !byte $85
-                !byte $9E
-                !byte $99
-                !byte $9E
+                !by $60
+                !by $27
+                !by $0F
+                !by $00
+                !by $08
+                !by $08
+                !by $05
+                !by $A2
+                !by $FE
+                !by $9A
+                !by $20
+                !by $F8
+                !by $9F
+L2_9978:
+                JSR $99C0
+                JSR L2_8793
+                JSR $9A2B
+                JMP L2_9978
+                !by $62
+                !by $B5
+                !by $65
+                !by $73
+                !by $74
+                !by $C3
+                !by $B9
+                !by $5F
+                !by $31
+                !by $32
+                !by $33
+                !by $C1
+                !by $76
+                !by $66
+                !by $B7
+                !by $61
+                !by $A8
+                !by $AA
+                !by $30
+                !by $B8
+                !by $E3
+                !by $99
+                !by $6D
+                !by $9B
+                !by $E3
+                !by $99
+                !by $1F
+                !by $9C
+                !by $6F
+                !by $9C
+                !by $B3
+                !by $0D
+                !by $AD
+                !by $0D
+                !by $85
+                !by $9E
+                !by $99
+                !by $9E
                 STA $999E,Y
-                !byte $9E
+                !by $9E
                 EOR $9A9D,X
                 LDY #$A6
                 LDY #$C2
                 LDY #$BE
                 TXS
                 ORA ($84),Y
-                !byte $1A
+                !by $1A
                 STY $A0
                 TXA
-                !byte $2B
-                BPL $D9E1
-                CPX $FF
-                BEQ L_D9D7
+                !by $2B
+                !by $10
+L2_99C0:
+                JSR $FFE4
+                BEQ L2_99D7
                 PHA
                 JSR $B27A
                 ASL $0340
                 PLA
                 LDX #$13
-L_D9CF:
-                CMP L_9984,X
-                BEQ L_D9D8
+L2_99CF:
+                CMP L0_9984,X
+                BEQ L2_99D8
                 DEX
-                BPL L_D9CF
-L_D9D7:
+                BPL L2_99CF
+L2_99D7:
                 RTS
-L_D9D8:
+L2_99D8:
                 TXA
                 ASL
                 TAY
-                LDA L_9999,Y
+                LDA L0_9999,Y
                 PHA
                 LDA $9998,Y
                 PHA
                 RTS
                 LDA #$04
                 BIT $29
-                BNE L_D9F0
+                BNE L2_99F0
                 LDA $37
                 CMP #$04
-                BNE L_D9F7
-L_D9F0:
+                BNE L2_99F7
+L2_99F0:
                 TXA
                 PHA
                 JSR $9DA4
                 PLA
                 TAX
-L_D9F7:
+L2_99F7:
                 LDA $38
                 AND #$BF
-L_D9FB:
+L2_99FB:
                 STA $38
                 LDA $29
                 AND #$FB
                 STA $29
                 STX $37
                 LDA $9A21,X
-                LDY L_9A26,X
+                LDY L0_9A26,X
                 STA $48
                 BIT $29
-                BPL L_DA15
+                BPL L2_9A15
                 LDA #$03
                 LDY #$02
-L_DA15:
-                STY L_D015
+L2_9A15:
+                STY $D015
                 JSR $AF3F
                 JSR $87C5
                 JMP $9F5A
@@ -9956,52 +9941,52 @@ L_DA15:
                 ORA ($01,X)
                 ORA ($02,X)
                 ASL $02
-                !byte $02
-                !byte $02
+                !by $02
+                !by $02
                 LDA $3F
                 AND #$07
-L_DA2F:
-                BEQ L_DA53
+L2_9A2F:
+                BEQ L2_9A53
                 PHA
                 JSR $87C5
                 JSR $B27A
                 JSR $B285
                 PLA
                 BIT $29
-                BPL L_DA43
+                BPL L2_9A43
                 JMP $9FA2
-L_DA43:
+L2_9A43:
                 AND #$02
-                BNE L_DA54
+                BNE L2_9A54
                 LDA $37
                 ASL
                 TAX
                 LDA $9A5D,X
                 PHA
-                LDA L_9A5C,X
+                LDA L0_9A5C,X
                 PHA
-L_DA53:
+L2_9A53:
                 RTS
-L_DA54:
+L2_9A54:
                 LDX #$02
-                JSR L_99E4
-                JMP L_9BEB
+                JSR L0_99E4
+                JMP L0_9BEB
                 ADC $9A
-                BCS L_D9FB
+                BCS L2_99FB
                 NOP
-                !byte $9B
-                !byte $3C
-                !byte $9C
+                !by $9B
+                !by $3C
+                !by $9C
                 CPY $9C
                 LDA $29
                 EOR #$04
                 STA $29
                 AND #$04
-                BEQ L_DA79
+                BEQ L2_9A79
                 JSR $9F0D
                 JSR $9E74
-                JMP L_8AE2
-L_DA79:
+                JMP L0_8AE2
+L2_9A79:
                 JSR $9282
                 INC $0F
                 INC $11
@@ -10009,59 +9994,59 @@ L_DA79:
                 SEC
                 SBC $0B
                 CMP #$05
-                BCC L_DAB4
+                BCC L2_9AB4
                 LDY $52
                 LDX #$02
                 BIT $38
-                BVS L_DAA4
+                BVS L2_9AA4
                 LDA $1700
                 TAY
                 CLC
                 ADC #$05
-                BCS L_DAB7
+                BCS L2_9AB7
                 STA $1700
                 LDA #$00
                 STA $1800,Y
                 LDX #$00
-L_DAA4:
+L2_9AA4:
                 STX $37
                 LDX #$00
-L_DAA8:
+L2_9AA8:
                 LDA $0B,X
                 STA $1801,Y
                 INY
                 INX
                 INX
                 CPX #$08
-                BCC L_DAA8
-L_DAB4:
+                BCC L2_9AA8
+L2_9AB4:
                 JMP $A073
-L_DAB7:
+L2_9AB7:
                 LDA #$05
                 JSR $B22A
                 JMP $9DA4
                 BIT $38
-                BVC L_DAE7
+                BVC L2_9AE7
                 JSR $9E74
                 LDY $52
                 LDA $1800,Y
-                BPL L_DAE8
+                BPL L2_9AE8
                 CLC
                 ADC #$20
                 AND #$60
                 CMP #$20
-                BNE L_DAD8
+                BNE L2_9AD8
                 LDA #$40
-L_DAD8:
+L2_9AD8:
                 STA $1C
                 LDA $1800,Y
                 AND #$9F
                 ORA $1C
                 STA $1800,Y
                 JSR $9F5A
-L_DAE7:
+L2_9AE7:
                 RTS
-L_DAE8:
+L2_9AE8:
                 LDA $52
                 TAX
                 CLC
@@ -10069,104 +10054,104 @@ L_DAE8:
                 TAY
                 LDA $1800,X
                 AND #$1F
-                BEQ L_DB12
+                BEQ L2_9B12
                 LDA $1800,Y
                 CMP #$A0
-                BCC L_DB12
+                BCC L2_9B12
                 CLC
                 ADC #$04
                 STA $1800,Y
                 AND #$1C
-                BNE L_DB23
+                BNE L2_9B23
                 DEC $1800,X
                 LDA #$01
                 JSR $9E59
                 JMP $9B2C
-L_DB12:
+L2_9B12:
                 LDA #$01
                 JSR $9E38
-                BCS L_DB27
+                BCS L2_9B27
                 LDX $52
                 LDA #$E0
                 STA $1805,X
                 INC $1800,X
-L_DB23:
+L2_9B23:
                 JSR $9B2C
                 RTS
-L_DB27:
+L2_9B27:
                 LDA #$05
                 JMP $B22A
                 LDY $52
                 LDA $1800,Y
-                BMI L_DB49
+                BMI L2_9B49
                 LDX #$80
                 AND #$1F
-                BEQ L_DB45
+                BEQ L2_9B45
                 LDA $1805,Y
                 CMP #$A0
-                BCC L_DB45
+                BCC L2_9B45
                 ASL
                 ASL
                 AND #$70
                 TAX
-L_DB45:
+L2_9B45:
                 LDY #$00
-                BEQ L_DB57
-L_DB49:
+                BEQ L2_9B57
+L2_9B49:
                 LDY #$10
                 LDX #$A0
                 ASL
                 ASL
-                BMI L_DB57
+                BMI L2_9B57
                 LDX #$90
-                BCS L_DB57
+                BCS L2_9B57
                 LDX #$B0
-L_DB57:
+L2_9B57:
                 LDA #$10
                 STA $26
-L_DB5B:
-                LDA L_BC87,X
+L2_9B5B:
+                LDA L0_BC87,X
                 STA $6FD0,Y
-                LDA L_BD47,X
+                LDA L0_BD47,X
                 STA $7110,Y
                 INY
                 INX
                 DEC $26
-                BNE L_DB5B
+                BNE L2_9B5B
                 RTS
                 LDA #$80
-                JSR L_8467
-                BCS L_DBAB
+                JSR L0_8467
+                BCS L2_9BAB
                 LDY $1700
                 TYA
                 CLC
                 ADC #$05
-                BCS L_DBA6
+                BCS L2_9BA6
                 TAX
                 ADC $B7
-                BCS L_DBA6
+                BCS L2_9BA6
                 STY $52
                 LDA $B7
                 ORA #$C0
                 STA $1800,Y
                 LDY #$00
-L_DB8E:
+L2_9B8E:
                 LDA ($BB),Y
                 STA $1800,X
                 INY
                 INX
                 CPY $B7
-                BCC L_DB8E
-                JSR L_9BDD
+                BCC L2_9B8E
+                JSR L0_9BDD
                 JSR $B222
                 LDA #$01
                 STA $37
                 JMP $A084
-L_DBA6:
+L2_9BA6:
                 LDA #$05
                 JSR $B22A
-L_DBAB:
-                JSR L_8658
+L2_9BAB:
+                JSR L0_8658
                 JMP $A076
                 JSR $9E74
                 LDY $52
@@ -10183,10 +10168,10 @@ L_DBAB:
                 ADC $41
                 STA $1804,Y
                 BIT $38
-                BVS L_DBDA
+                BVS L2_9BDA
                 JSR $9E26
                 STY $1700
-L_DBDA:
+L2_9BDA:
                 JMP $A073
                 LDY $52
                 JSR $B1B9
@@ -10195,7 +10180,7 @@ L_DBDA:
                 LDY $BC
                 JMP $B231
                 LDA $1700
-                BEQ L_DC1F
+                BEQ L2_9C1F
                 JSR $9DEB
                 JSR $9DD4
                 LDA $38
@@ -10203,11 +10188,11 @@ L_DBDA:
                 STA $38
                 LDY $52
                 LDX #$00
-L_DC00:
+L2_9C00:
                 LDA $1800,Y
-L_DC03:
-                BPL L_DC1C
-L_DC05:
+L2_9C03:
+                BPL L2_9C1C
+L2_9C05:
                 LDA $1803,Y
                 SEC
                 SBC $1801,Y
@@ -10216,62 +10201,62 @@ L_DC05:
                 SEC
                 SBC $1802,Y
                 STA $41
-                JSR L_9BDD
+                JSR L0_9BDD
                 LDX #$01
-L_DC1C:
+L2_9C1C:
                 JSR $9A03
-L_DC1F:
+L2_9C1F:
                 RTS
                 LDA $1700
-                BEQ L_DC38
+                BEQ L2_9C38
                 LDY #$00
-L_DC27:
+L2_9C27:
                 LDA $1800,Y
-                BMI L_DC33
+                BMI L2_9C33
                 STY $52
                 JSR $9DD4
                 LDY $52
-L_DC33:
+L2_9C33:
                 JSR $9E26
-                BCC L_DC27
-L_DC38:
+                BCC L2_9C27
+L2_9C38:
                 LDX #$03
-                JMP L_99E4
+                JMP L0_99E4
                 LDA $1700
-                BEQ L_DC6F
+                BEQ L2_9C6F
                 JSR $9DEB
                 LDY $52
                 JSR $9DD4
                 JSR $9E74
                 LDX #$00
                 LDY $52
-L_DC51:
+L2_9C51:
                 LDA $1800,Y
                 STA $0200,X
                 INY
                 INX
                 CPX #$15
-                BCC L_DC51
+                BCC L2_9C51
                 JSR $9D85
                 LDX #$00
-L_DC62:
+L2_9C62:
                 LDA $0200,X
                 STA $1800,Y
                 INX
                 INY
                 CPY $1700
-                BNE L_DC62
-L_DC6F:
+                BNE L2_9C62
+L2_9C6F:
                 RTS
                 BIT $38
-                BVC L_DC83
+                BVC L2_9C83
                 LDY $52
                 LDA $1800,Y
-                BMI L_DC83
+                BMI L2_9C83
                 JSR $9C84
                 LDX #$04
                 JSR $9A03
-L_DC83:
+L2_9C83:
                 RTS
                 JSR $9F08
                 LDY $52
@@ -10279,19 +10264,19 @@ L_DC83:
                 LDY $52
                 JSR $9E26
                 DEY
-L_DC92:
+L2_9C92:
                 TYA
                 SEC
                 SBC #$04
                 CMP $52
-                BEQ L_DCC4
+                BEQ L2_9CC4
                 LDA $1800,Y
                 CMP #$A0
-                BCS L_DCC4
+                BCS L2_9CC4
                 LDX $52
                 ADC $1801,X
                 CMP #$A0
-                BCS L_DCC1
+                BCS L2_9CC1
                 STA $0B
                 STA $0F
                 LDA $1802,X
@@ -10304,74 +10289,74 @@ L_DC92:
                 JSR $8D70
                 PLA
                 TAY
-L_DCC1:
+L2_9CC1:
                 DEY
-                BNE L_DC92
-L_DCC4:
+                BNE L2_9C92
+L2_9CC4:
                 RTS
                 JSR $9E74
                 LDY $52
                 LDA $0B
                 SEC
                 SBC $1801,Y
-                BCC L_DD2D
+                BCC L2_9D2D
                 STA $0F
                 JSR $9E26
                 DEY
-L_DCD8:
+L2_9CD8:
                 TYA
                 SEC
                 SBC #$04
                 CMP $52
-                BEQ L_DCF0
+                BEQ L2_9CF0
                 LDA $1800,Y
                 CMP #$A0
-                BCS L_DCF0
+                BCS L2_9CF0
                 CMP $0F
-                BEQ L_DD20
-                BCC L_DCF0
+                BEQ L2_9D20
+                BCC L2_9CF0
                 DEY
-                BNE L_DCD8
-L_DCF0:
+                BNE L2_9CD8
+L2_9CF0:
                 LDX $52
                 LDA $0B
                 CMP $1803,X
-                BCS L_DD2D
+                BCS L2_9D2D
                 LDA $1800,X
                 AND #$1F
                 CMP #$0F
-L_DD00:
-                BCS L_DD1B
-L_DD02:
+L2_9D00:
+                BCS L2_9D1B
+L2_9D02:
                 INY
-L_DD03:
+L2_9D03:
                 TYA
                 PHA
                 LDA #$01
                 JSR $9E38
                 PLA
                 TAY
-                BCS L_DD1B
+                BCS L2_9D1B
                 LDA $0F
                 STA $1800,Y
                 LDX $52
                 INC $1800,X
                 JMP $9C84
-L_DD1B:
+L2_9D1B:
                 LDA #$05
                 JMP $B22A
-L_DD20:
+L2_9D20:
                 LDA #$01
                 JSR $9E59
                 LDX $52
                 DEC $1800,X
                 JSR $9C84
-L_DD2D:
+L2_9D2D:
                 RTS
                 LDY $52
                 LDA $1800,Y
                 AND #$1F
-                BEQ L_DD5D
+                BEQ L2_9D5D
                 TAX
                 TYA
                 CLC
@@ -10379,12 +10364,12 @@ L_DD2D:
                 TAY
                 LDA $1800,Y
                 CMP #$A0
-                BCC L_DD46
+                BCC L2_9D46
                 INY
                 DEX
-L_DD46:
+L2_9D46:
                 TXA
-                BEQ L_DD5D
+                BEQ L2_9D5D
                 PHP
                 JSR $9E59
                 LDY $52
@@ -10395,25 +10380,25 @@ L_DD46:
                 ROL
                 STA $1800,Y
                 JSR $9C84
-L_DD5D:
+L2_9D5D:
                 RTS
                 ASL $0340
-                BCC L_DD66
+                BCC L2_9D66
                 JMP $0FF4
-L_DD66:
+L2_9D66:
                 JSR $9E74
                 LDY #$00
                 BIT $38
-                BVC L_DD7F
+                BVC L2_9D7F
                 LDA $37
                 CMP #$04
-                BNE L_DD78
+                BNE L2_9D78
                 JMP $9D2E
-L_DD78:
+L2_9D78:
                 JSR $9D85
                 LDA #$02
                 STA $37
-L_DD7F:
+L2_9D7F:
                 STY $1700
                 JMP $A073
                 LDY $52
@@ -10423,12 +10408,12 @@ L_DD7F:
                 SBC $52
                 STA $1C
                 LDX $52
-L_DD92:
+L2_9D92:
                 LDA $1800,Y
                 STA $1800,X
                 INX
                 INY
-                BNE L_DD92
+                BNE L2_9D92
                 LDA $1700
                 SEC
                 SBC $1C
@@ -10436,20 +10421,20 @@ L_DD92:
                 RTS
                 JSR $9F08
                 LDA $1700
-                BEQ L_DDBA
+                BEQ L2_9DBA
                 LDY #$00
-L_DDAE:
+L2_9DAE:
                 TYA
                 PHA
                 JSR $9DBB
                 PLA
                 TAY
                 JSR $9E26
-                BCC L_DDAE
-L_DDBA:
+                BCC L2_9DAE
+L2_9DBA:
                 RTS
                 LDX #$00
-L_DDBD:
+L2_9DBD:
                 LDA $1801,Y
                 STA $0B,X
                 INY
@@ -10458,13 +10443,13 @@ L_DDBD:
                 STA $0B,X
                 INX
                 CPX #$08
-                BCC L_DDBD
+                BCC L2_9DBD
                 DEC $0F
                 DEC $11
                 JMP $8DDD
                 LDA #$04
                 STA $25
-L_DDD8:
+L2_9DD8:
                 LDA $29
                 EOR #$01
                 STA $29
@@ -10472,44 +10457,44 @@ L_DDD8:
                 JSR $9DBB
                 JSR $9F0D
                 DEC $25
-                BNE L_DDD8
+                BNE L2_9DD8
                 RTS
                 LDA #$FF
                 STA $24
                 LDY #$00
                 STY $52
-L_DDF3:
+L2_9DF3:
                 INY
                 INY
                 LDX #$02
                 LDA #$00
                 STA $1C
-L_DDFB:
+L2_9DFB:
                 LDA $1800,Y
                 CLC
                 ADC $1802,Y
                 ROR
                 SEC
                 SBC $0B,X
-                BCS L_DE0C
+                BCS L2_9E0C
                 EOR #$FF
                 ADC #$01
-L_DE0C:
+L2_9E0C:
                 CLC
                 ADC $1C
                 STA $1C
                 DEY
                 DEX
                 DEX
-                BPL L_DDFB
-                BCS L_DE20
+                BPL L2_9DFB
+                BCS L2_9E20
                 CMP $24
-                BCS L_DE20
+                BCS L2_9E20
                 STA $24
                 STY $52
-L_DE20:
+L2_9E20:
                 JSR $9E26
-                BCC L_DDF3
+                BCC L2_9DF3
                 RTS
                 LDA $1800,Y
                 AND #$1F
@@ -10524,7 +10509,7 @@ L_DE20:
                 STA $26
                 CLC
                 ADC $1700
-                BCS L_DE58
+                BCS L2_9E58
                 STA $1700
                 STY $1C
                 LDY #$FF
@@ -10532,14 +10517,14 @@ L_DE20:
                 SEC
                 SBC $26
                 TAX
-L_DE4C:
+L2_9E4C:
                 LDA $1800,X
                 STA $1800,Y
                 DEY
                 DEX
                 CPX $1C
-                BCS L_DE4C
-L_DE58:
+                BCS L2_9E4C
+L2_9E58:
                 RTS
                 STA $26
                 LDA $1700
@@ -10550,28 +10535,28 @@ L_DE58:
                 CLC
                 ADC $26
                 TAX
-L_DE69:
+L2_9E69:
                 LDA $1800,X
                 STA $1800,Y
                 INY
                 INX
-                BNE L_DE69
+                BNE L2_9E69
                 RTS
                 LDY #$00
-L_DE76:
+L2_9E76:
                 LDA $1800,Y
                 STA $5B00,Y
                 INY
-                BNE L_DE76
+                BNE L2_9E76
                 LDA $1700
                 STA $0341
                 RTS
                 LDY #$00
-L_DE88:
+L2_9E88:
                 LDA $5B00,Y
                 STA $1800,Y
                 INY
-                BNE L_DE88
+                BNE L2_9E88
                 LDA $0341
                 STA $1700
                 JMP $A073
@@ -10583,45 +10568,45 @@ L_DE88:
                 TAX
                 LDY $9EBA,X
                 LDX #$00
-L_DEA8:
+L2_9EA8:
                 LDA $9EBD,Y
                 STA $1800,X
-                BEQ L_DEB4
+                BEQ L2_9EB4
                 INY
                 INX
-                BPL L_DEA8
-L_DEB4:
+                BPL L2_9EA8
+L2_9EB4:
                 STX $1700
                 JMP $A073
                 BRK
                 ASL $11
                 RTI
-                !byte $0A
-                !byte $06
+                !by $0A
+                !by $06
                 STX $C3,Y
-                !byte $00
-                !byte $40
-                !byte $09
-                !byte $06
-                !byte $4E
-                !byte $C3
-                !byte $40
-                !byte $52
-                !byte $06
-                !byte $97
-                !byte $C3
+                !by $00
+                !by $40
+                !by $09
+                !by $06
+                !by $4E
+                !by $C3
+                !by $40
+                !by $52
+                !by $06
+                !by $97
+                !by $C3
                 BRK
                 RTI
                 PHP
                 ASL $36
-                !byte $C3
+                !by $C3
                 RTI
                 AND $6706,Y
-                !byte $C3
+                !by $C3
                 RTI
                 ROR
                 ASL $98
-                !byte $C3
+                !by $C3
                 BRK
                 LDA $29
                 AND #$76
@@ -10630,33 +10615,33 @@ L_DEB4:
                 AND #$EF
                 STA $38
                 LDX #$07
-L_DEEC:
+L2_9EEC:
                 LDA $9F00,X
                 STA $0B,X
                 DEX
-                BPL L_DEEC
+                BPL L2_9EEC
                 JSR $8D70
                 LDA #$B8
                 STA $0B
                 STA $0F
                 JMP $8D70
-                !byte $17
+                !by $17
                 BRK
-                !byte $C7
+                !by $C7
                 BRK
-                !byte $17
+                !by $17
                 BRK
                 BRK
                 BRK
                 LDA #$00
                 TAX
-                BEQ L_DF15
+                BEQ L2_9F15
                 LDA #$80
-                BNE L_DF13
+                BNE L2_9F13
                 LDA #$00
-L_DF13:
+L2_9F13:
                 LDX #$FF
-L_DF15:
+L2_9F15:
                 STA $1F
                 STX $24
                 LDX #$17
@@ -10669,34 +10654,34 @@ L_DF15:
                 STY $05
                 LDA #$19
                 STA $26
-L_DF2D:
+L2_9F2D:
                 LDY #$A0
                 BIT $1F
-                BMI L_DF3E
-L_DF33:
+                BMI L2_9F3E
+L2_9F33:
                 LDA ($04),Y
                 AND $24
                 STA ($02),Y
                 DEY
-                BNE L_DF33
-                BEQ L_DF45
-L_DF3E:
+                BNE L2_9F33
+                BEQ L2_9F45
+L2_9F3E:
                 LDA ($02),Y
                 STA ($04),Y
                 DEY
-                BNE L_DF3E
-L_DF45:
+                BNE L2_9F3E
+L2_9F45:
                 LDX #$02
                 JSR $8331
                 LDA $04
                 CLC
                 ADC #$A0
                 STA $04
-                BCC L_DF55
+                BCC L2_9F55
                 INC $05
-L_DF55:
+L2_9F55:
                 DEC $26
-                BNE L_DF2D
+                BNE L2_9F2D
                 RTS
                 LDX $0E3D
                 LDY $0E3E
@@ -10713,11 +10698,11 @@ L_DF55:
                 LDA $37
                 JSR $9F86
                 BIT $38
-                BVC L_DF85
+                BVC L2_9F85
                 LDA #$02
                 JSR $9F86
                 JSR $9B2C
-L_DF85:
+L2_9F85:
                 RTS
                 ASL
                 ASL
@@ -10725,7 +10710,7 @@ L_DF85:
                 ASL
                 TAY
                 LDX #$10
-L_DF8D:
+L2_9F8D:
                 LDA $6D50,Y
                 EOR #$FF
                 STA $6D50,Y
@@ -10734,14 +10719,14 @@ L_DF8D:
                 STA $6E90,Y
                 INY
                 DEX
-                BNE L_DF8D
+                BNE L2_9F8D
                 RTS
                 LDA $0B
                 SEC
                 SBC #$18
-                BCC L_DFE3
+                BCC L2_9FE3
                 CMP #$50
-                BCS L_DFD4
+                BCS L2_9FD4
                 LSR
                 LSR
                 LSR
@@ -10750,9 +10735,9 @@ L_DF8D:
                 LDA $0D
                 SEC
                 SBC #$40
-                BCC L_DFE3
+                BCC L2_9FE3
                 CMP #$40
-                BCS L_DFD4
+                BCS L2_9FD4
                 AND #$F0
                 LSR
                 LSR
@@ -10764,41 +10749,41 @@ L_DF8D:
                 TAX
                 JMP ($0E41)
                 LDA $9FE4,X
-                !byte $4C
-                !byte $C3
-                !byte $99
-L_DFD4:
-                !byte $A5
-                !byte $0D
-                !byte $C9
-                !byte $B8
-                !byte $90
-                !byte $09
-                !byte $A5
-                !byte $0B
-                !byte $C9
-                !byte $68
-                !byte $90
-                !byte $03
-                !byte $20
-                !byte $B8
-                !byte $8A
-L_DFE3:
-                !byte $60
-                !byte $C3
-                !byte $B9
-                !byte $76
-                !byte $66
-                !byte $B7
-                !byte $62
+                !by $4C
+                !by $C3
+                !by $99
+L2_9FD4:
+                !by $A5
+                !by $0D
+                !by $C9
+                !by $B8
+                !by $90
+                !by $09
+                !by $A5
+                !by $0B
+                !by $C9
+                !by $68
+                !by $90
+                !by $03
+                !by $20
+                !by $B8
+                !by $8A
+L2_9FE3:
+                !by $60
+                !by $C3
+                !by $B9
+                !by $76
+                !by $66
+                !by $B7
+                !by $62
                 LDA $65,X
-                !byte $73
-                !byte $74
+                !by $73
+                !by $74
                 ADC ($61,X)
                 ADC ($00,X)
                 CMP ($5F,X)
                 AND ($32),Y
-                !byte $33
+                !by $33
                 CLV
                 LDX #$00
                 LDY #$60
@@ -10816,18 +10801,18 @@ L_DFE3:
                 STA $49
                 LDA #$00
                 STA $81
-L_E01B:
+L2_A01B:
                 PHA
                 TAY
                 LDA $A08F,Y
                 JSR $0DE9
                 STA $34
                 TAY
-L_E026:
+L2_A026:
                 LDA $0428,Y
                 STA $02C0,Y
                 DEY
-                BPL L_E026
+                BPL L2_A026
                 PLA
                 PHA
                 TAY
@@ -10841,14 +10826,14 @@ L_E026:
                 LDA $A090,Y
                 STA $7F
                 JSR $AEE2
-                BCS L_E04F
-                JSR L_818F
-L_E04F:
+                BCS L2_A04F
+                JSR L0_818F
+L2_A04F:
                 PLA
                 CLC
                 ADC #$04
                 CMP #$0C
-                BCC L_E01B
+                BCC L2_A01B
                 LDX #$18
                 LDY #$6C
                 STX $08
@@ -10865,16 +10850,16 @@ L_E04F:
                 JSR $9DA4
                 LDA $37
                 CMP #$01
-                BEQ L_E080
+                BEQ L2_A080
                 CMP #$04
-                BNE L_E084
-L_E080:
+                BNE L2_A084
+L2_A080:
                 LDA #$02
                 STA $37
-L_E084:
+L2_A084:
                 JSR $AF0D
                 LDX $37
-                JSR L_99E4
+                JSR L0_99E4
                 JMP $B285
                 +InsertMainScreenTextPos ; Position of texts $11, $12 a $13
                 LDA #$01
@@ -10883,160 +10868,160 @@ L_E084:
                 JSR $A107
                 JMP $A076
                 ASL $0340
-                BCS L_E0B2
+                BCS L2_A0B2
                 LDA #$40
                 STA $0340
                 RTS
-L_E0B2:
+L2_A0B2:
                 LDA #$01
                 STA $72
                 LDA #$40
                 JSR $A107
-                BNE L_E0C0
-                JSR L_837B
-L_E0C0:
+                BNE L2_A0C0
+                JSR L0_837B
+L2_A0C0:
                 JMP $A076
                 JSR $0E1B
-                BCS L_E0FE
+                BCS L2_A0FE
                 LDX #$05
-L_E0CA:
+L2_A0CA:
                 LDA $A101,X
                 STA $4C,X
                 DEX
-                BPL L_E0CA
+                BPL L2_A0CA
                 LDA #$01
                 STA $72
                 LDA #$70
                 JSR $A107
-                BNE L_E0FE
+                BNE L2_A0FE
                 JSR $0E24
-                BCS L_E0FE
+                BCS L2_A0FE
                 LDA $70
                 AND #$F7
                 CMP $70
-                BEQ L_E0FE
+                BEQ L2_A0FE
                 PHA
                 JSR $A738
                 INC $72
-                !byte $68
-                !byte $A6
-                !byte $71
-                !byte $F0
-                !byte $E3
-                !byte $8A
-                !byte $20
-                !byte $2A
-                !byte $B2
-                !byte $A9
-                !byte $00
-                !byte $20
-                !byte $10
-                !byte $0E
-L_E0FE:
-                !byte $4C
-                !byte $76
-                !byte $A0
-                !byte $00
-                !byte $00
-                !byte $63
-                !byte $4F
-                !byte $64
-                BVC $E174
-                !byte $43
+                !by $68
+                !by $A6
+                !by $71
+                !by $F0
+                !by $E3
+                !by $8A
+                !by $20
+                !by $2A
+                !by $B2
+                !by $A9
+                !by $00
+                !by $20
+                !by $10
+                !by $0E
+L2_A0FE:
+                !by $4C
+                !by $76
+                !by $A0
+                !by $00
+                !by $00
+                !by $63
+                !by $4F
+                !by $64
+                BVC $A174
+                !by $43
                 ASL $7085
                 LDA #$00
                 STA $71
-                STA L_D015
+                STA $D015
                 LDA #$18
                 LDY $1700
-                BEQ L_E18B
+                BEQ L2_A18B
                 LDX #$01
                 LDY #$19
                 STX $58
                 STY $59
                 BIT $70
-                BVC L_E129
+                BVC L2_A129
                 JSR $0FF4
-L_E129:
+L2_A129:
                 JSR $9F08
                 JSR $A19B
                 JSR $A1D8
                 JSR $A71B
                 LDA $71
-                BNE L_E18B
+                BNE L2_A18B
                 LDA $1901
-                BEQ L_E195
+                BEQ L2_A195
                 LDY #$00
                 JSR $A201
                 LDA #$18
-                BCS L_E18B
-L_E147:
+                BCS L2_A18B
+L2_A147:
                 LDY #$00
                 LDA ($58),Y
                 CMP #$01
-                BEQ L_E16D
-                BCC L_E195
+                BEQ L2_A16D
+                BCC L2_A195
                 CMP #$02
-                BNE L_E166
+                BNE L2_A166
                 LDA $70
                 ORA #$80
                 STA $70
                 JSR $A753
-                BCS L_E195
+                BCS L2_A195
                 LDA #$00
                 STA $83
-                BCC L_E17E
-L_E166:
+                BCC L2_A17E
+L2_A166:
                 JSR $A250
-                BCC L_E17E
-                BCS L_E177
-L_E16D:
+                BCC L2_A17E
+                BCS L2_A177
+L2_A16D:
                 LDA #$00
                 STA $83
                 INC $58
-                BNE L_E177
+                BNE L2_A177
                 INC $59
-L_E177:
+L2_A177:
                 JSR $A1FA
                 LDA #$19
-                BCS L_E18B
-L_E17E:
+                BCS L2_A18B
+L2_A17E:
                 LDA $71
-                BNE L_E18B
+                BNE L2_A18B
                 JSR CBM_GETIN
                 CMP #$B3
-                BNE L_E147
+                BNE L2_A147
                 LDA #$1B
-L_E18B:
+L2_A18B:
                 STA $71
                 JSR $B22A
                 LDA #$00
                 JSR $0E10
-L_E195:
+L2_A195:
                 JSR $9E74
                 LDA $71
                 RTS
                 LDX #$0B
-L_E19D:
+L2_A19D:
                 LDA $A1CC,X
                 STA $79,X
                 DEX
-                BPL L_E19D
+                BPL L2_A19D
                 LDA #$00
                 STA $3C00
                 JSR $AEAA
                 LDA #$00
                 LDX #$0F
-L_E1B1:
+L2_A1B1:
                 STA $0345,X
                 DEX
-                BPL L_E1B1
+                BPL L2_A1B1
                 LDA #$FF
                 LDX #$07
-L_E1BB:
+L2_A1BB:
                 STA $023E,X
                 DEX
-                BPL L_E1BB
+                BPL L2_A1BB
                 LDX #$78
                 LDY #$04
                 STX $0246
@@ -11053,7 +11038,7 @@ L_E1BB:
                 BRK
                 BRK
                 LDY #$00
-L_E1DA:
+L2_A1DA:
                 LDA $1800,Y
                 ASL
                 ORA $1800,Y
@@ -11067,14 +11052,14 @@ L_E1DA:
                 ORA $1C
                 STA $1800,Y
                 JSR $9E26
-                BCC L_E1DA
+                BCC L2_A1DA
                 RTS
                 LDY $52
-L_E1FC:
+L2_A1FC:
                 JSR $9E26
-                BCS L_E24F
+                BCS L2_A24F
                 LDA $1800,Y
-                BMI L_E1FC
+                BMI L2_A1FC
                 STY $52
                 ORA #$40
                 STA $1800,Y
@@ -11089,10 +11074,10 @@ L_E1FC:
                 ROL
                 STA $65
                 TXA
-                BEQ L_E24E
+                BEQ L2_A24E
                 LDA $1805,Y
                 CMP #$A0
-                BCC L_E237
+                BCC L2_A237
                 AND #$1C
                 STA $1C
                 LDA $7C
@@ -11101,45 +11086,45 @@ L_E1FC:
                 STA $7C
                 DEX
                 INY
-L_E237:
+L2_A237:
                 TXA
-                BEQ L_E24E
+                BEQ L2_A24E
                 STA $26
                 LDX #$01
-L_E23E:
+L2_A23E:
                 LDA $1805,Y
                 STA $0345,X
                 INY
                 INX
                 CPX #$10
-                BCS L_E24E
+                BCS L2_A24E
                 DEC $26
-                BNE L_E23E
-L_E24E:
+                BNE L2_A23E
+L2_A24E:
                 CLC
-L_E24F:
+L2_A24F:
                 RTS
                 LDA $70
                 AND #$7F
                 STA $70
                 JSR $A29F
-                BCS L_E29E
+                BCS L2_A29E
                 JSR $A674
                 LDY #$00
                 LDA ($58),Y
                 CMP #$0D
-                BEQ L_E277
+                BEQ L2_A277
                 LDA $0D
                 STA $11
                 LDA #$00
                 LDX #$07
-L_E26E:
+L2_A26E:
                 STA $0B,X
                 DEX
                 DEX
-                BPL L_E26E
+                BPL L2_A26E
                 JSR $8D70
-L_E277:
+L2_A277:
                 LDA $70
                 ORA #$80
                 STA $70
@@ -11154,14 +11139,14 @@ L_E277:
                 ADC $7A
                 ADC $64
                 STA $64
-                BCC L_E296
+                BCC L2_A296
                 INC $65
-L_E296:
+L2_A296:
                 JSR $A9EE
                 STA $58
                 STY $59
                 CLC
-L_E29E:
+L2_A29E:
                 RTS
                 LDA $64
                 STA $0D
@@ -11173,17 +11158,17 @@ L_E29E:
                 LDA $7C
                 AND #$FC
                 STA $7C
-L_E2B1:
+L2_A2B1:
                 LDA $0D
                 LDY $52
                 CMP $1804,Y
-                BCS L_E313
+                BCS L2_A313
                 LDA $1801,Y
                 STA $0B
                 LDA $1803,Y
                 STA $0F
                 JSR $A314
-                BCS L_E2F4
+                BCS L2_A2F4
                 JSR $A44C
                 LDA $64
                 CLC
@@ -11198,7 +11183,7 @@ L_E2B1:
                 LDA $0D
                 LDY $52
                 CMP $1804,Y
-                BCS L_E313
+                BCS L2_A313
                 LDA $67
                 PHA
                 LDA $66
@@ -11207,8 +11192,8 @@ L_E2B1:
                 PLA
                 TAX
                 PLA
-                BCC L_E307
-L_E2F4:
+                BCC L2_A307
+L2_A2F4:
                 LDA #$00
                 STA $65
                 LDA $1804,Y
@@ -11218,31 +11203,31 @@ L_E2F4:
                 ASL
                 ROL $65
                 STA $64
-                BCC L_E2B1
-L_E307:
+                BCC L2_A2B1
+L2_A307:
                 CPX $66
-                BNE L_E30F
+                BNE L2_A30F
                 CMP $67
-                BEQ L_E312
-L_E30F:
+                BEQ L2_A312
+L2_A30F:
                 JSR $A44C
-L_E312:
+L2_A312:
                 CLC
-L_E313:
+L2_A313:
                 RTS
                 LDY #$00
                 CPY $52
-                BEQ L_E38F
+                BEQ L2_A38F
                 LDA $1800,Y
                 AND #$40
-                BEQ L_E38F
+                BEQ L2_A38F
                 LDA $0D
                 CMP $1802,Y
-                BCC L_E38F
+                BCC L2_A38F
                 CMP $1804,Y
-                BCS L_E38F
+                BCS L2_A38F
                 JSR $A3B5
-                BCS L_E38F
+                BCS L2_A38F
                 LDX $0B
                 CPX $1D
                 ROL
@@ -11254,11 +11239,11 @@ L_E313:
                 CPX $1D
                 ROL
                 AND #$0F
-                BEQ L_E38F
+                BEQ L2_A38F
                 CMP #$0F
-                BEQ L_E38F
+                BEQ L2_A38F
                 CMP #$06
-                BEQ L_E3B4
+                BEQ L2_A3B4
                 TAX
                 LDA $1C
                 SEC
@@ -11269,40 +11254,40 @@ L_E313:
                 SBC $1D
                 STA $1D
                 CPX #$03
-                BNE L_E369
+                BNE L2_A369
                 LDA $1C
                 CMP $1D
-                BCS L_E36D
-                BCC L_E37F
-L_E369:
+                BCS L2_A36D
+                BCC L2_A37F
+L2_A369:
                 CPX #$02
-                BNE L_E37B
-L_E36D:
+                BNE L2_A37B
+L2_A36D:
                 LDA #$19
                 CMP $1C
-                BCS L_E3B4
+                BCS L2_A3B4
                 LDA $1A
                 STA $0F
                 LDA #$01
-                BCC L_E38B
-L_E37B:
+                BCC L2_A38B
+L2_A37B:
                 CPX #$07
-                BNE L_E38F
-L_E37F:
+                BNE L2_A38F
+L2_A37F:
                 LDA #$19
                 CMP $1D
-                BCS L_E3B4
+                BCS L2_A3B4
                 LDA $1B
                 STA $0B
                 LDA #$02
-L_E38B:
+L2_A38B:
                 ORA $7C
                 STA $7C
-L_E38F:
+L2_A38F:
                 JSR $9E26
-                BCS L_E397
+                BCS L2_A397
                 JMP $A316
-L_E397:
+L2_A397:
                 LDA #$00
                 STA $63
                 STA $67
@@ -11320,20 +11305,20 @@ L_E397:
                 ASL
                 ROL $67
                 STA $66
-L_E3B4:
+L2_A3B4:
                 RTS
                 LDA $1800,Y
                 AND #$A0
                 CMP #$A0
-                BNE L_E3C9
+                BNE L2_A3C9
                 LDX #$07
                 TYA
-L_E3C1:
+L2_A3C1:
                 CMP $023E,X
-                BEQ L_E3DD
+                BEQ L2_A3DD
                 DEX
-                BPL L_E3C1
-L_E3C9:
+                BPL L2_A3C1
+L2_A3C9:
                 LDX $1801,Y
                 STX $1A
                 INX
@@ -11346,7 +11331,7 @@ L_E3C9:
                 STX $1D
                 CLC
                 RTS
-L_E3DD:
+L2_A3DD:
                 TXA
                 ASL
                 TAX
@@ -11369,14 +11354,14 @@ L_E3DD:
                 LDX #$00
                 LDA ($02,X)
                 CMP #$FE
-                BEQ L_E428
+                BEQ L2_A428
                 CLC
                 ADC $1801,Y
                 SEC
                 SBC $1D
-                BCS L_E411
+                BCS L2_A411
                 LDA #$00
-L_E411:
+L2_A411:
                 STA $1C
                 STA $1A
                 INC $02
@@ -11384,18 +11369,18 @@ L_E411:
                 CLC
                 ADC $1801,Y
                 ADC $1D
-                BCC L_E423
+                BCC L2_A423
                 LDA #$A0
-L_E423:
+L2_A423:
                 STA $1D
                 STA $1B
                 CLC
-L_E428:
+L2_A428:
                 RTS
                 LDX #$00
                 STX $1E
                 LDY #$10
-L_E42F:
+L2_A42F:
                 ASL $1C
                 ROL $1D
                 ROL $1E
@@ -11405,23 +11390,23 @@ L_E42F:
                 LDA $1E
                 SEC
                 SBC $26
-                BCS L_E444
+                BCS L2_A444
                 CPX #$01
-                BCC L_E448
+                BCC L2_A448
                 DEX
-L_E444:
+L2_A444:
                 STA $1E
                 INC $1C
-L_E448:
+L2_A448:
                 DEY
-                BNE L_E42F
+                BNE L2_A42F
                 RTS
                 LDA #$00
                 LDX #$08
-L_E450:
+L2_A450:
                 STA $85,X
                 DEX
-                BPL L_E450
+                BPL L2_A450
                 JSR $AA2C
                 JSR $AA53
                 LDA $7D
@@ -11431,70 +11416,70 @@ L_E450:
                 AND #$DF
                 STA $7C
                 LDX #$00
-L_E469:
+L2_A469:
                 LDA $7F,X
                 PHA
                 INX
                 CPX #$06
-                BCC L_E469
-L_E471:
+                BCC L2_A469
+L2_A471:
                 JSR $A9CD
                 JSR $A9F9
-                BCS L_E487
+                BCS L2_A487
                 LDA #$2D
                 JSR $AAA7
-                BCS L_E4E5
+                BCS L2_A4E5
                 LDA #$40
                 JSR $AA19
                 DEC $86
-L_E487:
+L2_A487:
                 JSR $A512
-                BCS L_E4E5
+                BCS L2_A4E5
                 LDA $61
                 JSR $A8B8
-                BCC L_E471
+                BCC L2_A471
                 CMP #$0D
-                BEQ L_E501
+                BEQ L2_A501
                 CMP #$03
-                BCC L_E4FF
+                BCC L2_A4FF
                 CMP #$09
-                BNE L_E4AE
+                BNE L2_A4AE
                 LDA #$2D
                 JSR $AAA7
-                BCS L_E4E5
+                BCS L2_A4E5
                 LDA #$40
                 JSR $AA19
                 JMP $A471
-L_E4AE:
+L2_A4AE:
                 CMP #$2D
-                BNE L_E4BF
+                BNE L2_A4BF
                 JSR $AA9B
-                BCS L_E4E5
+                BCS L2_A4E5
                 LDA #$00
                 JSR $AA19
                 JMP $A471
-L_E4BF:
+L2_A4BF:
                 CMP #$20
-                BNE L_E4D6
+                BNE L2_A4D6
                 INC $89
                 LDX $68
                 LDY $69
                 LDA #$00
                 JSR $AA19
                 JSR $AA9B
-                BCS L_E4E5
+                BCS L2_A4E5
                 JMP $A471
-L_E4D6:
-                BCC L_E4E2
+L2_A4D6:
+                BCC L2_A4E2
                 CMP $3C03
-                BCS L_E4E2
+                BCS L2_A4E2
                 JSR $AA9B
-                BCS L_E4E5
-L_E4E2:
+                BCS L2_A4E5
+L2_A4E2:
                 JMP $A471
-L_E4E5:
+L2_A4E5:
                 LDA $86
-                BEQ L_E4FF
+                BEQ L2_A4FF
                 STA $85
                 LDX $6A
                 LDY $6B
@@ -11504,38 +11489,38 @@ L_E4E5:
                 DEY
                 LDA ($58),Y
                 CMP #$20
-                BNE L_E507
+                BNE L2_A507
                 DEC $89
-                BCS L_E507
-L_E4FF:
+                BCS L2_A507
+L2_A4FF:
                 DEC $85
-L_E501:
+L2_A501:
                 LDA $7D
                 AND #$9F
                 STA $7D
-L_E507:
+L2_A507:
                 LDX #$05
-L_E509:
+L2_A509:
                 PLA
                 STA $7F,X
                 DEX
-                BPL L_E509
+                BPL L2_A509
                 JMP $AEAA
                 BIT $7D
-                BPL L_E568
+                BPL L2_A568
                 LDA $83
                 CMP #$E8
-                BNE L_E522
+                BNE L2_A522
                 LDX #$00
                 STX $8B
                 STX $8A
-L_E522:
+L2_A522:
                 AND #$0F
                 CMP #$08
-                BEQ L_E52C
+                BEQ L2_A52C
                 CMP #$0E
-                BNE L_E562
-L_E52C:
+                BNE L2_A562
+L2_A52C:
                 LDA $61
                 AND #$1F
                 TAX
@@ -11553,73 +11538,73 @@ L_E52C:
                 STA $022F,Y
                 LDA $8B
                 CMP #$05
-                BCC L_E568
+                BCC L2_A568
                 AND #$03
                 CMP #$01
-                BNE L_E568
+                BNE L2_A568
                 LDX #$03
                 BIT $7D
-                BVS L_E55C
+                BVS L2_A55C
                 INX
-L_E55C:
+L2_A55C:
                 CPX $8A
-                BCS L_E568
-                BCC L_E56A
-L_E562:
+                BCS L2_A568
+                BCC L2_A56A
+L2_A562:
                 LDA #$00
                 STA $8A
                 STA $8B
-L_E568:
+L2_A568:
                 CLC
                 RTS
-L_E56A:
+L2_A56A:
                 LDY $85
                 DEY
                 DEY
                 STY $1E
                 LDX #$03
-L_E572:
+L2_A572:
                 LDA ($58),Y
                 JSR $B296
                 STA $0200,X
                 DEY
                 DEX
-                BPL L_E572
+                BPL L2_A572
                 LDY #$63
-L_E580:
+L2_A580:
                 LDX #$03
-L_E582:
+L2_A582:
                 LDA $A610,Y
-                BEQ L_E5A0
+                BEQ L2_A5A0
                 CMP $0200,X
-                BNE L_E592
+                BNE L2_A592
                 DEX
                 DEY
-                BPL L_E582
-                BMI L_E5AF
-L_E592:
+                BPL L2_A582
+                BMI L2_A5AF
+L2_A592:
                 DEY
                 DEY
-                BMI L_E5AF
-L_E596:
+                BMI L2_A5AF
+L2_A596:
                 LDA $A611,Y
-                BEQ L_E580
+                BEQ L2_A580
                 DEY
-                BPL L_E596
-                BMI L_E5AF
-L_E5A0:
+                BPL L2_A596
+                BMI L2_A5AF
+L2_A5A0:
                 LDA #$60
                 CPY #$00
-                BEQ L_E5B1
+                BEQ L2_A5B1
                 TXA
                 CLC
                 ADC $1E
                 SEC
                 SBC #$02
                 STA $1E
-L_E5AF:
+L2_A5AF:
                 LDA #$40
-L_E5B1:
+L2_A5B1:
                 STA $1D
                 LDA #$2D
                 JSR $AAA7
@@ -11642,7 +11627,7 @@ L_E5B1:
                 TAY
                 ROL $1C
                 SBC $67
-                BCS L_E5EA
+                BCS L2_A5EA
                 STX $6A
                 STY $6B
                 LDY $1E
@@ -11652,7 +11637,7 @@ L_E5B1:
                 ORA $1D
                 STA $7D
                 CLC
-L_E5EA:
+L2_A5EA:
                 LDX #$01
                 STX $8B
                 INX
@@ -11672,112 +11657,112 @@ L_E5EA:
                 ORA ($00,X)
                 BRK
                 BRK
-                !byte $00
-                !byte $00
-                !byte $01
-                !byte $00
-                !byte $00
-                !byte $00
-                !byte $01
-                !byte $00
-                !byte $01
-                !byte $01
-                !byte $01
-                !byte $00
-                !byte $00
-                !byte $43
-                !byte $4B
-                !byte $00
-                !byte $42
-                !byte $4C
-                !byte $00
-                !byte $42
-                !byte $52
-                !byte $00
-                !byte $43
-                !byte $48
-                !byte $00
-                !byte $44
-                !byte $52
-                !byte $00
-                !byte $46
-                !byte $4C
-                !byte $00
-                !byte $46
-                !byte $52
-                !byte $00
-                !byte $47
+                !by $00
+                !by $00
+                !by $01
+                !by $00
+                !by $00
+                !by $00
+                !by $01
+                !by $00
+                !by $01
+                !by $01
+                !by $01
+                !by $00
+                !by $00
+                !by $43
+                !by $4B
+                !by $00
+                !by $42
+                !by $4C
+                !by $00
+                !by $42
+                !by $52
+                !by $00
+                !by $43
+                !by $48
+                !by $00
+                !by $44
+                !by $52
+                !by $00
+                !by $46
+                !by $4C
+                !by $00
+                !by $46
+                !by $52
+                !by $00
+                !by $47
                 JMP $4700
-                !byte $52
+                !by $52
                 BRK
-                !byte $4B
+                !by $4B
                 JMP $4B00
-                !byte $4E
-                !byte $00
-                !byte $4B
-                !byte $52
-                !byte $00
-                !byte $50
-                !byte $48
-                !byte $00
-                !byte $50
-                !byte $46
-                !byte $00
-                !byte $50
-                !byte $4C
-                !byte $00
-                !byte $50
-                !byte $52
-                !byte $00
-                !byte $53
-                !byte $50
-                !byte $00
-                !byte $53
-                !byte $54
-                !byte $00
-                !byte $54
-                !byte $48
-                !byte $00
-                !byte $54
-                !byte $52
-                !byte $00
-                !byte $5A
-                !byte $57
-                !byte $00
-                !byte $53
-                !byte $43
-                !byte $48
-                !byte $00
-                !byte $53
-                !byte $50
-                !byte $52
-                !byte $00
-                !byte $53
-                !byte $54
-                !byte $52
-                !byte $00
-                !byte $53
-                !byte $43
-                !byte $48
-                !byte $4C
-                !byte $00
-                !byte $53
-                !byte $43
-                !byte $48
-                !byte $4E
-                !byte $00
-                !byte $53
-                !byte $43
-                !byte $48
-                !byte $57
-                !byte $00
-                !byte $53
-                !byte $43
+                !by $4E
+                !by $00
+                !by $4B
+                !by $52
+                !by $00
+                !by $50
+                !by $48
+                !by $00
+                !by $50
+                !by $46
+                !by $00
+                !by $50
+                !by $4C
+                !by $00
+                !by $50
+                !by $52
+                !by $00
+                !by $53
+                !by $50
+                !by $00
+                !by $53
+                !by $54
+                !by $00
+                !by $54
+                !by $48
+                !by $00
+                !by $54
+                !by $52
+                !by $00
+                !by $5A
+                !by $57
+                !by $00
+                !by $53
+                !by $43
+                !by $48
+                !by $00
+                !by $53
+                !by $50
+                !by $52
+                !by $00
+                !by $53
+                !by $54
+                !by $52
+                !by $00
+                !by $53
+                !by $43
+                !by $48
+                !by $4C
+                !by $00
+                !by $53
+                !by $43
+                !by $48
+                !by $4E
+                !by $00
+                !by $53
+                !by $43
+                !by $48
+                !by $57
+                !by $00
+                !by $53
+                !by $43
                 PHA
                 EOR $5300
-                !byte $43
+                !by $43
                 PHA
-                !byte $52
+                !by $52
                 LDA $66
                 SEC
                 SBC $68
@@ -11795,24 +11780,24 @@ L_E5EA:
                 STA $1D
                 LDA $7C
                 BIT $1D
-                BEQ L_E6A0
+                BEQ L2_A6A0
                 AND #$0F
                 TAY
                 LDA $7C
                 AND #$20
                 ORA $A70B,Y
-L_E6A0:
+L2_A6A0:
                 AND #$2C
-                BEQ L_E6E8
+                BEQ L2_A6E8
                 CMP #$0C
-                BEQ L_E6B3
+                BEQ L2_A6B3
                 AND #$28
-                BEQ L_E6C6
+                BEQ L2_A6C6
                 LSR $6D
                 ROR $6C
                 LSR $1E
                 CLC
-L_E6B3:
+L2_A6B3:
                 PHP
                 LDA $68
                 CLC
@@ -11822,129 +11807,129 @@ L_E6B3:
                 ADC $6D
                 STA $69
                 PLP
-                BCC L_E6E8
-                BCS L_E6EF
-L_E6C6:
+                BCC L2_A6E8
+                BCS L2_A6EF
+L2_A6C6:
                 LDY $85
                 DEY
                 LDA ($58),Y
                 CMP #$0D
-                BEQ L_E6E8
+                BEQ L2_A6E8
                 LDY #$00
                 LDX $89
-                BEQ L_E6F3
+                BEQ L2_A6F3
                 LDX $6C
-L_E6D7:
+L2_A6D7:
                 CPX $89
                 LDA $6D
                 SBC #$00
-                BCC L_E6F3
+                BCC L2_A6F3
                 STA $6D
                 TXA
                 SBC $89
                 TAX
                 INY
-                BNE L_E6D7
-L_E6E8:
+                BNE L2_A6D7
+L2_A6E8:
                 LDA $0F
                 SEC
                 SBC $1E
                 STA $0F
-L_E6EF:
+L2_A6EF:
                 LDX #$00
                 LDY #$00
-L_E6F3:
+L2_A6F3:
                 STX $6F
                 STY $6E
                 LDA $69
                 STA $1C
                 LDA $68
                 LSR $1C
-                !byte $6A
-                !byte $46
-                !byte $1C
-                !byte $6A
-                !byte $18
-                !byte $65
-                !byte $0B
-                !byte $85
-                !byte $0B
-                !byte $C6
-                !byte $0F
-                !byte $60
-                !byte $00
-                !byte $04
-                !byte $00
-                !byte $04
-                !byte $04
-                !byte $00
-                !byte $0C
-                !byte $08
-                !byte $08
-                !byte $0C
-                !byte $00
-                !byte $04
-                !byte $0C
-                !byte $0C
-                !byte $04
-                !byte $04
+                !by $6A
+                !by $46
+                !by $1C
+                !by $6A
+                !by $18
+                !by $65
+                !by $0B
+                !by $85
+                !by $0B
+                !by $C6
+                !by $0F
+                !by $60
+                !by $00
+                !by $04
+                !by $00
+                !by $04
+                !by $04
+                !by $00
+                !by $0C
+                !by $08
+                !by $08
+                !by $0C
+                !by $00
+                !by $04
+                !by $0C
+                !by $0C
+                !by $04
+                !by $04
                 LDA $1700
-                BEQ L_E737
+                BEQ L2_A737
                 LDY #$00
                 STY $35
-L_E724:
+L2_A724:
                 STY $52
                 LDA $1800,Y
-                BPL L_E730
+                BPL L2_A730
                 JSR $B10F
-                BCS L_E737
-L_E730:
+                BCS L2_A737
+L2_A730:
                 LDY $52
                 JSR $9E26
-                BCC L_E724
-L_E737:
+                BCC L2_A724
+L2_A737:
                 RTS
                 LDY #$01
-L_E73A:
+L2_A73A:
                 LDA ($58),Y
                 CMP #$22
-                BEQ L_E747
+                BEQ L2_A747
                 INY
                 CPY #$11
-                BCC L_E73A
-                BCS L_E752
-L_E747:
+                BCC L2_A73A
+                BCS L2_A752
+L2_A747:
                 TYA
                 LDX $58
                 LDY $59
                 JSR CBM_SETNAM
                 JSR $B0A8
-L_E752:
+L2_A752:
                 RTS
                 LDA #$00
                 STA $85
-L_E757:
+L2_A757:
                 JSR $A9CD
                 CMP #$02
-                BCC L_E78C
+                BCC L2_A78C
                 CMP #$0D
-                BEQ L_E78F
+                BEQ L2_A78F
                 CMP #$22
-                BEQ L_E798
+                BEQ L2_A798
                 JSR $B296
                 LDX #$08
-L_E76B:
+L2_A76B:
                 DEX
-                BMI L_E757
+                BMI L2_A757
                 CMP $A7A7,X
-                BNE L_E76B
+                BNE L2_A76B
                 TXA
                 PHA
                 JSR $B2F3
                 TAX
                 PLA
                 CPX #$00
-                BEQ L_E757
+                BEQ L2_A757
                 TAY
                 ASL
                 TAX
@@ -11954,46 +11939,46 @@ L_E76B:
                 PHA
                 LDA $1A
                 RTS
-L_E78C:
+L2_A78C:
                 JSR $A9E5
-L_E78F:
+L2_A78F:
                 JSR $A9EE
                 STA $58
                 STY $59
                 CLC
                 RTS
-L_E798:
+L2_A798:
                 LDA $70
                 ORA #$08
-                !byte $85
-                !byte $70
-                !byte $20
-                !byte $EE
-                !byte $A9
-                !byte $85
-                !byte $58
-                !byte $84
-                !byte $59
-                !byte $38
-                !byte $60
-                !byte $48
-                !byte $56
-                !byte $4B
-                !byte $5A
-                !byte $2D
-                !byte $4E
-                !byte $B8
-                !byte $A7
-                !byte $B8
-                !byte $A7
-                !byte $B8
-                !byte $A7
+                !by $85
+                !by $70
+                !by $20
+                !by $EE
+                !by $A9
+                !by $85
+                !by $58
+                !by $84
+                !by $59
+                !by $38
+                !by $60
+                !by $48
+                !by $56
+                !by $4B
+                !by $5A
+                !by $2D
+                !by $4E
+                !by $B8
+                !by $A7
+                !by $B8
+                !by $A7
+                !by $B8
+                !by $A7
                 LDX $C6A7,Y
-                !byte $A7
-                CPY L_99A7
+                !by $A7
+                CPY L0_99A7
                 ADC $4C00,Y
-                !byte $57
-                !byte $A7
+                !by $57
+                !by $A7
                 STA $7F
                 JSR $AEAA
                 JMP $A757
@@ -12009,26 +11994,26 @@ L_E798:
                 STA $88
                 STA $89
                 STA $87
-L_E7E0:
+L2_A7E0:
                 JSR $A9CD
                 JSR $A9F9
                 CMP #$0D
-                BNE L_E7EF
+                BNE L2_A7EF
                 LDA #$00
                 STA $84
                 RTS
-L_E7EF:
+L2_A7EF:
                 JSR $A8B8
-                BCC L_E839
+                BCC L2_A839
                 BIT $70
-                BVC L_E839
+                BVC L2_A839
                 CMP #$20
-                BNE L_E81A
+                BNE L2_A81A
                 LDY $85
                 CPY $86
-                BCS L_E805
+                BCS L2_A805
                 JSR $ABB7
-L_E805:
+L2_A805:
                 JSR $AA9B
                 INC $89
                 LDA $6F
@@ -12036,53 +12021,53 @@ L_E805:
                 LDA $68
                 ADC $6E
                 STA $68
-                BCC L_E839
+                BCC L2_A839
                 INC $69
-                BCS L_E839
-L_E81A:
-                BCC L_E839
+                BCS L2_A839
+L2_A81A:
+                BCC L2_A839
                 CMP $3C03
-                BCS L_E839
+                BCS L2_A839
                 LDA $7D
                 ASL
                 ASL
                 ASL
                 LDA $61
-                BCC L_E833
+                BCC L2_A833
                 LDY $85
                 CPY $86
-                BCC L_E833
+                BCC L2_A833
                 CLC
                 ADC #$08
-L_E833:
+L2_A833:
                 JSR $AACF
                 JSR $AA9B
-L_E839:
+L2_A839:
                 LDY $85
                 CPY $86
-                BCC L_E7E0
+                BCC L2_A7E0
                 BIT $70
-                BVC L_E84C
+                BVC L2_A84C
                 BIT $7D
-                BVC L_E84C
+                BVC L2_A84C
                 LDA #$2D
                 JSR $AACF
-L_E84C:
+L2_A84C:
                 RTS
                 LDA #$00
                 STA $8C
                 STA $8D
                 JSR $AEE2
-                BCS L_E8A4
+                BCS L2_A8A4
                 LDA #$58
                 STA $62
                 LDA #$30
                 SEC
                 SBC $78
                 SBC $8C
-                BCS L_E867
+                BCS L2_A867
                 LDA #$00
-L_E867:
+L2_A867:
                 LSR
                 ADC #$49
                 STA $64
@@ -12102,78 +12087,78 @@ L_E867:
                 STA $70
                 LDY $85
                 CPY #$13
-                BCS L_E8A4
+                BCS L2_A8A4
                 INC $85
                 LDA $A8A5,Y
                 STA $61
                 JSR $AAA7
-                !byte $B0
-                !byte $0A
-                !byte $A5
-                !byte $61
-                !byte $20
-                !byte $CF
-                !byte $AA
-                !byte $20
-                !byte $9B
-                !byte $AA
-                !byte $90
-                !byte $E4
-L_E8A4:
-                !byte $60
-                !byte $54
-                !byte $68
-                !byte $65
-                !byte $20
-                !byte $51
-                !byte $75
-                !byte $69
-                !byte $63
-                !byte $6B
+                !by $B0
+                !by $0A
+                !by $A5
+                !by $61
+                !by $20
+                !by $CF
+                !by $AA
+                !by $20
+                !by $9B
+                !by $AA
+                !by $90
+                !by $E4
+L2_A8A4:
+                !by $60
+                !by $54
+                !by $68
+                !by $65
+                !by $20
+                !by $51
+                !by $75
+                !by $69
+                !by $63
+                !by $6B
                 JSR $7242
-                !byte $6F
-                !byte $77
+                !by $6F
+                !by $77
                 ROR $4620
-                !byte $6F
+                !by $6F
                 SEI
                 CMP #$20
-                BCS L_E8C7
+                BCS L2_A8C7
                 LDX #$10
-L_E8BE:
+L2_A8BE:
                 CMP $A8D4,X
-                BEQ L_E8C8
+                BEQ L2_A8C8
                 DEX
-                BPL L_E8BE
+                BPL L2_A8BE
                 SEC
-L_E8C7:
+L2_A8C7:
                 RTS
-L_E8C8:
-                !byte $8A
-                !byte $0A
-                !byte $A8
-                !byte $B9
-                !byte $E6
-                !byte $A8
-                !byte $48
-                !byte $B9
-                !byte $E5
-                !byte $A8
-                !byte $48
-                !byte $60
-                !byte $03
-                !byte $04
-                !byte $05
-                !byte $0B
-                !byte $0C
-                !byte $18
-                !byte $19
+L2_A8C8:
+                !by $8A
+                !by $0A
+                !by $A8
+                !by $B9
+                !by $E6
+                !by $A8
+                !by $48
+                !by $B9
+                !by $E5
+                !by $A8
+                !by $48
+                !by $60
+                !by $03
+                !by $04
+                !by $05
+                !by $0B
+                !by $0C
+                !by $18
+                !by $19
                 ASL $0706
                 PHP
                 ASL
-                !byte $0F
-                !byte $1A
-                BPL $E8F5
-                !byte $12
+                !by $0F
+                !by $1A
+                BPL $A8F5
+                !by $12
                 ROL
                 LDA #$2A
                 LDA #$2A
@@ -12194,25 +12179,25 @@ L_E8C8:
                 LDA #$A9
                 BRK
                 STA $82
-                BEQ L_E930
+                BEQ L2_A930
                 LDA #$02
                 STA $72,X
                 LDY $85
                 LDA ($58),Y
                 CMP #$30
-                BCC L_E92B
+                BCC L2_A92B
                 CMP #$39
-                BCS L_E92B
+                BCS L2_A92B
                 JSR $A9CD
                 AND #$0F
                 STA $72,X
                 LDA $90D4,X
                 ORA $81
-                BNE L_E930
-L_E92B:
+                BNE L2_A930
+L2_A92B:
                 LDA $90D4,X
                 EOR $81
-L_E930:
+L2_A930:
                 STA $81
                 JSR $AA2C
                 CLC
@@ -12229,24 +12214,24 @@ L_E930:
                 RTS
                 INC $88
                 LDA $88
-                BNE L_E951
+                BNE L2_A951
                 INC $84
                 LDA $84
-L_E951:
+L2_A951:
                 JSR $AA74
                 CLC
                 RTS
                 JSR $A947
                 LDY $85
-L_E95B:
+L2_A95B:
                 STY $26
                 LDA ($58),Y
                 CMP #$21
-                BCC L_E985
+                BCC L2_A985
                 CMP #$2E
-                BEQ L_E985
+                BEQ L2_A985
                 CMP #$2C
-                BEQ L_E985
+                BEQ L2_A985
                 JSR $AAA7
                 STA $1C
                 LDA $68
@@ -12255,13 +12240,13 @@ L_E95B:
                 TAX
                 LDA $69
                 SBC #$00
-                BCC L_E985
+                BCC L2_A985
                 STX $68
                 STA $69
                 LDY $26
                 INY
-                BNE L_E95B
-L_E985:
+                BNE L2_A95B
+L2_A985:
                 CLC
                 RTS
                 JSR $B2F3
@@ -12269,13 +12254,13 @@ L_E985:
                 LDA $68
                 SEC
                 SBC $1A
-                BCS L_E99B
+                BCS L2_A99B
                 DEY
                 CPY #$FF
-                BNE L_E99B
+                BNE L2_A99B
                 LDA #$00
                 TAY
-L_E99B:
+L2_A99B:
                 STA $68
                 STY $69
                 CLC
@@ -12296,41 +12281,41 @@ L_E99B:
                 STA $87
                 LDX #$02
                 LDY #$00
-L_E9C1:
+L2_A9C1:
                 LDA $0201,Y
                 STA $02C1,X
                 INY
                 DEX
-                BPL L_E9C1
+                BPL L2_A9C1
                 CLC
                 RTS
                 LDY $87
-                BEQ L_E9D8
+                BEQ L2_A9D8
                 DEC $87
                 LDA $02C0,Y
-                BNE L_E9E2
-L_E9D8:
+                BNE L2_A9E2
+L2_A9D8:
                 LDY $85
                 LDA ($58),Y
                 INC $85
-                BNE L_E9E2
+                BNE L2_A9E2
                 INC $59
-L_E9E2:
+L2_A9E2:
                 STA $61
                 RTS
                 LDA $85
-                BNE L_E9EB
+                BNE L2_A9EB
                 DEC $59
-L_E9EB:
+L2_A9EB:
                 DEC $85
                 RTS
                 LDA $85
                 CLC
                 ADC $58
                 LDY $59
-                BCC L_E9F8
+                BCC L2_A9F8
                 INY
-L_E9F8:
+L2_A9F8:
                 RTS
                 LDY $83
                 CMP #$41
@@ -12343,12 +12328,12 @@ L_E9F8:
                 ROL $83
                 LDX $83
                 CPX #$E8
-                BNE L_EA17
+                BNE L2_AA17
                 CLC
                 ADC #$20
                 STA $61
                 RTS
-L_EA17:
+L2_AA17:
                 SEC
                 RTS
                 STA $1C
@@ -12365,29 +12350,29 @@ L_EA17:
                 LDY $3C76
                 LDA $81
                 LSR
-                BCC L_EA3D
+                BCC L2_AA3D
                 TXA
                 ASL
                 TAX
                 TYA
                 ASL
                 TAY
-L_EA3D:
+L2_AA3D:
                 LDA #$04
                 BIT $81
-                BEQ L_EA46
+                BEQ L2_AA46
                 INX
                 INX
                 INY
-L_EA46:
+L2_AA46:
                 CPX $8C
-                BCC L_EA4C
+                BCC L2_AA4C
                 STX $8C
-L_EA4C:
+L2_AA4C:
                 CPY $8D
-                BCC L_EA52
+                BCC L2_AA52
                 STY $8D
-L_EA52:
+L2_AA52:
                 RTS
                 LDY $84
                 LDA $0345,Y
@@ -12401,15 +12386,15 @@ L_EA52:
                 LDX $1C
                 CPX $66
                 SBC $67
-                BCC L_EA6F
+                BCC L2_AA6F
                 LDX #$00
                 LDY #$00
-L_EA6F:
+L2_AA6F:
                 STX $68
                 STY $69
                 RTS
                 CMP #$10
-                BCS L_EA9A
+                BCS L2_AA9A
                 TAY
                 LDA $0345,Y
                 STA $1C
@@ -12419,42 +12404,42 @@ L_EA6F:
                 ASL $1C
                 ROL
                 TAY
-L_EA87:
+L2_AA87:
                 LDX $1C
                 CPX $68
                 SBC $69
-                BCC L_EA9A
+                BCC L2_AA9A
                 TYA
                 CPX $66
                 SBC $67
-                BCS L_EA9A
+                BCS L2_AA9A
                 STX $68
                 STY $69
-L_EA9A:
+L2_AA9A:
                 RTS
                 LDA $61
                 JSR $AAA7
-                BCS L_EAA6
+                BCS L2_AAA6
                 STX $68
                 STY $69
-L_EAA6:
+L2_AAA6:
                 RTS
                 TAX
                 LDA $3BE4,X
                 CLC
                 ADC $79
                 CLC
-                BPL L_EAB3
+                BPL L2_AAB3
                 LDA #$00
-L_EAB3:
+L2_AAB3:
                 BIT $81
-                BPL L_EAB8
+                BPL L2_AAB8
                 ASL
-L_EAB8:
+L2_AAB8:
                 BIT $81
-                BVC L_EABE
+                BVC L2_AABE
                 ADC #$01
-L_EABE:
+L2_AABE:
                 PHA
                 ADC $68
                 TAX
@@ -12485,7 +12470,7 @@ L_EABE:
                 LDA $81
                 LSR
                 AND #$08
-                BEQ L_EAFC
+                BEQ L2_AAFC
                 LDA $64
                 SEC
                 SBC $76
@@ -12493,12 +12478,12 @@ L_EABE:
                 LDA $65
                 SBC #$00
                 TAY
-                BCS L_EB12
-L_EAFC:
+                BCS L2_AB12
+L2_AAFC:
                 LDA $3C76
-                BCC L_EB02
+                BCC L2_AB02
                 ASL
-L_EB02:
+L2_AB02:
                 STA $1C
                 LDA $8D
                 SEC
@@ -12509,27 +12494,27 @@ L_EB02:
                 LDA $65
                 ADC #$00
                 TAY
-L_EB12:
+L2_AB12:
                 LDA $81
                 AND #$08
-                BEQ L_EB20
+                BEQ L2_AB20
                 CLC
                 TXA
                 ADC $76
                 TAX
-                BCC L_EB20
+                BCC L2_AB20
                 INY
-L_EB20:
+L2_AB20:
                 LDA $81
                 AND #$04
-                BEQ L_EB30
+                BEQ L2_AB30
                 DEX
-                BNE L_EB30
+                BNE L2_AB30
                 DEY
-                BPL L_EB30
+                BPL L2_AB30
                 LDX #$00
                 LDY #$00
-L_EB30:
+L2_AB30:
                 STX $11
                 STY $12
                 LDA $62
@@ -12540,23 +12525,23 @@ L_EB30:
                 ADC $69
                 STA $10
                 BIT $82
-                BPL L_EB59
+                BPL L2_AB59
                 LDA $3C02
                 LSR
                 LSR $81
-                BCS L_EB4F
+                BCS L2_AB4F
                 LSR
                 CLC
-L_EB4F:
+L2_AB4F:
                 ROL $81
                 ADC $0F
                 STA $0F
-                BCC L_EB59
+                BCC L2_AB59
                 INC $10
-L_EB59:
+L2_AB59:
                 LDA #$02
                 BIT $81
-                BEQ L_EB73
+                BEQ L2_AB73
                 LDX $78
                 LDY $78
                 LDA #$00
@@ -12567,25 +12552,25 @@ L_EB59:
                 LDA #$00
                 SEC
                 JSR $AC02
-L_EB73:
+L2_AB73:
                 LDA #$04
                 BIT $81
-                BEQ L_EBAD
+                BEQ L2_ABAD
                 LDY #$00
                 LDX #$00
                 BIT $82
-                BPL L_EB82
+                BPL L2_AB82
                 INX
-L_EB82:
+L2_AB82:
                 LDA $77
                 CLC
                 JSR $AC02
                 LDY #$01
                 LDX #$00
                 BIT $82
-                BPL L_EB91
+                BPL L2_AB91
                 INX
-L_EB91:
+L2_AB91:
                 LDA $77
                 CLC
                 JSR $AC02
@@ -12598,19 +12583,19 @@ L_EB91:
                 LDY #$01
                 SEC
                 BIT $82
-                BPL L_EBB2
+                BPL L2_ABB2
                 INX
-                BCS L_EBB2
-L_EBAD:
+                BCS L2_ABB2
+L2_ABAD:
                 LDX #$00
                 LDY #$00
                 CLC
-L_EBB2:
+L2_ABB2:
                 LDA #$00
                 JMP $AC02
                 LDA $81
                 AND #$20
-                BEQ L_EC01
+                BEQ L2_AC01
                 LDA $3C02
                 LSR
                 LSR
@@ -12632,24 +12617,24 @@ L_EBB2:
                 JSR $AAA7
                 LDX $61
                 CPX #$20
-                BNE L_EBE9
+                BNE L2_ABE9
                 ADC $6E
-L_EBE9:
+L2_ABE9:
                 PHA
                 LDX #$00
                 LDY #$00
                 JSR $AC85
                 LDA #$02
                 BIT $81
-                BEQ L_EC00
+                BEQ L2_AC00
                 LDX $78
                 LDY $78
                 PLA
                 PHA
                 JSR $AC85
-L_EC00:
+L2_AC00:
                 PLA
-L_EC01:
+L2_AC01:
                 RTS
                 STA $25
                 TYA
@@ -12658,50 +12643,50 @@ L_EC01:
                 STA $1F
                 JSR $AD1F
                 LDY #$00
-L_EC0F:
+L2_AC0F:
                 JSR $1373
                 BIT $26
-                BMI L_EC1D
+                BMI L2_AC1D
                 TYA
                 PHA
                 JSR $ACB2
                 PLA
                 TAY
-L_EC1D:
+L2_AC1D:
                 BIT $82
-                BPL L_EC2E
+                BPL L2_AC2E
                 LDA $1F
                 EOR #$02
                 STA $1F
                 AND #$02
-                BNE L_EC2E
+                BNE L2_AC2E
                 JSR $90EB
-L_EC2E:
+L2_AC2E:
                 LDA $81
                 LSR
-                BCC L_EC41
+                BCC L2_AC41
                 LDA $1F
                 EOR #$80
                 STA $1F
-                BPL L_EC41
+                BPL L2_AC41
                 TYA
                 SEC
                 SBC $3C01
                 TAY
-L_EC41:
+L2_AC41:
                 CPY $75
-                BEQ L_EC80
+                BEQ L2_AC80
                 INC $02
-                BNE L_EC4B
+                BNE L2_AC4B
                 INC $03
-L_EC4B:
+L2_AC4B:
                 INC $0D
                 LDA $0D
                 AND #$07
-                BNE L_EC0F
+                BNE L2_AC0F
                 LDA $0D
                 CMP #$C8
-                BCS L_EC70
+                BCS L2_AC70
                 LDA $70
                 LSR
                 AND #$02
@@ -12713,8 +12698,8 @@ L_EC4B:
                 LDA $03
                 ADC $AC82,X
                 STA $03
-                BCC L_EC0F
-L_EC70:
+                BCC L2_AC0F
+L2_AC70:
                 LDA #$00
                 STA $0D
                 INC $46
@@ -12724,10 +12709,10 @@ L_EC70:
                 PLA
                 TAY
                 JMP $AC0F
-L_EC80:
+L2_AC80:
                 RTS
                 SEI
-                !byte $02
+                !by $02
                 SEC
                 ORA ($48,X)
                 JSR $AD1F
@@ -12743,15 +12728,15 @@ L_EC80:
                 ORA #$F8
                 TAX
                 LDA #$FF
-L_EC98:
+L2_AC98:
                 ASL
                 INX
-                BNE L_EC98
-L_EC9C:
+                BNE L2_AC98
+L2_AC9C:
                 STA $0200,Y
                 LDA #$FF
                 DEY
-                BPL L_EC9C
+                BPL L2_AC9C
                 INC $26
                 LDY $26
                 LDA #$00
@@ -12760,73 +12745,73 @@ L_EC9C:
                 JMP $AD0A
                 INC $26
                 BIT $81
-                BPL L_ECD8
+                BPL L2_ACD8
                 ASL $26
                 LDY $26
                 DEY
                 STY $1C
-L_ECBF:
+L2_ACBF:
                 LDY #$04
                 LDA $1C
                 LSR
                 TAX
-L_ECC5:
+L2_ACC5:
                 LSR $0200,X
                 PHP
                 ROR
                 PLP
                 ROR
                 DEY
-                BNE L_ECC5
+                BNE L2_ACC5
                 LDY $1C
                 STA $0200,Y
                 DEC $1C
-                BPL L_ECBF
-L_ECD8:
+                BPL L2_ACBF
+L2_ACD8:
                 LDY $26
                 LDA #$00
                 STA $0200,Y
                 LDX $25
-                BEQ L_ECE9
+                BEQ L2_ACE9
                 INC $26
                 INY
                 STA $0200,Y
-L_ECE9:
+L2_ACE9:
                 BIT $81
-                BVC L_ECEE
+                BVC L2_ACEE
                 INX
-L_ECEE:
+L2_ACEE:
                 TXA
-                BEQ L_ED0A
+                BEQ L2_AD0A
                 STA $1C
-L_ECF3:
+L2_ACF3:
                 LDX #$00
                 LDY $26
                 CLC
-L_ECF8:
+L2_ACF8:
                 LDA $0200,X
                 ROR
                 ORA $0200,X
                 STA $0200,X
                 INX
                 DEY
-                BPL L_ECF8
+                BPL L2_ACF8
                 DEC $1C
-                BNE L_ECF3
-L_ED0A:
+                BNE L2_ACF3
+L2_AD0A:
                 LDA $0A
-L_ED0C:
+L2_AD0C:
                 ASL
-                BCS L_ED1C
+                BCS L2_AD1C
                 LDX #$00
                 LDY $26
-L_ED13:
+L2_AD13:
                 ROR $0200,X
                 INX
                 DEY
-                BPL L_ED13
-                BMI L_ED0C
-L_ED1C:
+                BPL L2_AD13
+                BMI L2_AD0C
+L2_AD1C:
                 JMP $1397
                 TXA
                 CLC
@@ -12844,28 +12829,28 @@ L_ED1C:
                 STA $0E
                 LDA $70
                 AND #$04
-                BEQ L_ED49
-                JSR L_9092
+                BEQ L2_AD49
+                JSR L0_9092
                 LDA #$37
                 STA $45
                 LDA #$02
                 STA $43
                 RTS
-L_ED49:
+L2_AD49:
                 LDX #$00
-L_ED4B:
+L2_AD4B:
                 LDA $0D
                 SEC
                 SBC #$C8
                 TAY
                 LDA $0E
                 SBC #$00
-                BCC L_ED5E
+                BCC L2_AD5E
                 STY $0D
                 STA $0E
                 INX
-                BCS L_ED4B
-L_ED5E:
+                BCS L2_AD4B
+L2_AD5E:
                 STX $46
                 LDA #$00
                 STA $02
@@ -12893,16 +12878,16 @@ L_ED5E:
                 LDX $46
                 ORA $8314,X
                 STA $03
-                LDA L_830C,X
+                LDA L0_830C,X
                 STA $45
-                LDA L_8310,X
+                LDA L0_8310,X
                 STA $43
                 LDA $0B
                 AND #$07
                 TAY
                 LDA $90D4,Y
                 STA $0A
-L_EDA3:
+L2_ADA3:
                 RTS
                 ORA #$06
                 ORA $20
@@ -12911,10 +12896,10 @@ L_EDA3:
                 LDA $61
                 CMP $61A5
                 CMP $3C03
-                BCS L_EDA3
+                BCS L2_ADA3
                 SEC
                 SBC #$20
-                BCC L_EDA3
+                BCC L2_ADA3
                 TAY
                 LDX $75
                 JSR $B336
@@ -12926,20 +12911,20 @@ L_EDA3:
                 ADC $74
                 STA $09
                 LDX #$02
-L_EDD0:
+L2_ADD0:
                 LDA $0F,X
                 STA $0B,X
                 DEX
-                BPL L_EDD0
-                JSR L_9092
+                BPL L2_ADD0
+                JSR L0_9092
                 LDY #$00
                 STY $1F
-L_EDDE:
+L2_ADDE:
                 JSR $1373
                 TYA
                 PHA
                 LDX $26
-                BMI L_EE30
+                BMI L2_AE30
                 INX
                 TXA
                 ASL
@@ -12947,65 +12932,65 @@ L_EDDE:
                 ASL
                 STA $20
                 LDX #$00
-L_EDF0:
+L2_ADF0:
                 LDA $02,X
                 PHA
                 INX
                 CPX #$0D
-                BCC L_EDF0
-L_EDF8:
+                BCC L2_ADF0
+L2_ADF8:
                 LDX $26
-L_EDFA:
+L2_ADFA:
                 ROL $0200,X
                 DEX
-                BPL L_EDFA
+                BPL L2_ADFA
                 ROR
                 PHA
                 JSR $AE86
                 LDA $49
                 JSR $AE94
                 PLA
-                BCC L_EE28
+                BCC L2_AE28
                 BIT $81
-                BPL L_EE1D
+                BPL L2_AE1D
                 PHA
                 JSR $AE86
                 LDA $49
                 JSR $AE94
                 PLA
-                BCC L_EE28
-L_EE1D:
+                BCC L2_AE28
+L2_AE1D:
                 BIT $81
-                BVC L_EE24
+                BVC L2_AE24
                 JSR $AE86
-L_EE24:
+L2_AE24:
                 DEC $20
-                BNE L_EDF8
-L_EE28:
+                BNE L2_ADF8
+L2_AE28:
                 LDX #$0C
-L_EE2A:
+L2_AE2A:
                 PLA
                 STA $02,X
                 DEX
-                BPL L_EE2A
-L_EE30:
+                BPL L2_AE2A
+L2_AE30:
                 JSR $AE8F
                 PLA
-                BCC L_EE4B
+                BCC L2_AE4B
                 TAY
                 LDA $81
                 AND #$01
                 EOR $1F
                 STA $1F
                 LSR
-                BCC L_EE47
+                BCC L2_AE47
                 TYA
                 SBC $3C01
                 TAY
-L_EE47:
+L2_AE47:
                 CPY $75
-                BCC L_EDDE
-L_EE4B:
+                BCC L2_ADDE
+L2_AE4B:
                 LDA $61
                 JSR $AAA7
                 STA $1C
@@ -13017,71 +13002,71 @@ L_EE4B:
                 LSR
                 LDA $0F,X
                 LDY $10,X
-                BCS L_EE77
+                BCS L2_AE77
                 ADC $1C
-                BCC L_EE67
+                BCC L2_AE67
                 INY
-L_EE67:
-                CMP L_8C52,X
-                BCC L_EE7F
+L2_AE67:
+                CMP L0_8C52,X
+                BCC L2_AE7F
                 PHA
                 TYA
-                CMP L_8C53,X
+                CMP L0_8C53,X
                 TAY
                 PLA
-                BCC L_EE7F
-                BCS L_EE85
-L_EE77:
+                BCC L2_AE7F
+                BCS L2_AE85
+L2_AE77:
                 SBC $1C
-                BCS L_EE7F
+                BCS L2_AE7F
                 SEC
                 DEY
-                BMI L_EE85
-L_EE7F:
+                BMI L2_AE85
+L2_AE7F:
                 STA $0F,X
                 TYA
                 STA $10,X
                 CLC
-L_EE85:
+L2_AE85:
                 RTS
                 ASL
-                BCC L_EE8E
+                BCC L2_AE8E
                 LDY #$00
-                JSR L_8C3D
-L_EE8E:
+                JSR L0_8C3D
+L2_AE8E:
                 RTS
                 LDX $49
                 LDA $AEA6,X
                 CMP #$02
-                BCS L_EEA3
+                BCS L2_AEA3
                 ASL
-                JSR L_9133
-                BCC L_EEA2
+                JSR L0_9133
+                BCC L2_AEA2
                 LDA #$B7
                 CMP $0D
-L_EEA2:
+L2_AEA2:
                 RTS
-L_EEA3:
+L2_AEA3:
                 JMP $90E8
-                !byte $03
-                !byte $02
+                !by $03
+                !by $02
                 BRK
                 ORA ($A5,X)
-                !byte $7F
-                BNE L_EEB2
+                !by $7F
+                BNE L2_AEB2
                 LDA $80
                 STA $7F
-L_EEB2:
+L2_AEB2:
                 CMP $3C00
-                BEQ L_EEE1
+                BEQ L2_AEE1
                 LDA $3C00
                 STA $80
                 JSR $12F2
-                BCC L_EEC9
+                BCC L2_AEC9
                 JSR $B03C
                 LDA $7F
                 STA $3C00
-L_EEC9:
+L2_AEC9:
                 LDA $3C77
                 STA $79
                 LDA $3C02
@@ -13093,13 +13078,13 @@ L_EEC9:
                 JSR $B336
                 STX $75
                 JSR $AA2C
-L_EEE1:
+L2_AEE1:
                 RTS
                 JSR $12F2
-                BCS L_EEEB
+                BCS L2_AEEB
                 JSR $AEC9
                 CLC
-L_EEEB:
+L2_AEEB:
                 RTS
                 LDA #$00
                 STA $4A
@@ -13113,16 +13098,16 @@ L_EEEB:
                 JSR $AF0D
                 JSR $B3B4
                 LDA $28
-                JSR L_80DE
+                JSR L0_80DE
                 JMP $B285
                 LDA #$BB
                 STA $D011
                 LDA #$78
                 STA $D018
-                LDA L_DD00
+                LDA $DD00
                 AND #$FC
                 ORA #$02
-                STA L_DD00
+                STA $DD00
                 LDA #$00
                 STA $D01B
                 STA $54
@@ -13142,15 +13127,15 @@ L_EEEB:
                 LDY $AF72,X
                 LDX #$00
                 CMP #$05
-                BNE L_EF4B
+                BNE L2_AF4B
                 LDX #$40
 ;==========================================================
 ; RLE?
-L_EF4B:
+L2_AF4B:
                 LDA $AF78,Y
                 STA $02
-                BEQ L_EF71
-L_EF52:
+                BEQ L2_AF71
+L2_AF52:
                 LDA $AF79,Y
                 STA $7F80,X
                 INX
@@ -13161,15 +13146,15 @@ L_EF52:
                 STA $7F80,X
                 INX
                 DEC $02
-                BNE L_EF52
+                BNE L2_AF52
                 INY
                 INY
                 INY
                 INY
-                BNE L_EF4B
-L_EF71:
+                BNE L2_AF4B
+L2_AF71:
                 RTS
-L_EF72:
+L2_AF72:
 ;==========================================================
                 !by $00,$00,$15,$2B,$22,$58,$08,$00
                 !by $20,$00,$02,$00,$00,$00,$01,$FF
@@ -13184,48 +13169,48 @@ L_EF72:
                 !by $C0,$01,$00,$00,$E0,$01,$00,$00
                 !by $40,$02,$00,$00,$00,$00,$14,$00
                 !by $00,$01,$01,$FF,$FF,$FF,$00
-L_EFD9:
+L2_AFD9:
                 LDA #$00
                 LDY #$3F
-L_EFDD:
+L2_AFDD:
                 STA $7F40,Y
                 DEY
-                BPL L_EFDD
+                BPL L2_AFDD
                 RTS
                 LDX #$3F
-L_EFE6:
+L2_AFE6:
                 LDA $7F40,X
                 STA $03C0,X
                 DEX
-                BPL L_EFE6
+                BPL L2_AFE6
                 RTS
                 LDX #$3F
-L_EFF2:
+L2_AFF2:
                 LDA $03C0,X
                 STA $7F40,X
                 DEX
-                BPL L_EFF2
+                BPL L2_AFF2
                 RTS
                 LDA #$12
                 STA $D018
                 LDA #$9B
                 STA $D011
-                LDA L_DD00
+                LDA $DD00
                 ORA #$03
-                STA L_DD00
+                STA $DD00
                 LDA #$00
                 LDX #$3E
-L_F012:
+L2_B012:
                 STA $03C0,X
                 DEX
-                BPL L_F012
+                BPL L2_B012
                 LDA #$FF
                 STA $03EB
                 STA $03EE
                 LDA #$0F
                 STA $07F9
                 LDA #$02
-                STA L_D015
+                STA $D015
                 SEI
                 LDA #$80
                 STA $19
@@ -13252,14 +13237,14 @@ L_F012:
                 JSR CBM_SETNAM
                 LDA #$5A
                 JSR $B1C8
-                BCS L_F0A7
+                BCS L2_B0A7
                 LDY #$00
-L_F060:
+L2_B060:
                 JSR CBM_CHRIN
                 STA $3C00,Y
                 INY
                 CPY #$78
-                BCC L_F060
+                BCC L2_B060
                 LDX #$78
                 LDY #$3C
                 STX $73
@@ -13267,109 +13252,109 @@ L_F060:
                 STX $02
                 STY $03
                 BIT $70
-                BPL L_F0A4
-                BVC L_F0A4
+                BPL L2_B0A4
+                BVC L2_B0A4
                 LDA $7F
                 CMP $7E
-                BEQ L_F0A4
+                BEQ L2_B0A4
                 STA $7E
                 LDA #$00
                 STA $26
                 STA $27
                 STA $1F
-L_F08D:
+L2_B08D:
                 JSR $119A
                 LDY #$00
                 STA ($02),Y
                 INC $02
-                BNE L_F09A
+                BNE L2_B09A
                 INC $03
-L_F09A:
+L2_B09A:
                 LDA $90
-                BEQ L_F08D
+                BEQ L2_B08D
                 LDA $26
                 ORA $27
-                BNE L_F08D
-L_F0A4:
+                BNE L2_B08D
+L2_B0A4:
                 JSR $B222
-L_F0A7:
+L2_B0A7:
                 RTS
                 LDA #$54
                 JSR $B1C8
-                BCS L_F10E
+                BCS L2_B10E
                 LDX #$01
                 LDY #$19
                 STX $5A
                 STY $5B
                 STX $58
                 STY $59
-L_F0BB:
+L2_B0BB:
                 JSR CBM_CHRIN
                 LDY #$00
                 STA ($5A),Y
                 TAX
-                BEQ L_F0DE
+                BEQ L2_B0DE
                 INC $5A
-                BNE L_F0BB
+                BNE L2_B0BB
                 INC $5B
                 LDA $5B
                 CMP #$3C
-                BCC L_F0BB
+                BCC L2_B0BB
                 DEC $5B
                 DEC $5A
                 LDA #$00
                 TAY
                 STA ($5A),Y
                 LDA #$05
-                BCS L_F103
-L_F0DE:
+                BCS L2_B103
+L2_B0DE:
                 STA $1700
-L_F0E1:
+L2_B0E1:
                 JSR CBM_CHRIN
                 TAX
-                BEQ L_F0E1
+                BEQ L2_B0E1
                 LDA #$18
                 CPX #$4C
                 SEC
-                BNE L_F103
+                BNE L2_B103
                 JSR CBM_CHRIN
                 STA $1700
                 LDY #$00
-L_F0F6:
+L2_B0F6:
                 JSR CBM_CHRIN
                 STA $1800,Y
                 INY
                 CPY $1700
-                BCC L_F0F6
+                BCC L2_B0F6
                 CLC
-L_F103:
+L2_B103:
                 PHA
                 PHP
                 JSR $B222
                 PLP
                 PLA
-                BCC L_F10E
+                BCC L2_B10E
                 STA $71
-L_F10E:
+L2_B10E:
                 RTS
                 LDX #$20
                 LDY $52
                 LDA $1800,Y
                 AND #$60
                 CMP #$60
-                BEQ L_F123
+                BEQ L2_B123
                 CLC
                 BIT $70
-                BVC L_F155
+                BVC L2_B155
                 LDX #$00
-L_F123:
+L2_B123:
                 STX $1F
                 JSR $B1B9
                 LDA #$00
                 JSR $B1C8
-                BCS L_F155
+                BCS L2_B155
                 BIT $70
-                BVC L_F151
+                BVC L2_B151
                 LDY $52
                 LDA $1801,Y
                 LSR
@@ -13377,33 +13362,33 @@ L_F123:
                 CLC
                 ADC $23
                 CMP #$51
-                BCS L_F151
+                BCS L2_B151
                 LDA $1802,Y
                 LSR
                 STA $2A
                 ADC $22
                 CMP #$65
-                BCS L_F151
+                BCS L2_B151
                 JSR $1134
-L_F151:
+L2_B151:
                 JSR $B222
                 CLC
-L_F155:
+L2_B155:
                 RTS
                 LDA $1F
                 AND #$20
-                BEQ L_F1B8
+                BEQ L2_B1B8
                 JSR CBM_CHRIN
                 CMP #$4B
-                BNE L_F1B8
+                BNE L2_B1B8
                 LDX #$07
-L_F165:
+L2_B165:
                 LDY $023D,X
                 INY
-                BNE L_F16E
+                BNE L2_B16E
                 DEX
-                BNE L_F165
-L_F16E:
+                BNE L2_B165
+L2_B16E:
                 LDA $22
                 ASL
                 ASL
@@ -13424,7 +13409,7 @@ L_F16E:
                 STA $03
                 ADC $1D
                 CMP #$08
-                BCS L_F1B8
+                BCS L2_B1B8
                 STA $05
                 STA $0249,Y
                 LDA $52
@@ -13432,19 +13417,19 @@ L_F16E:
                 LDY $02
                 LDA #$00
                 STA $02
-L_F1A4:
+L2_B1A4:
                 JSR CBM_CHRIN
                 EOR #$FF
                 STA ($02),Y
                 INY
-                BNE L_F1B0
+                BNE L2_B1B0
                 INC $03
-L_F1B0:
+L2_B1B0:
                 CPY $04
                 LDA $03
                 SBC $05
-                BCC L_F1A4
-L_F1B8:
+                BCC L2_B1A4
+L2_B1B8:
                 RTS
                 TYA
                 CLC
@@ -13460,35 +13445,35 @@ L_F1B8:
                 LDY $BC
                 JSR $B231
                 LDA #$00
-L_F1D5:
+L2_B1D5:
                 PHA
                 LDA $24
-                BNE L_F1E1
-                JSR L_8471
-                BCS L_F1F2
+                BNE L2_B1E1
+                JSR L0_8471
+                BCS L2_B1F2
                 PLA
                 RTS
-L_F1E1:
+L2_B1E1:
                 LDY #$00
                 JSR $B209
-                BCS L_F1F2
+                BCS L2_B1F2
                 JSR CBM_CHRIN
                 CMP $24
-                BNE L_F1F2
+                BNE L2_B1F2
                 PLA
                 CLC
                 RTS
-L_F1F2:
+L2_B1F2:
                 JSR $B222
                 PLA
-                BNE L_F203
-L_F1F8:
+                BNE L2_B203
+L2_B1F8:
                 JSR $0E2D
                 CMP #$AD
-                BEQ L_F1D5
+                BEQ L2_B1D5
                 CMP #$B3
-                BNE L_F1F8
-L_F203:
+                BNE L2_B1F8
+L2_B203:
                 LDA #$1A
                 STA $71
                 SEC
@@ -13501,12 +13486,12 @@ L_F203:
                 JSR CBM_OPEN
                 LDX #$08
                 PLA
-                BCS L_F221
-                BNE L_F21E
+                BCS L2_B221
+                BNE L2_B21E
                 JMP CBM_CHKIN
-L_F21E:
+L2_B21E:
                 JSR CBM_CHKOUT
-L_F221:
+L2_B221:
                 RTS
                 JSR CBM_CLRCHN
                 LDA #$08
@@ -13525,7 +13510,7 @@ L_F221:
                 PLA
                 STA $1C
                 LDY #$00
-L_F246:
+L2_B246:
                 LDA #$01
                 STA $09
                 LDA ($02),Y
@@ -13540,50 +13525,50 @@ L_F246:
                 PHA
                 LDY #$07
                 LDA ($08),Y
-                BNE L_F262
+                BNE L2_B262
                 DEY
-L_F260:
+L2_B260:
                 LDA ($08),Y
-L_F262:
+L2_B262:
                 STA ($06),Y
                 DEY
-                BPL L_F260
+                BPL L2_B260
                 LDA $06
                 CLC
                 ADC #$08
                 STA $06
-                BCC L_F272
+                BCC L2_B272
                 INC $07
-L_F272:
+L2_B272:
                 PLA
                 TAY
                 INY
                 CPY $1C
-                BCC L_F246
+                BCC L2_B246
                 RTS
                 LDY #$7F
                 LDA #$00
-L_F27E:
+L2_B27E:
                 STA $79C0,Y
                 DEY
-                BPL L_F27E
+                BPL L2_B27E
                 RTS
-L_F285:
+L2_B285:
                 LDA $CB
                 CMP #$40
-                BNE L_F285
+                BNE L2_B285
                 LDA $3F
                 AND #$07
-                BNE L_F285
+                BNE L2_B285
                 LDA #$00
                 STA $C6
                 RTS
                 CMP #$7E
-                BCS L_F2A0
+                BCS L2_B2A0
                 CMP #$61
-                BCC L_F2A0
+                BCC L2_B2A0
                 SBC #$20
-L_F2A0:
+L2_B2A0:
                 RTS
                 TYA
                 PHA
@@ -13596,65 +13581,65 @@ L_F2A0:
                 JSR $B2C0
                 PLA
                 TAY
-L_F2B4:
+L2_B2B4:
                 LDA $0201,X
                 STA ($02),Y
                 INY
                 INX
                 CPX #$03
-                BCC L_F2B4
+                BCC L2_B2B4
                 RTS
                 LDX #$02
-L_F2C2:
+L2_B2C2:
                 LDA #$00
                 LDY #$10
-L_F2C6:
+L2_B2C6:
                 ROL $1A
                 ROL $1B
                 ROL
                 CMP #$0A
-                BCC L_F2D1
+                BCC L2_B2D1
                 SBC #$0A
-L_F2D1:
+L2_B2D1:
                 DEY
-                BNE L_F2C6
+                BNE L2_B2C6
                 ROL $1A
                 ROL $1B
                 ORA #$30
                 STA $0201,X
                 DEX
-                BPL L_F2C2
+                BPL L2_B2C2
                 INX
-L_F2E1:
+L2_B2E1:
                 LDA $0201,X
                 CMP #$30
-                BNE L_F2F2
+                BNE L2_B2F2
                 LDA #$1F
                 STA $0201,X
                 INX
                 CPX #$02
-                BCC L_F2E1
-L_F2F2:
+                BCC L2_B2E1
+L2_B2F2:
                 RTS
                 LDX #$00
                 STX $1F
                 STX $1A
-L_F2F9:
+L2_B2F9:
                 JSR $A9CD
                 CPX #$00
-                BNE L_F30C
+                BNE L2_B30C
                 CMP #$3D
-                BEQ L_F2F9
+                BEQ L2_B2F9
                 CMP #$2D
-                BNE L_F30C
+                BNE L2_B30C
                 ROR $1F
-                BMI L_F2F9
-L_F30C:
+                BMI L2_B2F9
+L2_B30C:
                 SEC
                 SBC #$30
-                BCC L_F327
+                BCC L2_B327
                 CMP #$0A
-                BCS L_F327
+                BCS L2_B327
                 PHA
                 LDA $1A
                 ASL
@@ -13666,14 +13651,14 @@ L_F30C:
                 ADC $1A
                 STA $1A
                 INX
-                BNE L_F2F9
-L_F327:
+                BNE L2_B2F9
+L2_B327:
                 ASL $1F
-                BCC L_F331
+                BCC L2_B331
                 LDA #$00
                 SBC $1A
                 STA $1A
-L_F331:
+L2_B331:
                 JSR $A9E5
                 TXA
                 RTS
@@ -13681,74 +13666,74 @@ L_F331:
                 STY $1D
                 LDA #$00
                 LDY #$08
-L_F33E:
+L2_B33E:
                 ASL
                 ROL $1D
-                BCC L_F34A
+                BCC L2_B34A
                 CLC
                 ADC $1C
-                BCC L_F34A
+                BCC L2_B34A
                 INC $1D
-L_F34A:
+L2_B34A:
                 DEY
-                BNE L_F33E
+                BNE L2_B33E
                 TAX
                 LDY $1D
                 RTS
                 ASL $10A0,X
-L_F354:
+L2_B354:
                 ASL $1C
                 ROL $1D
                 ROL $1E
                 SEC
                 LDA $1E
                 SBC $26
-                BCC L_F365
+                BCC L2_B365
                 STA $1E
                 INC $1C
-L_F365:
+L2_B365:
                 DEY
-                BNE L_F354
+                BNE L2_B354
                 RTS
                 STX $27
                 STY $86
-                !byte $27
+                !by $27
                 STY $26
                 STA $1C
                 ROR $1D
-L_F374:
+L2_B374:
                 LDA $09
                 PHA
                 LDA $08
                 PHA
                 LDX $26
-L_F37C:
+L2_B37C:
                 LDY #$07
                 LDA $1C
-L_F380:
+L2_B380:
                 BIT $1D
-                BMI L_F386
+                BMI L2_B386
                 LDA ($02),Y
-L_F386:
+L2_B386:
                 STA ($08),Y
                 DEY
-                BPL L_F380
+                BPL L2_B380
                 LDA $02
                 CLC
                 ADC #$08
                 STA $02
-                BCC L_F396
+                BCC L2_B396
                 INC $03
-L_F396:
+L2_B396:
                 LDA $08
                 CLC
                 ADC #$08
                 STA $08
-                BCC L_F3A1
+                BCC L2_B3A1
                 INC $09
-L_F3A1:
+L2_B3A1:
                 DEX
-                BNE L_F37C
+                BNE L2_B37C
                 PLA
                 CLC
                 ADC #$40
@@ -13757,14 +13742,14 @@ L_F3A1:
                 ADC #$01
                 STA $09
                 DEC $27
-                BNE L_F374
+                BNE L2_B374
                 RTS
                 LDA $1704
                 LSR
                 LSR
                 LSR
                 LSR
-                STA L_D027
+                STA $D027
                 LDA #$00
                 STA $02
                 LDA #$5C
@@ -13774,23 +13759,23 @@ L_F3A1:
                 LDA $1704
                 STY $1C
                 LDY $1C
-L_F3D1:
+L2_B3D1:
                 STA ($02),Y
                 DEY
-                BPL L_F3D1
+                BPL L2_B3D1
                 PHA
                 LDA $02
                 CLC
                 ADC #$28
                 STA $02
-                BCC L_F3E2
+                BCC L2_B3E2
                 INC $03
-L_F3E2:
-                !byte $68
-                !byte $CA
-                !byte $10
-                !byte $E9
-                !byte $60
+L2_B3E2:
+                !by $68
+                !by $CA
+                !by $10
+                !by $E9
+                !by $60
 ; data - grafika nabídek (grafické ikony)
 ; menu 1 line 1
                 !by $FF,$80,$E6,$E6,$E6,$E6,$BE,$80
