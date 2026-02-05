@@ -1,4 +1,10 @@
 ;==========================================================
+; Notes for vice debug
+; :m $de80 $de80;n - show state od ROM
+; :break .L0_8031
+;==========================================================
+
+;==========================================================
 ; sources
 ;==========================================================
 
@@ -44,10 +50,10 @@
 ;==========================================================
 ; header / signature
 ;==========================================================
-L0_8000:
-                !by $31, $80
-                !by $BB, $0E, $C3, $C2, $CD, $38
-                !by $30,$50,$46,$20,$56,$31,$2E,$30
+                !WO L0_8031             ; coldstart vector
+                !WO $0EBB               ; warmstart vector
+                !PET "CBM80"            ; Autostart string
+                !tx "PF V1.0"
                 JMP $8045
                 JMP $92BA
                 JMP $9039
@@ -59,8 +65,9 @@ L0_8000:
                 JMP $98A2
                 JMP $8ECC
                 JMP $9474
+L0_8031:
                 SEI
-                JSR $FDA3
+                JSR $FDA3               ; prepare IRQ
                 LDA $DC01
                 AND #$10
                 BEQ L0_8042
@@ -82,7 +89,7 @@ L0_804B:                                 ; wait for input
 
 ;==========================================================
 L0_8054:
-                JSR L0_949D              ; get character from imput device?
+                JSR L0_949D             ; get character from imput device?
 L0_8057:
                 BEQ L0_8077
                 STA $61                 ; break point
@@ -4545,10 +4552,10 @@ MSG_TABLE:
                 LDA #$00                ; map ROM0 LO
                 STA $DE80
                 JMP $FCE2
+                JSR $0FDC               ; target of JMP $0DA8
+                JMP L2_9972             ; 
                 JSR $0FDC
-                JMP L0_9972
-                JSR $0FDC
-                JMP L0_8000
+                JMP $8000
                 JSR $0FE8
                 JMP $8010
                 JSR $0FFA
@@ -6038,11 +6045,12 @@ L0_BE02:
 !pseudopc $8000 {
                 LDX #$FE
                 TXS
-    JSR $AEEC
-    JSR $8082
-    JSR $8674
-    JSR $8BA5
-    JMP $8006
+                JSR $AEEC
+L2_8006:                
+                JSR $8082
+                JSR $8674
+                JSR $8BA5
+                JMP L2_8006
                 !by $64
                 !by $44
                 JMP ($6372)
@@ -9818,68 +9826,46 @@ L2_9918:
                 !by $08
                 !by $08
                 !by $05
-                !by $A2
-                !by $FE
-                !by $9A
-                !by $20
-                !by $F8
-                !by $9F
-L2_9978:
-                JSR $99C0
-                JSR L2_8793
-                JSR $9A2B
-                JMP L2_9978
-                !by $62
-                !by $B5
-                !by $65
-                !by $73
-                !by $74
-                !by $C3
-                !by $B9
-                !by $5F
-                !by $31
-                !by $32
-                !by $33
-                !by $C1
-                !by $76
-                !by $66
-                !by $B7
-                !by $61
-                !by $A8
-                !by $AA
-                !by $30
-                !by $B8
-                !by $E3
-                !by $99
-                !by $6D
-                !by $9B
-                !by $E3
-                !by $99
-                !by $1F
-                !by $9C
-                !by $6F
-                !by $9C
-                !by $B3
-                !by $0D
-                !by $AD
-                !by $0D
-                !by $85
-                !by $9E
-                !by $99
-                !by $9E
-                STA $999E,Y
-                !by $9E
-                EOR $9A9D,X
-                LDY #$A6
-                LDY #$C2
-                LDY #$BE
+L2_9972:                                ; menu init
+                LDX #$FE
                 TXS
-                ORA ($84),Y
-                !by $1A
-                STY $A0
-                TXA
-                !by $2B
-                !by $10
+                JSR $9FF8               
+L2_9978:
+                JSR L2_99C0
+                JSR L2_8793
+                JSR L2_9A2B             ;$9A2B
+                JMP L2_9978
+                !by $62,$B5,$65,$73
+                !by $74,$C3,$B9,$5F
+                !by $31,$32,$33,$C1
+                !by $76,$66,$B7,$61
+                !by $A8,$AA,$30,$B8
+
+                !wo $99E3               ; B
+                !wo $9B6D               ; C= L
+                !wo $99E3               ; E
+                !wo $9C1F               ; S
+
+                !wo $9C6F               ; T
+                !wo $0DB3               ; C= T
+                !wo $0DAD               ; C= G - go to graphic editor
+                !wo $9E85               ; LEFT ARROW
+
+                !wo $9E99               ; 1
+                !wo $9E99               ; 2
+                !wo $9E99               ; 3
+                !wo $9D5D               ; C= CLR
+
+                !wo $A09A               ; V
+                !wo $A0A6               ; F
+                !wo $A0C2               ; C= P
+                !wo $9ABE               ; A
+                
+                !wo $8411               ; F3
+                !wo $841A               ; F5
+                !wo $8AA0               ; 0
+                !wo $102B               ; C= Q
+                
 L2_99C0:
                 JSR $FFE4
                 BEQ L2_99D7
@@ -9943,6 +9929,7 @@ L2_9A15:
                 ASL $02
                 !by $02
                 !by $02
+L2_9A2B:
                 LDA $3F
                 AND #$07
 L2_9A2F:
@@ -10560,6 +10547,11 @@ L2_9E88:
                 LDA $0341
                 STA $1700
                 JMP $A073
+
+;==========================================================
+; Layout 1, 2 or 3
+;==========================================================
+L2_9E9A:
                 TXA
                 AND #$03
                 PHA
@@ -10578,6 +10570,8 @@ L2_9EA8:
 L2_9EB4:
                 STX $1700
                 JMP $A073
+
+;==========================================================
                 BRK
                 ASL $11
                 RTI
