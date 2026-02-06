@@ -1,8 +1,26 @@
 ;==========================================================
-; Notes for vice debug
-; :m $de80 $de80;n - show state od ROM
-; :break .L0_8031
+;  PAGEFOX SOURCE CODE
+;  Version 2.5 (2026.02.06)
+;  Copyright (c) 2026 Tomas Kakulizek
+;
+;  This source code is based on the Pagefox v1.0
+;
+;  Ppagefox was programmed by Hans Haberl in 1987
+;  (c) 1987 by SCANNTRONIK
+;
+;  More information about Pagefox can be found at:
+;  https://www.c64-wiki.de/wiki/Pagefox
+;
+;  This source code can be found at:
+;  https://github.com/xinteksik/C64-Pagefox-cs
+;
+;  This version of the source code is under MIT License
+
 ;==========================================================
+; Notes for vice debug
+; m $de80 $de80 : show state of selected ROM 
+; (00 means 1st part with labels L0_, 02 means 2nd part with labels L2_)
+; break .L0_8031 : add breakpoint
 
 ;==========================================================
 ; sources
@@ -14,10 +32,10 @@
 !source "pg_24.asm"
 
 ;==========================================================
-; build options (language, 9pin/24pin printer mod)
+; build options (language, 9pin/24pin printer mod)        ;
 ;==========================================================
-.language = 0                           ; 0 = cs, 1 = de, 2 = en (not implemented)
-.pg24 = 0                               ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
+.language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
+.pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -50,16 +68,16 @@
 ;==========================================================
 ; header / signature
 ;==========================================================
-                !WO L0_8031             ; coldstart vector
-                !WO $0EBB               ; warmstart vector
-                !PET "CBM80"            ; Autostart string
+                !wo L0_8031             ; coldstart vector
+                !wo $0EBB               ; warmstart vector
+                !pet "CBM80"            ; autostart string
                 !tx "PF V1.0"
-                JMP $8045
+                JMP L0_8045
                 JMP $92BA
                 JMP $9039
                 JMP $9747
                 JMP $957C
-                JMP L0_915D              ; read dir
+                JMP L0_915D              
                 JMP L0_9258
                 JMP $977F
                 JMP $98A2
@@ -71,7 +89,7 @@ L0_8031:
                 LDA $DC01
                 AND #$10
                 BEQ L0_8042
-                JSR L0_8F6A              ; cold start init
+                JSR L0_8F6A             ; cold start init
 !if .pg24 = 1 {
                 JMP pg24_boot
 } else {
@@ -79,10 +97,14 @@ L0_8031:
 }
 L0_8042:
                 JMP (L0_A000)
+;==========================================================
+; Text editor
+;==========================================================
+L0_8045:                                ; menu init
                 LDX #$FE
                 TXS
                 JSR L0_90B0
-L0_804B:                                 ; wait for input
+L0_804B:                                ; wait for input
                 JSR L0_8054
                 JSR L0_8BA1
                 JMP L0_804B
@@ -120,57 +142,53 @@ L0_806B:
 L0_8077:
                 RTS
 
-;==========================================================
-; Text address table
-; Values $A0–$C3 from macro InsertKeybMap
-;==========================================================
 L0_8078:
-                !word L0_8261-1          ; CURSOR DOWN
-                !word L0_8211-1          ; CURSOR UP
-                !word L0_8253-1          ; CURSOR RIGHT
-                !word L0_81FB-1          ; CURSOR LEFT
+                !wo L0_8261-1          ; CURSOR DOWN
+                !wo L0_8211-1          ; CURSOR UP
+                !wo L0_8253-1          ; CURSOR RIGHT
+                !wo L0_81FB-1          ; CURSOR LEFT
 
-                !word L0_827F-1          ; CLR/HOME
-                !word L0_82B0-1          ; SHIFT-CLR/HOME
-                !word L0_82DE-1          ; F1
-                !word L0_8303-1          ; F2
+                !wo L0_827F-1          ; CLR/HOME
+                !wo L0_82B0-1          ; SHIFT-CLR/HOME
+                !wo L0_82DE-1          ; F1
+                !wo L0_8303-1          ; F2
 
-                !word L0_82B8-1          ; F3
-                !word L0_82D3-1          ; F4
-                !word L0_8313-1          ; F5
-                !word L0_831E-1          ; F6
+                !wo L0_82B8-1          ; F3
+                !wo L0_82D3-1          ; F4
+                !wo L0_8313-1          ; F5
+                !wo L0_831E-1          ; F6
 
-                !word L0_832C-1          ; SHIFT RETURN
-                !word L0_80F0-1          ; RETURN
+                !wo L0_832C-1          ; SHIFT RETURN
+                !wo L0_80F0-1          ; RETURN
 L0_8094:
-                !word L0_80F0-1          ; CTRL RETURN
-                !word L0_8104-1          ; INST/DEL
+                !wo L0_80F0-1          ; CTRL RETURN
+                !wo L0_8104-1          ; INST/DEL
 
-                !word L0_80FF-1          ; SHIFT-INST/DEL
-                !word L0_811D-1          ; F7
-                !word L0_8519-1          ; F8
-                !word L0_8077-1          ; RUN/STOP (points to RTS only)
+                !wo L0_80FF-1          ; SHIFT-INST/DEL
+                !wo L0_811D-1          ; F7
+                !wo L0_8519-1          ; F8
+                !wo L0_8077-1          ; RUN/STOP (points to RTS only)
 
-                !word L0_8530-1          ; C= ARROW LEFT
-                !word L0_87DF-1          ; C= L
-                !word L0_8749-1          ; C= S
-                !word $0DA7             ; C= P - go to main menu
+                !wo L0_8530-1          ; C= ARROW LEFT
+                !wo L0_87DF-1          ; C= L
+                !wo L0_8749-1          ; C= S
+                !wo $0DA7              ; C= P - go to main menu
 
-                !word $0DA7             ; C= Q - go to main menu
-                !word $0DAD             ; C= G - go to graphic editor
-                !word L0_898A-1          ; C= D
-                !word L0_8541-1          ; C= C
+                !wo $0DA7              ; C= Q - go to main menu
+                !wo $0DAD              ; C= G - go to graphic editor
+                !wo L0_898A-1          ; C= D
+                !wo L0_8541-1          ; C= C
 
-                !word L0_8529-1          ; C= M
-                !word L0_9433-1          ; C= ARROW UP
-                !word L0_8997-1          ; C= F
-                !word L0_89BD-1          ; C= R
+                !wo L0_8529-1          ; C= M
+                !wo L0_9433-1          ; C= ARROW UP
+                !wo L0_8997-1          ; C= F
+                !wo L0_89BD-1          ; C= R
 
-                !word L0_8B45-1          ; C= F1-F8
-                !word L0_8B83-1          ; C= CLR/HOME
+                !wo L0_8B45-1          ; C= F1-F8
+                !wo L0_8B83-1          ; C= CLR/HOME
 L0_80BC:
-                !word L0_8B9B-1          ; C= V
-                !word L0_8077-1          ; C= T
+                !wo L0_8B9B-1          ; C= V
+                !wo L0_8077-1          ; C= T
                 CMP #$20
                 BCC L0_80E6
                 LDY $23
@@ -3066,11 +3084,11 @@ L0_9300:
 L0_930C:
                 RTS
 L0_930D:
-                !word L_9317
-                !word L_9358
-                !word L_9399
-                !word L_9399
-                !word L_93DA
+                !wo L_9317
+                !wo L_9358
+                !wo L_9399
+                !wo L_9399
+                !wo L_93DA
 
 ; Keyboard map 4 blocks x 65 bytes
 +InsertKeybMap
@@ -3805,7 +3823,7 @@ L0_9863:
                 sta $D015
                 rts
 pf_menu_rowdef_ptr_table:               ; pointer table (little-endian)
-                !word $9879,$9882,$9888,$988F,$9895
+                !wo $9879,$9882,$9888,$988F,$9895
 ; msg $14 on row $08: "Low Medium High Shinwa MPS" (5 items)
                 !by $14,$08,$05
                 !by $00,$08,$11,$18,$21,$28
@@ -4323,8 +4341,8 @@ VIZA_CS_OUT:
 
 !pseudopc $A000 {
 L0_A000:
-                !word $A004
-                !word $A004
+                !wo $A004
+                !wo $A004
                 LDX #$08
 PF_INIT_LOOP:
                 LDA L0_A012,X
@@ -4541,7 +4559,9 @@ L0_A012:
 MSG_TABLE:
 +InsertMsgTable
 
-!if .pg24 = 1 {+InsertModPG24}
+!if .pg24 = 1 {
++InsertModPG24
+}
 
 }
 
@@ -6043,101 +6063,68 @@ L0_BE02:
 * = $4000
 
 !pseudopc $8000 {
-                LDX #$FE
+;==========================================================
+; Graphic editor
+;==========================================================
+                LDX #$FE                ; menu init
                 TXS
                 JSR $AEEC
-L2_8006:                
-                JSR $8082
+L2_8006:                                ; wait for input
+                JSR L2_8082
                 JSR $8674
                 JSR $8BA5
                 JMP L2_8006
-                !by $64
-                !by $44
-                JMP ($6372)
-                BVS $8083
-                !by $6D
-                !by $74
-                !by $67
-                !by $61
-                !by $73
-                !by $65
-                JSR $C17F
-                LDX $A7
-                ADC #$5F
-                LDY #$A1
-                !by $A2
-                !by $A3
-                !by $6F
-                !by $78
-                !by $75
-                !by $30
-                !by $B1
-                !by $B2
-                !by $2E
-                !by $B5
-                !by $B6
-                !by $B7
-                !by $50
-                !by $BA
-                !by $B8
-                !by $C3
-                !by $66
-                !by $4D
-                !by $5E
-                !by $77
-                !by $AF
-                !by $A8
-                !by $AA
-                !by $6B
-                !by $02
-                !by $96
-                !by $BD
-                !by $95
-                LSR $82,X
-                ROL $82
-                EOR $AA82
-                !by $82
-                !by $EB
-                LDX $81A4
-                LDY $81
-                LDY $81
-                LDY $81
-                !by $C3
-                !by $94
-                !by $C3
-                !by $94
-                !by $C3
-                !by $94
-                !by $7F
-                !by $8A
-                !by $C0
-                !by $8A
-                !by $E1
-                !by $8A
-                !by $85
-                !by $82
-                !by $3D
-                !by $84
-                !by $CC
-                !by $84
-                !by $D5
-                !by $83
-                !by $2E
-                !by $84
-                !by $47
-                !by $86
-                CPX $F283
-                !by $83
-                NOP
-                STA ($E0),Y
-                STA ($EC),Y
-                STA ($4A,X)
-                !by $83
-                ADC $81
-                ORA ($84),Y
-                !by $1A
-                STY $B7
-                TXA
+
+; Graphic mode keytable
+L2_8012:
+                !by $64,$44,$6C,$72
+                !by $63,$70,$6A,$6D
+                !by $74,$67,$61,$73
+                !by $65,$20,$7f,$C1 
+                !by $A6,$A7,$69,$5F
+L2_8026:
+                !by $A0,$A1,$A2,$A3
+                !by $6F,$78,$75,$30
+                !by $B1,$B2,$2E,$B5
+                !by $B6,$B7,$50,$BA
+                !by $B8,$C3,$66,$4D
+                !by $5E,$77,$AF,$A8
+                !by $AA,$6B
+L2_8040:
+                !wo $9602
+                !wo $95BD
+                !wo $8256               ; F1
+                !wo $8226
+                !wo $824D
+                !wo $82AA
+                !wo $AEEB
+                !wo $81A4
+                !wo $81A4
+                !wo $81A4
+                !wo $81A4
+                !wo $94C3
+                !wo $94C3
+                !wo $94C3
+                !wo $8A7F
+                !wo $8AC0
+                !wo $8AE1
+                !wo $8285               ; .
+                !wo $843D               ; C= L
+                !wo $84CC               ; C= S
+                !wo $83D5               ; C= P
+                !wo $842E               ; SHIFT P
+                !wo $8647               ; C= D
+                !wo $83EC               ; C= Q
+                !wo $83F2               ; C= T
+                !wo $91EA               ; F
+                !wo $91E0
+                !wo $81EC
+                !wo $834A
+                !wo $8165
+                !wo $8411               ; F3
+                !wo $841A               ; F7
+                !wo $8AB7               ; K
+L2_8082:
                 JSR CBM_GETIN
                 BEQ L2_80A6
                 LDX $28
@@ -6148,8 +6135,8 @@ L2_8006:
                 JMP L0_8119
 L2_8094:
                 LDX #$2D
-L2_8096:
-                CMP $8012,X
+L2_8096:        
+                CMP $8012,X             ; search key in tab
                 BEQ L2_80A7
                 DEX
                 BPL L2_8096
@@ -9826,21 +9813,28 @@ L2_9918:
                 !by $08
                 !by $08
                 !by $05
+
+;==========================================================
+; Layout Editor
+;==========================================================
 L2_9972:                                ; menu init
                 LDX #$FE
                 TXS
                 JSR $9FF8               
-L2_9978:
+L2_9978:                                ; wait for input
                 JSR L2_99C0
                 JSR L2_8793
-                JSR L2_9A2B             ;$9A2B
+                JSR L2_9A2B
                 JMP L2_9978
+
+; Layout mode keytable
+L2_9984:
                 !by $62,$B5,$65,$73
                 !by $74,$C3,$B9,$5F
                 !by $31,$32,$33,$C1
                 !by $76,$66,$B7,$61
                 !by $A8,$AA,$30,$B8
-
+L2_9998:
                 !wo $99E3               ; B
                 !wo $9B6D               ; C= L
                 !wo $99E3               ; E
@@ -9867,7 +9861,7 @@ L2_9978:
                 !wo $102B               ; C= Q
                 
 L2_99C0:
-                JSR $FFE4
+                JSR $FFE4               ; CBM_GETIN
                 BEQ L2_99D7
                 PHA
                 JSR $B27A
@@ -9875,7 +9869,7 @@ L2_99C0:
                 PLA
                 LDX #$13
 L2_99CF:
-                CMP L0_9984,X
+                CMP L2_9984,X
                 BEQ L2_99D8
                 DEX
                 BPL L2_99CF
@@ -9885,9 +9879,9 @@ L2_99D8:
                 TXA
                 ASL
                 TAY
-                LDA L0_9999,Y
+                LDA L2_9998+1,Y
                 PHA
-                LDA $9998,Y
+                LDA L2_9998,Y
                 PHA
                 RTS
                 LDA #$04
