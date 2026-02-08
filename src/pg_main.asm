@@ -19,7 +19,8 @@
 ;==========================================================
 ; Notes for vice debug
 ; m $de80 $de80 : show state of selected ROM 
-; (00 means 1st part with labels L0_, 02 means 2nd part with labels L2_)
+; 00 means 1st part with labels L0_
+; 02 means 2nd part with labels L2_
 ; break .L0_8031 : add breakpoint
 
 ;==========================================================
@@ -326,7 +327,7 @@ L0_8184:
                 RTS
 L0_8189:
                 LDA #$05                ; msg. no.
-                JSR L0_9747              ; print "Preteceni pameti"
+                JSR L0_9747             ; print "Preteceni pameti"
                 SEC
 L0_818F:
                 RTS
@@ -994,7 +995,7 @@ L0_8572:
                 RTS
 L0_8573:
                 LDA #$05                ; msg. no.
-                JMP L0_9747              ; print "Preteceni pameti"
+                JMP L0_9747             ; print "Preteceni pameti"
 L0_8578:
                 LDX $5D
                 LDY $5E
@@ -1087,7 +1088,7 @@ L0_85E1:
                 RTS
 L0_860E:
                 LDA #$07                ; msg. no.
-                JSR L0_9747              ; print "Označ cil a potvrd ..."
+                JSR L0_9747             ; print "Označ cil a potvrd ..."
 L0_8613:
                 JSR $9474               ; get character from imput device?
                 CMP #$A0
@@ -1127,7 +1128,7 @@ L0_8643:
                 SEC
                 BEQ L0_8642
                 LDA #$06                ; msg. no.
-                JSR L0_9747              ; print "Oznac konec a potvrd"
+                JSR L0_9747             ; print "Oznac konec a potvrd"
                 JSR L0_8382
                 LDA $56
                 PHA
@@ -1300,7 +1301,7 @@ L0_8749:
                 BCS L0_87D6
 L0_8770:
                 LDA #$03                ; msg. no. 03
-                JSR L0_957C              ; print "Nazev"
+                JSR L0_957C             ; print "Nazev"
                 BCS L0_87D6
                 LDY #$01
                 JSR L0_9297              ; set file prameter and open
@@ -1573,7 +1574,7 @@ L0_8921:
 L0_8922:
                 !by $00,$60,$20,$20,$60,$40,$00,$00
                 !by $00,$00,$00,$00,$40,$00,$00,$00
-; VIZA_DE map change in L_88DE
+; VIZA_DE map change in L0_88DE
 VIZA_DE_IN:
                 !by $F1,$E6,$ED,$EE,$DF,$DB,$EB,$EF
                 !by $EC,$DC,$DD,$79,$7A,$7B,$65,$76
@@ -1595,7 +1596,7 @@ VIZA_DE_OUT:
 L0_8956:
                 JSR CBM_CHRIN           ; Čti bajt
                 TAX
-                BEQ L0_8956              ; Přeskoč $00
+                BEQ L0_8956             ; Přeskoč $00
                 CMP #$4C                ; Je to 'L'?
                 SEC
                 BNE L0_8979              ; Ne -> chyba
@@ -1622,8 +1623,8 @@ L0_897C:
                 STA $1701,Y             ; Ulož do $1701+ (barvy)
                 INY
                 LDA $90                 ; Kontrola konce souboru
-                BEQ L0_897C              ; Pokračuj dokud není EOF
-                JMP L0_9142              ; Aplikuj barvy na obrazovku
+                BEQ L0_897C             ; Pokračuj dokud není EOF
+                JMP L0_9142             ; Aplikuj barvy na obrazovku
 ;==========================================================
 ; Text command C= D
 ;==========================================================
@@ -1646,7 +1647,7 @@ L0_89A0:
                 JSR L0_8A6F
                 BCS L0_89B8
                 LDA #$0E                ; msg. no.
-                JSR L0_9747              ; print "RETURN=Dale"
+                JSR L0_9747             ; print "RETURN=Dale"
 L0_89AA:
                 JSR $9474
                 BEQ L0_89AA
@@ -1675,7 +1676,7 @@ L0_89D0:
                 JSR L0_8A6F
                 BCS L0_89B8
                 LDA #$0F                ; msg. no.
-                JSR L0_9747              ; print "RETURN=Nahradit..."
+                JSR L0_9747             ; print "RETURN=Nahradit..."
 L0_89DA:
                 JSR $9474
                 CMP #$B3
@@ -1698,7 +1699,7 @@ L0_89FB:
                 LDA $0376
                 BCC L0_89D0
                 LDA #$05                ; msg. no.
-                JMP L0_9747              ; print "Preteceni pameti"
+                JMP L0_9747             ; print "Preteceni pameti"
 L0_8A08:
                 STY $85
                 JSR L0_8A64
@@ -1762,7 +1763,7 @@ L0_8A64:
                 BEQ L0_8A6C
                 LDA #$0D                ; msg. no.
 L0_8A6C:
-                JMP L0_9747              ; print "Novy"
+                JMP L0_9747             ; print "Novy"
 L0_8A6F:
                 SEI
                 CLC
@@ -1906,7 +1907,7 @@ L0_8B3F:
 ;==========================================================
 L0_8B45:
                 LDA #$09                ; msg. no.
-                JSR L0_9747              ; print "F1=Text ...."
+                JSR L0_9747             ; print "F1=Text ...."
 L0_8B4B:
                 JSR $9474
                 CMP #$B3
@@ -1940,7 +1941,7 @@ L0_8B80:
 ;==========================================================
 L0_8B83:
                 LDA #$08                ; msg. no.
-                JSR L0_9747              ; print "Volnych znaku:"
+                JSR L0_9747             ; print "Volnych znaku:"
                 LDA #$00
                 CLC
                 SBC $5A
@@ -1956,7 +1957,7 @@ L0_8B83:
 ;==========================================================
 L0_8B9B:
                 LDA #$1E                ; msg. no.
-                JMP L0_9747              ; print "Pagefox version"
+                JMP L0_9747             ; print "Pagefox version"
 L0_8BA1:
                 LDA $3F
                 ASL
@@ -2276,7 +2277,7 @@ L0_8D67:
                 ORA $81
                 BEQ L0_8DA7
                 LDA #$06                ; msg. no.
-                JSR L0_9747              ; print "Oznac konec..."
+                JSR L0_9747             ; print "Oznac konec..."
                 JSR L0_90D3
                 JSR L0_9660
                 JSR L0_8613
@@ -2839,14 +2840,14 @@ L0_915D:
                 STA $1F
 ;read dir
                 LDA #$01                ; msg. no.
-                JSR L0_9747              ; print "SPACE=...
-                LDX #<L0_920B            ; "$0" need_fix for SoftIEC?
+                JSR L0_9747             ; print "SPACE=...
+                LDX #<L0_920B           ; "$0" need_fix for SoftIEC?
                 LDY #>L0_920B
                 LDA #$02
                 JSR CBM_SETNAM          ; Set file name
                 LDY #$00
 L0_916F:
-                JSR L0_9297              ; set file parameter and open
+                JSR L0_9297             ; set file parameter and open
                 BCS L0_91D7
                 LDA #$04
                 STA $26
@@ -3597,13 +3598,13 @@ L0_9716:
 print_msg:
                 PHA                     ; save msg. length
                 LDY #$28                ; screen line length
-                JSR L0_96FB              ; multiply X with Y
+                JSR L0_96FB             ; multiply X with Y
                 STX $08                 ; screen position low byte
                 TYA
                 ORA #$04
                 STA $09                 ; screen position high byte
                 PLA                     ; msg. length
-                BEQ L0_9731              ; if zero, go delete the whole line
+                BEQ L0_9731             ; if zero, go delete the whole line
                 PHA
                 TAY
                 DEY
@@ -3760,7 +3761,7 @@ L0_97E9:
                 LDA $1708
                 BEQ L0_97B0
                 LDA #$21                ; msg. no.
-                JSR L0_9747              ; print "Radky"
+                JSR L0_9747             ; print "Radky"
                 JSR L0_94DB
                 LDX #$03
                 BCS L0_97B0
@@ -3775,7 +3776,7 @@ L0_9817:
                 DEY
                 BEQ L0_983C
                 LDA #$1F                ; msg. no.
-                JSR L0_9747              ; print "Cislo"
+                JSR L0_9747             ; print "Cislo"
                 JSR L0_94DB
                 LDX #$04
                 BCS L0_97B0
@@ -4571,6 +4572,10 @@ MSG_TABLE:
 ; cold start copy $B000-$BFFF to RAM $0800-$17FF
 ; - 180 chars x 8 bit = 1440 bits (lenght = 05A0)
 ; - bank switch routines
+; - printer routines
+; Author’s note: 
+; This space would be a better place for the “pg24 mod”, 
+; because it would load directly into RAM.
 ;==========================================================
 
 !pseudopc $B000 {
@@ -4579,9 +4584,9 @@ L0_B000:
 +InsertChars
 
 L0_B5A0:
-                LDA #$00                ; RAM $0DA0, map ROM0 LO
+                LDA #$00                ; RAM $0DA0 (SYS 3488), map ROM0 LO
                 STA $DE80
-                JMP $FCE2
+                JMP $FCE2               ; kernal start
                 JSR $0FDC               ; RAM $0DA8, JSR to set ROM0 HI
                 JMP L2_9972             ; to Layout
                 JSR $0FDC               ; RAM $0DAE, JSR to set ROM0 HI 
@@ -5351,9 +5356,9 @@ L0_BAE7:
                 LDY #$0F                ; 16 bits
 L0_BB04:
                 CMP $8001,Y             ; serach from $8001 to $8010
-                BEQ L0_BB11              ; ok
+                BEQ L0_BB11             ; ok
                 DEY                     ; Y+1
-                BPL L0_BB04              ; loop
+                BPL L0_BB04             ; loop
 L0_BB0C:
                 JSR $0FDC               ; error
                 SEC
@@ -5375,7 +5380,7 @@ L0_BB11:
                 STA $74
                 BCC L0_BB2E
                 INC $74
-L0_BB2E:                                 ; read from ZS LO or HI
+L0_BB2E:                                ; read from ZS LO or HI
                 PLA
                 AND #$40                ; $4xxx = HI, $0xxx = LO
                 ASL
@@ -5582,6 +5587,7 @@ L0_BC87:
                 INC $05
 L0_BC8B:
                 JMP $0FE8
+L0_BC8E:
                 LDA #$7F
                 STA $DC0D
                 STA $DD0D
