@@ -2633,7 +2633,7 @@ L0_8FDD:
                 DEY
                 BPL L0_8FDD
                 DEX
-; copy data from $B000 to $0800, X pages by 256B (10)
+; copy data from $B000 to $0800, X pages by 256B (16)
 L0_8FE9:
                 TYA
                 PHA
@@ -4567,94 +4567,87 @@ MSG_TABLE:
 
 *=$3000
 
+;==========================================================
+; cold start copy $B000-$BFFF to RAM $0800-$17FF
+; - 180 chars x 8 bit = 1440 bits (lenght = 05A0)
+; - bank switch routines
+;==========================================================
+
 !pseudopc $B000 {
+
+L0_B000:
 +InsertChars
-                LDA #$00                ; map ROM0 LO
+
+L0_B5A0:
+                LDA #$00                ; RAM $0DA0, map ROM0 LO
                 STA $DE80
                 JMP $FCE2
-                JSR $0FDC               ; target of JMP $0DA8
-                JMP L2_9972             ; 
-                JSR $0FDC
-                JMP $8000
-                JSR $0FE8
-                JMP $8010
-                JSR $0FFA
-                JMP $0FE8
-                JMP $13EE
+                JSR $0FDC               ; RAM $0DA8, JSR to set ROM0 HI
+                JMP L2_9972             ; to Layout
+                JSR $0FDC               ; RAM $0DAE, JSR to set ROM0 HI 
+                JMP $8000               ; to Graphic
+                JSR $0FE8               ; RAM $0DB4, JSR to set ROM0 LO 
+                JMP $8010               ; to Text
+                JSR $0FFA               ; RAM $0DBA, JSR to set RAM LO
+                JMP $0FE8               
+                JMP $13EE               ; 
                 JMP $1442
                 JSR $134D
                 JMP $0FE8
                 PHA
-                JSR $0FDC
+                JSR $0FDC               ; RAM $0DCD, JSR to set ROM0 HI
                 PLA
                 JSR $AF3F
                 JMP $0FE8
-                JSR $0FDC
+                JSR $0FDC               ; RAM $0DD7, JSR to set ROM0 HI
                 JSR $A84D
                 JMP $0FE8
-                JSR $0FE8
+                JSR $0FE8               ; RAM $0DE0, JSR to set ROM0 LO
                 JSR $8016
-                JMP $0FDC
+                JMP $0FDC               
                 PHA
-                JSR $0FE8
+                JSR $0FE8               ; RAM $0DEA, JSR to set ROM0 LO
                 PLA
                 JSR $8019
                 PHA
-                JSR $0FDC
+                JSR $0FDC               ; RAM $0DF2, JSR to set ROM0 HI
                 PLA
                 RTS
                 PHA
-                JSR $0FE8
+                JSR $0FE8               ; RAM $0DF8, JSR to set ROM0 LO
                 PLA
                 JSR $801C
                 PHA
-                JSR $0FDC
+                JSR $0FDC               ; RAM $0E00, JSR to set ROM0 HI
                 PLA
                 RTS
                 PHA
-                JSR $0FE8
+                JSR $0FE8               ; RAM $0E06, JSR to set ROM0 LO
                 PLA
                 JSR $801F
-                JMP $0FDC
+                JMP $0FDC               
                 PHA
-                JSR $0FE8
+                JSR $0FE8               ; RAM $0E11, JSR to set ROM0 LO
                 PLA
                 JSR $8022
-                JMP $0FDC
-                JSR $0FE8
+                JMP $0FDC               
+                JSR $0FE8               ; RAM $0E1B, JSR to set ROM0 LO
                 JSR $8025
                 JMP $0FDC
-                !by $20
-                !by $E8
-                !by $0F
-                !by $20
-                !by $28
-                !by $80
-                !by $4C
-                !by $DC
-                !by $0F
-                !by $20
-                !by $E8
-                !by $0F
-                !by $20
-                !by $2E
-                !by $80
-                !by $48
-                !by $20
-                !by $DC
-                !by $0F
-                !by $68
-                !by $60
-                !by $E7
-                !by $B3
-                !by $67
-                LDX $07,Y
-                TSX
-                !by $AF
-                STA $CE,X
-                !by $9F
-                ASL
-                LDA ($48,X)
+                JSR $0FE8               ; RAM $, JSR to set ROM0 LO
+                JSR $8028
+                JMP $0FDC
+                JSR $0FE8               ; RAM $, JSR to set ROM0 LO
+                JSR $802E
+                PHA
+                JSR $0FDC               ; RAM $, JSR to set ROM0 HI
+                PLA
+                RTS
+                !by $E7,$B3
+                !by $67,$B6
+                !by $07,$BA
+                !by $AF,$95
+                !by $CE,$9F,$0A,$A1,$48
                 TXA
                 PHA
                 TYA
@@ -4889,7 +4882,7 @@ L0_B7B7:
                 LDA $45
                 STA $01
                 RTS
-                LDA #$37
+                LDA #$37                
                 STA $01
                 LDA #$02                ;map to ROM0 HI
                 STA $42
@@ -6002,7 +5995,8 @@ L0_BE02:
                 !by .COLOR_GRAPHIC_TEXT+.COLOR_GRAPHIC_BACKGROUND
                 !by $00
                 !by $00
-                !by $01,$00
+                !by $01
+                !by $00
                 !by $00
                 !by $00
                 !by $00
@@ -6091,21 +6085,21 @@ L2_8026:
                 !by $5E,$77,$AF,$A8
                 !by $AA,$6B
 L2_8040:
-                !wo $9602
+                !wo $9602               ; SPACE
                 !wo $95BD
                 !wo $8256               ; F1
                 !wo $8226
                 !wo $824D
                 !wo $82AA
                 !wo $AEEB
-                !wo $81A4
-                !wo $81A4
-                !wo $81A4
-                !wo $81A4
-                !wo $94C3
-                !wo $94C3
-                !wo $94C3
-                !wo $8A7F
+                !wo $81A4               ; CRSR
+                !wo $81A4               ; CRSR
+                !wo $81A4               ; CRSR
+                !wo $81A4               ; CRSR
+                !wo $94C3               ; O/X/U
+                !wo $94C3               ; O/X/U
+                !wo $94C3               ; O/X/U
+                !wo $8A7F               ; 0
                 !wo $8AC0
                 !wo $8AE1
                 !wo $8285               ; .
@@ -6117,9 +6111,9 @@ L2_8040:
                 !wo $83EC               ; C= Q
                 !wo $83F2               ; C= T
                 !wo $91EA               ; F
-                !wo $91E0
+                !wo $91E0               ; SHIFT M
                 !wo $81EC
-                !wo $834A
+                !wo $834A               ; W
                 !wo $8165
                 !wo $8411               ; F3
                 !wo $841A               ; F7
