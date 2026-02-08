@@ -70,6 +70,9 @@ Níže je seznam všech PNG souborů seřazený **podle čísel za prefixem `zs`
 ### zs117
 ![](png/zs117.png)
 
+### zs211
+![](png/zs211.png)
+
 ### zs139
 ![](png/zs139.png)
 
