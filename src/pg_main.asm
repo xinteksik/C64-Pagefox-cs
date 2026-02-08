@@ -36,7 +36,7 @@
 ; build options (language, 9pin/24pin printer mod)        ;
 ;==========================================================
 .language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
-.pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
+.pg24           = 1                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -2843,7 +2843,7 @@ L0_915D:
                 JSR L0_9747             ; print "SPACE=...
                 LDX #<L0_920B           ; "$0" need_fix for SoftIEC?
                 LDY #>L0_920B
-                LDA #$02
+                LDA #$01                ; load only "$"
                 JSR CBM_SETNAM          ; Set file name
                 LDY #$00
 L0_916F:
