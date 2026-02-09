@@ -1,4 +1,4 @@
-# PAGEFOX Cartridge – Complete Memory Map
+# PAGEFOX Cartridge – Complete Memory Map (draft)
 
 ## 1. Hardware overview
 
@@ -14,58 +14,14 @@
 
 The output file corresponds to two 32 KB EPROMs stored sequentially:
 
-```
-File           ACME            pseudopc           Content
-offset         (* =)           (!pseudopc)
-───────────────────────────────────────────────────────────────────────
-                    ┌─────────────────────────────────────────────┐
-$0000–$1FFF    $0000    →  $8000–$9FFF   │ EPROM 79, bank 0 (lower)    │
-  (8 KB)                                  │ Text editor, menu, KERNAL   │
-                                          │ Labels: L0_8xxx             │
-                    ├─────────────────────────────────────────────┤
-$2000–$2FFF    $2000    →  $A000–$AFFF   │ EPROM 79, bank 0 (lower)    │
-  (4 KB)                                  │ Init, reset, font menu      │
-                                          │ graphics, message table     │
-                                          │ Labels: L0_Axxx             │
-                    ├─────────────────────────────────────────────┤
-$3000–$3FFF    $3000    →  $B000–$BFFF   │ EPROM 79, bank 0 (lower)    │
-  (4 KB)                                  │ → copied to RAM $0800–$17FF │
-                                          │ Character definitions,      │
-                                          │ trampolines, bankswitch     │
-                                          │ thunks, IRQ handler,        │
-                                          │ print routines              │
-                                          │ Labels: L0_Bxxx             │
-                    ├═════════════════════════════════════════════┤
-$4000–$5FFF    $4000    →  $8000–$9FFF   │ EPROM 79, bank 1 (upper)    │
-  (8 KB)                                  │ Graphic editor,             │
-                                          │ layout editor               │
-                                          │ Labels: L2_8xxx             │
-                    ├─────────────────────────────────────────────┤
-$6000–$7FFF           →   $A000–$BFFF   │ EPROM 79, bank 1 (upper)    │
-  (8 KB)                                  │ Graphic editor data,        │
-                                          │ fonts, tables               │
-                                          │ Labels: L2_Axxx             │
-                    ╞═════════════════════════════════════════════╡
-$8000–$BFFF    $8000    →  (charsets)    │ EPROM ZS3, bank 0 (lower)   │
-  (16 KB)                                 │ Character sets lower half   │
-                                          │ (zs-cs.bin / zs-de.bin)     │
-                    ├─────────────────────────────────────────────┤
-$C000–$FFFF           →  (charsets)      │ EPROM ZS3, bank 1 (upper)   │
-  (16 KB)                                 │ Character sets upper half   │
-                    └─────────────────────────────────────────────┘
-```
-
-**Summary:**
-
-| File offset     | Size  | EPROM    | Bank  | pseudopc       | Content                            |
-|-----------------|-------|----------|-------|----------------|------------------------------------|
-| `$0000–$1FFF`   | 8 KB  | 79       | 0     | `$8000–$9FFF`  | Text editor, menu, KERNAL (L0_)    |
-| `$2000–$2FFF`   | 4 KB  | 79       | 0     | `$A000–$AFFF`  | Init, reset, font graphics, msgs   |
-| `$3000–$3FFF`   | 4 KB  | 79       | 0     | `$B000–$BFFF`  | Copied to RAM $0800–$17FF at boot  |
-| `$4000–$5FFF`   | 8 KB  | 79       | 1     | `$8000–$9FFF`  | Graphic + layout editor (L2_)      |
-| `$6000–$7FFF`   | 8 KB  | 79       | 1     | `$A000–$BFFF`  | Graphic editor data, fonts         |
-| `$8000–$BFFF`   | 16 KB | ZS3      | 0     | —              | Character sets lower               |
-| `$C000–$FFFF`   | 16 KB | ZS3      | 1     | —              | Character sets upper               |
+| File offset   | Size  | pseudopc       | EPROM | Bank | Content                                                                       |
+|---------------|-------|----------------|-------|------|-------------------------------------------------------------------------------|
+| `$0000-$1FFF` | 8 KB  | `$8000-$9FFF`| 79    | 0    | Text editor, vizawrite map, coldstart init, ram copy, keyboard map, some free space (viza cs). Labels: `L0_8xxx`|
+| `$2000-$2FFF` | 4 KB  | `$A000-$AFFF`| 79    | 0    | Init, reset, font menu in Text editor, message table, some free space (pg-24). Labels: `L0_Axxx`|
+| `$3000-$3FFF` | 4 KB  | `$B000-$BFFF`| 79    | 0    | Copied to RAM $0800-$17FF at boot. Char defs, jsr, bankswitch thunks, IRQ handler, print routines, some free space. Labels: `L0_Bxxx` |
+| `$4000-$7FFF` | 16 KB  | `$8000-$BFFF`| 79    | 1    | Graphic editor, Layout editor, menu graphics. Labels: `L2_8xxx`|
+| `$8000-$BFFF` | 16 KB |  `$8000-$BFFF`| ZS3   | 0    | Character sets lower half (zs-cs.bin / zs-de.bin)|
+| `$C000-$FFFF` | 16 KB | `$8000-$BFFF`| ZS3   | 1    | Character sets upper half|
 
 ---
 
@@ -79,12 +35,12 @@ The register is **write-only**, mapped into the range $DE80–$DEFF (I/O1 space)
   Bit:   7  6  5  4  3  2  1  0
          ─  ─  ─  ┬  ┬──┬  ┬  ─
          x  x  x  │  │  │  │  x
-                   │  └──┘  │
-                   │ chip   │
-                   │ select bank
-                   │        select
-                   cartridge
-                   enable/disable
+                  │  └──┘  │
+                  │ chip   │
+                  │ select bank
+                  │        select
+                  cartridge
+                  enable/disable
 ```
 
 | Bit   | Function                                                               |
