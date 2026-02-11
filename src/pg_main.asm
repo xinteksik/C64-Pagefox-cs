@@ -27,7 +27,7 @@
 ; sources
 ;==========================================================
 
-!initmem $ff
+!initmem $FF
 !source "pg_kernal.asm"
 !source "pg_colors.asm"
 !source "pg_24.asm"
@@ -107,9 +107,9 @@ L0_8045:                                ; menu init
                 TXS
                 JSR L0_90B0
 L0_804B:                                ; wait for input
-                JSR L0_8054
-                JSR L0_8BA1
-                JMP L0_804B
+                JSR L0_8054             ; keyboard input
+                JSR L0_8BA1             ; mouse input
+                JMP L0_804B             
 
 ;==========================================================
 L0_8054:
@@ -328,7 +328,7 @@ L0_8184:
                 RTS
 L0_8189:
                 LDA #$05                ; msg. no.
-                JSR L0_9747             ; print "Preteceni pameti"
+                JSR L0_9747             ; print msg. "Přetečení paměti"
                 SEC
 L0_818F:
                 RTS
@@ -1281,24 +1281,24 @@ L0_8734:
 ; Text command C= S
 ;==========================================================
 L0_8749:
-; Nastavení rozsahu textu k uložení
+; Setting the text range to be saved
                 LDX #$01
                 LDY #$19
-                STX $5D                 ; $5D/$5E = začátek textu ($1901)
+                STX $5D                 ; $5D/$5E = text start address ($1901)
                 STY $5E
                 LDX $5A
                 LDY $5B
-                STX $5F                 ; $5F/$60 = konec textu (z $5A/$5B)
+                STX $5F                 ; $5F/$60 = text end (from $5A/$5B)
                 STY $60
-                LDX #$D9                ; Dialog - výběr rozsahu? (pointer na $87D9)
+                LDX #$D9                ; Dialog - select range? (pointer to $87D9)
                 LDY #$87
                 STX $04
                 STY $05
-                JSR L0_9598              ; Zobraz dialog
-                BCS L0_87D6              ; Zrušeno -> konec
-                BEQ L0_8770              ; OK bez výběru -> pokračuj
+                JSR L0_9598              ; Show dialog
+                BCS L0_87D6              ; Cancelled -> end
+                BEQ L0_8770              ; OK without selection -> continue
                 JSR L0_9660
-                JSR L0_8643              ; Označ blok textu
+                JSR L0_8643              ; Mark text block
                 BCS L0_87D6
 L0_8770:
                 LDA #$03                ; msg. no. 03
@@ -1307,45 +1307,45 @@ L0_8770:
                 LDY #$01
                 JSR L0_9297              ; set file prameter and open
                 BCS L0_87CE
-; === Zápis 'T' (signatura textu) ===
+; === Write 'T' (text signature) ===
                 LDA #$54                ; 'T'
-                JSR CBM_CHROUT          ; Output vetor
-; === Zápis textových dat ===
+                JSR CBM_CHROUT          ; Output vector
+; === Write text data ===
                 LDY $5D
                 LDA #$00
                 STA $5D
 L0_8789:
-                LDA ($5D),Y             ; Čti bajt textu
-                JSR CBM_CHROUT          ; Zapiš na disk
+                LDA ($5D),Y             ; Read text byte
+                JSR CBM_CHROUT          ; Write to disk
 L0_878E:
                 LDA $90
-                BNE L0_87CE              ; Chyba I/O
-                CPY $5F                 ; Konec textu
+                BNE L0_87CE             ; I/O error
+                CPY $5F                 ; End of text
                 BNE L0_879C
                 LDA $5E
                 CMP $60
-                BEQ L0_87A3              ; Ano -> pokračuj na layout
+                BEQ L0_87A3             ; Yes -> continue to layout
 L0_879C:
                 INY
                 BNE L0_8789
                 INC $5E
                 BNE L0_8789
 L0_87A3:
-; === Zápis $00 (ukončení textu) ===
+; === Write $00 (end of text) ===
                 LDA #$00
                 JSR CBM_CHROUT          ; Output Vector
-; === Zápis 'L' (signatura layout) ===
+; === Write 'L' (layout signature) ===
                 LDA #$4C                ; 'L'
                 JSR CBM_CHROUT
-; === Zápis délky layout dat ===
-                LDA $1700               ; Počet bajtů layoutu (n × 5)
+; === Write layout data length ===
+                LDA $1700               ; Number of layout bytes (n × 5)
                 JSR CBM_CHROUT
-; === Zápis layout dat (rámečky + obrázky) ===
-; Formát záznamu:
-; $40,X1/4,Y1/4,X2/4,Y2/4 = textový rámeček (5 bajtů)
-; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = obrázek (5+n bajtů)
-; kde n = délka názvu souboru (dolní nibble flags)
-; Souřadnice jsou v jednotkách 4 bodů
+; === Write layout data (frames + images) ===
+; Format of record:
+; $40,X1/4,Y1/4,X2/4,Y2/4 = text frame (5 bytes)
+; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = image (5+n bytes)
+; where n = length of filename (lower nibble flags)
+; Coordinates are in units of 4 pixels
                 LDY #$00
 L0_87B5:
                 LDA $1800,Y             ; Layout data z $1800
@@ -1353,16 +1353,16 @@ L0_87B5:
                 INY
                 CPY $1700
                 BCC L0_87B5
-; === Zápis barev ($1701-$170C) ===
+; === Write colors ($1701-$170C) ===
                 LDY #$00
 L0_87C3:
-                LDA $1701,Y             ; Barvy a další nastavení
+                LDA $1701,Y             ; Colors and other settings
                 JSR CBM_CHROUT
                 INY
-                CPY #$0C                ; 12 bajtů
+                CPY #$0C                ; 12 bytes
                 BCC L0_87C3
 L0_87CE:
-                JSR L0_92B2              ; restore i/o and close?
+                JSR L0_92B2             ; restore i/o and close?
                 LDA #$00
                 JSR L0_9258
 L0_87D6:
@@ -1373,16 +1373,16 @@ L0_87D6:
 ;==========================================================
 L0_87DF:
                 LDA #$00
-                JSR L0_915D              ;read dir
+                JSR L0_915D             ;read dir
                 BCS L0_882C
                 LDY #$02
-                JSR L0_9297              ; Otevři soubor pro čtení
-; === Kontrola signatury 'T' ===
-                JSR CBM_CHRIN           ; Přečti první bajt
+                JSR L0_9297             ; Open file for reading
+; === Check signature 'T' ===
+                JSR CBM_CHRIN           ; Read first byte
                 LDX #$00
-                CMP #$54                ; Je to 'T'?
-                BEQ L0_880D              ; Ano -> nativní PageFox formát
-; Není 'T' -> dialog pro výběr formátu (ASCII, atd.)
+                CMP #$54                ; Is it 'T'?
+                BEQ L0_880D             ; Yes -> native PageFox format
+; Not 'T' -> dialog for format selection (ASCII, etc.)
                 JSR CBM_CLRCHN
                 LDX #$41
                 LDY #$88
@@ -1397,29 +1397,29 @@ L0_87DF:
                 TAX
                 INX
 L0_880D:
-                STX $24                 ; $24 = typ formátu (0=PageFox, 1-4=jiné)
-                JSR L0_8849              ; Načti textová data
+                STX $24                 ; $24 = format type (0=PageFox, 1-4=other)
+                JSR L0_8849             ; Read text data
                 BCS L0_8825
                 BIT $1F
                 BPL L0_8824
                 LDA $24
-                BNE L0_8824              ; Pokud není PageFox, přeskoč layout
-; === Načtení layout sekce (jen pro PageFox) ===
-                JSR L0_8956              ; Načti 'L' + layout data
+                BNE L0_8824             ; If not PageFox, skip layout
+; === Load layout section (PageFox only) ===
+                JSR L0_8956             ; Read 'L' + layout data
                 BCS L0_8824
-                JSR L0_897A              ; Načti barvy
+                JSR L0_897A             ; Read colors
 L0_8824:
                 CLC
 L0_8825:
                 PHP
-                JSR L0_92B2              ; Zavři soubor
+                JSR L0_92B2             ; Close file
                 PLP
                 BCS L0_8831
 L0_882C:
                 LDA #$00
                 JSR L0_9258
 L0_8831:
-; Překresli obrazovku
+; Redraw screen
                 LDX $56
                 LDY $57
                 STX $02
@@ -1427,7 +1427,7 @@ L0_8831:
                 LDX #$03
                 JSR L0_8482
                 JMP L0_83A5
-; Definice klikacich poli pro vetu 1D (ASCII, ..., VIZA)
+; Definition of clickable fields for line 1D (ASCII, ..., VIZA)
                 !by $1D, $01, $04, $00, $07, $12, $22, $28
 L0_8849:
                 BIT $1F
@@ -1468,7 +1468,7 @@ L0_887C:
                 CPY #$3C
                 BCC L0_8890
                 LDA #$05                ; msg. no.
-                JSR L0_9747              ; print "Preteceni pameti"
+                JSR L0_9747             ; print "Preteceni pameti"
                 SEC
                 BCS L0_8899
 L0_8890:
@@ -1586,46 +1586,46 @@ VIZA_DE_OUT:
                 !by $7D,$7E
 
 ;==========================================================
-; Načtení layout sekce ze souboru
+; Load layout section from file
 ;==========================================================
-; Čte 'L' signaturu, délku a layout data
-; Layout data obsahují textové rámečky a pozice obrázků:
-; $40,X1/4,Y1/4,X2/4,Y2/4 = textový rámeček (5 bajtů)
-; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = obrázek (5+n bajtů)
-; kde n = délka názvu souboru (dolní nibble flags)
+; Read 'L' signature, length and layout data
+; Layout data contains text frames and image positions:
+; $40,X1/4,Y1/4,X2/4,Y2/4 = text frame (5 bytes)
+; $Cn,X1/4,Y1/4,X2/4,Y2/4,filename = image (5+n bytes)
+; where n = filename length (lower nibble flags)
 ;==========================================================
 L0_8956:
-                JSR CBM_CHRIN           ; Čti bajt
+                JSR CBM_CHRIN           ; Read byte
                 TAX
-                BEQ L0_8956             ; Přeskoč $00
-                CMP #$4C                ; Je to 'L'?
+                BEQ L0_8956             ; Skip $00
+                CMP #$4C                ; Is it 'L'?
                 SEC
-                BNE L0_8979              ; Ne -> chyba
-; === Načti délku layoutu ===
+                BNE L0_8979              ; No -> error
+; === Read layout length ===
                 JSR CBM_CHRIN
-                STA $1700               ; Ulož délku (počet bajtů)
-; === Načti layout data (rámečky) ===
+                STA $1700               ; Store length (number of bytes)
+; === Read layout data (frames) ===
                 LDY #$00
 L0_8969:
                 JSR CBM_CHRIN
-                STA $1800,Y             ; Ulož do $1800+
+                STA $1800,Y             ; Store to $1800+
                 INY
                 CPY $1700
                 BCC L0_8969
 L0_8975:
-                JSR L0_907B              ; Zpracuj layout data?
+                JSR L0_907B              ; Process layout data?
                 CLC
 L0_8979:
                 RTS
 L0_897A:
                 LDY #$00
 L0_897C:
-                JSR CBM_CHRIN           ; Čti bajt
-                STA $1701,Y             ; Ulož do $1701+ (barvy)
+                JSR CBM_CHRIN           ; Read byte
+                STA $1701,Y             ; Store to $1701+ (colors)
                 INY
-                LDA $90                 ; Kontrola konce souboru
-                BEQ L0_897C             ; Pokračuj dokud není EOF
-                JMP L0_9142             ; Aplikuj barvy na obrazovku
+                LDA $90                 ; Check end of file
+                BEQ L0_897C             ; Continue until EOF
+                JMP L0_9142             ; Apply colors to screen
 ;==========================================================
 ; Text command C= D
 ;==========================================================
@@ -1959,6 +1959,8 @@ L0_8B83:
 L0_8B9B:
                 LDA #$1E                ; msg. no.
                 JMP L0_9747             ; print "Pagefox version"
+
+;==========================================================
 L0_8BA1:
                 LDA $3F
                 ASL
@@ -2442,6 +2444,7 @@ L0_8E95:
                 DEX
                 BNE L0_8E95
                 RTS
+; copy char menu in Text editor to bitmap RAM
 L0_8EAA:
                 LDX #$1A
                 LDY #$A0
@@ -3097,7 +3100,9 @@ L0_930D:
                 !wo L_9399
                 !wo L_93DA
 
+;==========================================================
 ; Keyboard map 4 blocks x 65 bytes
+;==========================================================
 +InsertKeybMap
 
 ; print CTRL or C= or an empty string
@@ -3151,11 +3156,11 @@ L0_944B:
 L0_9455:
                 RTS
 L0_9456:
-                !by $1D,$53,$50,$41,$43,$1C ; "<caps>"
+                !tx $1D,"SPAC",$1C                  ; ">SPAC<" <CAPS>
 L0_945C:
-                !by $1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E
-                !by $1E,$1D,$3D,$43,$1C,$1E,$1E,$1E
-                !by $1D,$4C,$52,$54,$43,$1C,$1E,$1E
+                !by $1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E ; "--------" --------
+                !by $1E,$1D,$3D,$43,$1C,$1E,$1E,$1E ; "->=C<---" ---<C=>-
+                !by $1D,$4C,$52,$54,$43,$1C,$1E,$1E ; ">LRTC<--" --<CTRL>
                 LDA $99
                 BNE L0_94D6
                 SEI
@@ -4367,7 +4372,8 @@ L0_A012:
                 JMP CBM_START           ; KERNAL RESET
 
 ;==========================================================
-; Char menu in Text editor
+; menu for font selection in Text editor
+; 20x10 characters, 8x8 pixels per character
 ;==========================================================
                 !by $FF,$80,$80,$80,$80,$80,$80,$80
                 !by $FF,$00,$00,$00,$00,$00,$00,$00
@@ -4389,6 +4395,7 @@ L0_A012:
                 !by $FF,$00,$00,$00,$00,$00,$10,$10
                 !by $FF,$80,$80,$80,$80,$80,$80,$80
                 !by $FF,$01,$01,$01,$01,$01,$01,$01
+
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $00,$00,$00,$00,$00,$00,$00,$00
                 !by $00,$00,$00,$00,$00,$00,$00,$00
@@ -4409,6 +4416,7 @@ L0_A012:
                 !by $7C,$10,$10,$00,$00,$00,$00,$00
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $01,$01,$01,$01,$01,$01,$01,$01
+
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $00,$00,$00,$00,$00,$00,$00,$00
                 !by $00,$00,$00,$00,$00,$00,$00,$00
@@ -4429,6 +4437,7 @@ L0_A012:
                 !by $FF,$00,$00,$00,$00,$00,$10,$10
                 !by $80,$80,$88,$8C,$86,$83,$8F,$8F
                 !by $01,$01,$21,$61,$C1,$81,$E1,$E1
+
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $00,$00,$00,$00,$00,$00,$00,$00
                 !by $00,$00,$00,$00,$00,$00,$00,$00
@@ -4449,6 +4458,7 @@ L0_A012:
                 !by $7C,$10,$10,$00,$00,$00,$00,$00
                 !by $80,$87,$8F,$88,$88,$88,$8F,$87
                 !by $01,$C1,$E1,$21,$21,$21,$E1,$C1
+
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $00,$00,$00,$00,$00,$00,$00,$00
                 !by $00,$00,$00,$00,$00,$00,$00,$00
@@ -4469,6 +4479,7 @@ L0_A012:
                 !by $FF,$00,$00,$00,$00,$10,$10,$7C
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $01,$01,$01,$01,$01,$01,$01,$01
+
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $00,$00,$00,$00,$00,$00,$00,$00
                 !by $00,$00,$00,$00,$00,$00,$00,$00
@@ -4489,6 +4500,7 @@ L0_A012:
                 !by $10,$10,$00,$00,$00,$00,$00,$00
                 !by $80,$80,$80,$80,$80,$80,$80,$80
                 !by $01,$01,$01,$01,$01,$01,$01,$01
+
                 !by $FF,$80,$80,$80,$80,$BE,$82,$84
                 !by $FF,$00,$00,$00,$00,$78,$84,$80
                 !by $FF,$80,$80,$80,$80,$81,$83,$86
@@ -4509,6 +4521,7 @@ L0_A012:
                 !by $FF,$00,$C0,$20,$20,$E0,$20,$20
                 !by $FF,$80,$80,$80,$80,$80,$80,$80
                 !by $FF,$01,$01,$01,$01,$01,$01,$01
+
                 !by $88,$90,$A0,$BE,$80,$80,$80,$FF
                 !by $78,$04,$84,$78,$00,$00,$00,$FF
                 !by $86,$87,$86,$86,$80,$80,$80,$FF
@@ -4529,6 +4542,7 @@ L0_A012:
                 !by $00,$00,$00,$00,$00,$00,$00,$FF
                 !by $80,$83,$84,$84,$87,$84,$84,$FF
                 !by $01,$81,$41,$41,$C1,$41,$41,$FF
+
                 !by $FF,$80,$80,$80,$80,$8F,$88,$8A
                 !by $FF,$00,$E0,$50,$28,$F8,$28,$A0
                 !by $FF,$80,$80,$80,$80,$BC,$A5,$A5
@@ -4549,6 +4563,7 @@ L0_A012:
                 !by $FF,$00,$7C,$44,$44,$44,$44,$44
                 !by $FF,$80,$E0,$90,$9F,$98,$94,$94
                 !by $FF,$01,$01,$01,$FD,$07,$05,$0D
+
                 !by $8A,$8A,$8A,$8A,$88,$8F,$80,$FF
                 !by $A0,$A0,$A0,$A0,$20,$E0,$00,$FF
                 !by $A5,$A5,$A5,$BC,$80,$80,$80,$FF
@@ -4569,7 +4584,7 @@ L0_A012:
                 !by $44,$44,$44,$44,$44,$7C,$00,$FF
                 !by $94,$94,$98,$9F,$91,$E2,$84,$FF
                 !by $15,$25,$45,$FD,$01,$01,$01,$FF
-; Texty a hlasky
+; Texts and messages
 MSG_TABLE:
 +InsertMsgTable
 
@@ -9848,9 +9863,9 @@ L2_9984:
                 !by $76,$66,$B7,$61
                 !by $A8,$AA,$30,$B8
 L2_9998:
-                !wo $99E3               ; B
+                !wo L2_99E4-1           ; B
                 !wo $9B6D               ; C= L
-                !wo $99E3               ; E
+                !wo L2_99E4-1           ; E
                 !wo $9C1F               ; S
 
                 !wo $9C6F               ; T
@@ -9858,9 +9873,9 @@ L2_9998:
                 !wo $0DAD               ; C= G - go to graphic editor
                 !wo $9E85               ; LEFT ARROW
 
-                !wo $9E99               ; 1
-                !wo $9E99               ; 2
-                !wo $9E99               ; 3
+                !wo L2_9E9A-1           ; 1
+                !wo L2_9E9A-1           ; 2
+                !wo L2_9E9A-1           ; 3
                 !wo $9D5D               ; C= CLR
 
                 !wo $A09A               ; V
@@ -9897,6 +9912,8 @@ L2_99D8:
                 LDA L2_9998,Y
                 PHA
                 RTS
+
+L2_99E4:                
                 LDA #$04
                 BIT $29
                 BNE L2_99F0
