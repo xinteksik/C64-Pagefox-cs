@@ -103,7 +103,7 @@ zs_viewer.py zs70.prg --text "Na pasece se pase kun."
 ```
 
 <img width="640" height="480" alt="zs70" src="https://github.com/user-attachments/assets/1a2457f7-4397-4ef7-9864-07eba153012f" />
-<img width="640" height="480" alt="zs70_text" src="https://github.com/user-attachments/assets/ce1caa9b-3a33-4842-b0c7-0113b2d13113" />
+<img width="640" alt="zs70_text" src="https://github.com/user-attachments/assets/ce1caa9b-3a33-4842-b0c7-0113b2d13113" />
 
 
 ### cfox-cs.prg

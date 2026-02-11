@@ -36,7 +36,7 @@
 ; build options (language, 9pin/24pin printer mod)        ;
 ;==========================================================
 .language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
-.pg24           = 1                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
+.pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -87,17 +87,18 @@
 L0_8031:
                 SEI
                 JSR $FDA3               ; prepare IRQ
-                LDA $DC01
+                LDA $DC01               ; CIA1 port B
                 AND #$10
-                BEQ L0_8042
-                JSR L0_8F6A             ; cold start init
+                BEQ L0_8042             ; jump to disable cartridge (by holding SPACE on start)
+                JSR L0_8F6A             ; cold start init, copy data to RAM
 !if .pg24 = 1 {
                 JMP pg24_boot
 } else {
-                JMP $0DA8               ; go to main menu
+                JMP $0DA8               ; set ROM to HI and JMP L0_9133 (Layout editor)
 }
 L0_8042:
                 JMP (L0_A000)
+
 ;==========================================================
 ; Text editor
 ;==========================================================
@@ -2565,6 +2566,12 @@ L0_8F65:
                 DEX
                 BPL L0_8F52
                 RTS
+
+;==========================================================
+; cold start init
+; - clear ram, copy KERNAL, IRQ, CIA
+; - copy data from $B000 to $0800, X pages by 256B (16)
+;==========================================================
 ; cold start init
 L0_8F6A:
                 LDA #$00
@@ -2587,7 +2594,7 @@ L0_8F7B:
                 LDA #$04
                 STA $0288
                 JSR $FF5B
-; Border color
+; border color
                 LDA #.COLOR_BORDER
                 STA $D020
                 LDA #$00
@@ -2623,7 +2630,6 @@ L0_8F7B:
                 LDA #$1C
                 STA $DC04
                 STA $DC05
-;==========================================================
 ; ram upload check
                 LDX #$10
                 LDY #$7F
@@ -2811,7 +2817,7 @@ L0_9122:
                 JSR L0_973E
                 LDY #$27
                 LDA #$1E
--   STA $0450,Y
+-               STA $0450,Y
 L0_9133:
                 DEY
                 BPL -
@@ -4341,6 +4347,10 @@ VIZA_CS_OUT:
 * = $2000
 
 !pseudopc $A000 {
+;==========================================================
+; disable cartridge on boot by holding a SPACE
+; loop copy 8 bytes from $A012 to RAM $0340 and run
+;==========================================================
 L0_A000:
                 !wo $A004
                 !wo $A004
@@ -4353,9 +4363,12 @@ PF_INIT_LOOP:
                 JMP $0340
 L0_A012:
                 LDA #$FF
-                STA $DE80               ; disable cartridge / reset bank switching
+                STA $DE80               ; disable cartridge
                 JMP CBM_START           ; KERNAL RESET
-; Grafiga pro nabidku volby pisma
+
+;==========================================================
+; Char menu in Text editor
+;==========================================================
                 !by $FF,$80,$80,$80,$80,$80,$80,$80
                 !by $FF,$00,$00,$00,$00,$00,$00,$00
                 !by $FF,$00,$00,$00,$00,$00,$00,$00
