@@ -5420,7 +5420,7 @@ L0_BB2E:                                ; read from ZS LO or HI
                 STA $42
                 STA $DE80
                 LDY #$77
-L0_BB40:                                 ; map 120 chars from ZS
+L0_BB40:                                ; map 120 chars from ZS
                 LDA ($02),Y
                 STA $3C00,Y
                 DEY
@@ -10587,10 +10587,10 @@ L2_9E9A:
                 JSR $9E74
                 PLA
                 TAX
-                LDY $9EBA,X
+                LDY L2_9EBA,X
                 LDX #$00
 L2_9EA8:
-                LDA $9EBD,Y
+                LDA L2_9EBD,Y
                 STA $1800,X
                 BEQ L2_9EB4
                 INY
@@ -10599,74 +10599,75 @@ L2_9EA8:
 L2_9EB4:
                 STX $1700
                 JMP $A073
-
-;==========================================================
-                BRK
-                ASL $11
-                RTI
-                !by $0A
-                !by $06
-                STX $C3,Y
+L2_9EBA:
+                !by $00                     ; Layout 1 → offset 0
+                !by $06                     ; Layout 2 → offset 6
+                !by $11                     ; Layout 3 → offset 17
+L2_9EBD:
+; --- Layout 1: single frame ---
+                !by $40,$0A,$06,$96,$C3
                 !by $00
-                !by $40
-                !by $09
-                !by $06
-                !by $4E
-                !by $C3
-                !by $40
-                !by $52
-                !by $06
-                !by $97
-                !by $C3
-                BRK
-                RTI
-                PHP
-                ASL $36
-                !by $C3
-                RTI
-                AND $6706,Y
-                !by $C3
-                RTI
-                ROR
-                ASL $98
-                !by $C3
-                BRK
-                LDA $29
-                AND #$76
+; --- Layout 2: two frames (two columns) ---
+                !by $40,$09,$06,$4E,$C3
+                !by $40,$52,$06,$97,$C3
+                !by $00
+; --- Layout 3: three frames (three columns) ---
+                !by $40,$08,$06,$36,$C3 
+                !by $40,$39,$06,$67,$C3
+                !by $40,$6A,$06,$98,$C3
+                !by $00
+
+; ==========================================================
+; Reset layout flags and set default work area
+; ==========================================================
+L2_9EDE:
+                LDA $29                 ; load layout flags
+                AND #$76                ; clear bits 0,3,7
                 STA $29
-                LDA $38
-                AND #$EF
+                LDA $38                 ; load mode flags
+                AND #$EF                ; clear bit 4
                 STA $38
-                LDX #$07
+                LDX #$07                ; copy 8 bytes
 L2_9EEC:
-                LDA $9F00,X
-                STA $0B,X
+                LDA L2_9F00,X           ; default work area coords
+                STA $0B,X               ; store to ZP $0B-$12
                 DEX
                 BPL L2_9EEC
-                JSR $8D70
-                LDA #$B8
-                STA $0B
-                STA $0F
-                JMP $8D70
-                !by $17
-                BRK
-                !by $C7
-                BRK
-                !by $17
-                BRK
-                BRK
-                BRK
+                JSR $8D70               ; draw frame
+                LDA #$B8                ; 184 (dec)
+                STA $0B                 ; X1 = $B8
+                STA $0F                 ; X2 = $B8
+                JMP $8D70               ; draw second frame
+
+; ==========================================================
+; Default work area coordinates
+; Copied to $0B-$12 by L2_9EDE
+; $0B=X1, $0C=Y1, $0D=X2, $0E=Y2,
+; $0F=X1', $10=Y1', $11=X2', $12=Y2'
+; ==========================================================
+L2_9F00:
+                !by $17,$00,$C7,$00
+                !by $17,$00,$00,$00
+
+; ==========================================================
+; Layout editor init - set cursor mode
+; Entry at $9F08: A=0, X=0 (no cursor)
+; Entry at $9F0D: A=$80 (cursor enabled)
+; Entry at $9F11: A=0, X=$FF
+; ==========================================================
+L2_9F08:
                 LDA #$00
                 TAX
-                BEQ L2_9F15
+                BEQ L2_9F15         ; always taken
+L2_9F0D:
                 LDA #$80
-                BNE L2_9F13
+                BNE L2_9F13         ; always taken
                 LDA #$00
 L2_9F13:
                 LDX #$FF
 L2_9F15:
-                STA $1F
-                STX $24
+                STA $1F             ; cursor mode flag
+                STX $24             ; cursor state
                 LDX #$17
                 LDY #$60
                 STX $02
@@ -10772,41 +10773,21 @@ L2_9F8D:
                 TAX
                 JMP ($0E41)
                 LDA $9FE4,X
-                !by $4C
-                !by $C3
-                !by $99
+                JMP $99C3
 L2_9FD4:
-                !by $A5
-                !by $0D
-                !by $C9
-                !by $B8
-                !by $90
-                !by $09
-                !by $A5
-                !by $0B
-                !by $C9
-                !by $68
-                !by $90
-                !by $03
-                !by $20
-                !by $B8
-                !by $8A
+                LDA $0D                 ; load Y coordinate (low)
+                CMP #$B8                ; compare with 184 (dec)
+                BCC L2_9FE3             ; if < 184, skip
+                LDA $0B                 ; load X coordinate (low)
+                CMP #$68                ; compare with 104 (dec)
+                BCC L2_9FE3             ; if < 104, skip
+                JSR $8AB8               ; handle out-of-bounds
 L2_9FE3:
-                !by $60
-                !by $C3
-                !by $B9
-                !by $76
-                !by $66
-                !by $B7
-                !by $62
-                LDA $65,X
-                !by $73
-                !by $74
-                ADC ($61,X)
-                ADC ($00,X)
-                CMP ($5F,X)
-                AND ($32),Y
-                !by $33
+                RTS
+L2_9FE4:
+                !by $C3,$B9,$76,$66,$B7,$62,$B5,$65
+                !by $73,$74,$61,$61,$61,$00,$C1,$5F
+                !by $31,$32,$33
                 CLV
                 LDX #$00
                 LDY #$60
