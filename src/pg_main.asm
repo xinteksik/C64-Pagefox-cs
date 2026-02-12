@@ -9870,17 +9870,17 @@ L2_9998:
 
                 !wo $9C6F               ; T
                 !wo $0DB3               ; C= T
-                !wo $0DAD               ; C= G - go to graphic editor
+                !wo $0DAD               ; C= G
                 !wo $9E85               ; LEFT ARROW
 
                 !wo L2_9E9A-1           ; 1
                 !wo L2_9E9A-1           ; 2
                 !wo L2_9E9A-1           ; 3
-                !wo $9D5D               ; C= CLR
+                !wo L2_9D5E-1           ; C= CLR
 
-                !wo $A09A               ; V
-                !wo $A0A6               ; F
-                !wo $A0C2               ; C= P
+                !wo L2_A09B-1           ; V
+                !wo L2_A0A7-1           ; F
+                !wo L2_A0C3-1           ; C= P
                 !wo $9ABE               ; A
                 
                 !wo $8411               ; F3
@@ -10393,6 +10393,11 @@ L2_9D46:
                 JSR $9C84
 L2_9D5D:
                 RTS
+
+;==========================================================
+; $9D5E - Layout editor: C= CLR
+;==========================================================
+L2_9D5E:
                 ASL $0340
                 BCC L2_9D66
                 JMP $0FF4
@@ -10573,7 +10578,7 @@ L2_9E88:
                 JMP $A073
 
 ;==========================================================
-; Layout 1, 2 or 3
+; $9E9A - Layout editor: Layout 1, 2 or 3
 ;==========================================================
 L2_9E9A:
                 TXA
@@ -10880,25 +10885,40 @@ L2_A084:
                 JSR L0_99E4
                 JMP $B285
                 +InsertMainScreenTextPos ; Position of texts $11, $12 a $13
-                LDA #$01
+
+;==========================================================
+; $A09B - Layout editor: V = quick preview
+;==========================================================
+L2_A09B:
+                LDA #$01                ; render mode = 1
                 STA $72
-                LDA #$00
-                JSR $A107
-                JMP $A076
-                ASL $0340
-                BCS L2_A0B2
-                LDA #$40
-                STA $0340
-                RTS
+                LDA #$00                ; preview type $00 = quick/thumbnail
+                JSR $A107               ; call preview render routine
+                JMP $A076               ; return to layout editor refresh
+
+;==========================================================
+; $A0A7 - Layout editor: F = full preview (requires double press)
+;==========================================================
+L2_A0A7:
+                ASL $0340               ; shift preview flag left, bit 7 → carry
+                BCS L2_A0B2             ; carry set = 2nd press → do full preview
+                LDA #$40                ; 1st press: set "F pressed once" flag
+                STA $0340               ; store in flag byte
+                RTS                     ; return to layout editor refresh
 L2_A0B2:
-                LDA #$01
+                LDA #$01                ; render mode = 1
                 STA $72
-                LDA #$40
-                JSR $A107
-                BNE L2_A0C0
-                JSR L0_837B
+                LDA #$40                ; preview type $40 = full page
+                JSR $A107               ; call preview render routine
+                BNE L2_A0C0             ; if non-zero result → skip text refresh
+                JSR L0_837B             ; refresh text editor screen
 L2_A0C0:
-                JMP $A076
+                JMP $A076               ; return to layout editor refresh
+
+;==========================================================
+; $A0A7 - Layout editor: C= P = print
+;==========================================================
+L2_A0C3:
                 JSR $0E1B
                 BCS L2_A0FE
                 LDX #$05
@@ -10921,32 +10941,25 @@ L2_A0CA:
                 PHA
                 JSR $A738
                 INC $72
-                !by $68
-                !by $A6
-                !by $71
-                !by $F0
-                !by $E3
-                !by $8A
-                !by $20
-                !by $2A
-                !by $B2
-                !by $A9
-                !by $00
-                !by $20
-                !by $10
-                !by $0E
+                PLA
+                LDX $71
+                !by $F0, $E3
+                TXA
+                JSR $B22A
+                LDA #$00
+                JSR $0E10
 L2_A0FE:
-                !by $4C
-                !by $76
-                !by $A0
+                JMP $A076
                 !by $00
                 !by $00
                 !by $63
                 !by $4F
                 !by $64
-                BVC $A174
-                !by $43
-                ASL $7085
+                !by $50
+L2_A107:                
+                JMP ($0E43)
+                !by $85
+                !by $70
                 LDA #$00
                 STA $71
                 STA $D015
