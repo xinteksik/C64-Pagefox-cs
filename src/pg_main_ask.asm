@@ -37,7 +37,6 @@
 ;==========================================================
 .language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
 .pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
-.device         = $08                   ; 08, 09, 0A, 0B, ...
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -329,7 +328,7 @@ L0_8184:
                 RTS
 L0_8189:
                 LDA #$05                ; msg. no.
-                JSR L0_9747             ; print msg. "Přetečení paměti"
+                JSR L0_9747             ; print msg. "PÅ™eteÄenÃ­ pamÄ›ti"
                 SEC
 L0_818F:
                 RTS
@@ -1090,7 +1089,7 @@ L0_85E1:
                 RTS
 L0_860E:
                 LDA #$07                ; msg. no.
-                JSR L0_9747             ; print "Označ cil a potvrd ..."
+                JSR L0_9747             ; print "OznaÄ cil a potvrd ..."
 L0_8613:
                 JSR $9474               ; get character from imput device?
                 CMP #$A0
@@ -1302,8 +1301,10 @@ L0_8749:
                 JSR L0_8643              ; Mark text block
                 BCS L0_87D6
 L0_8770:
-                LDA #$03                ; msg. no. 03
-                JSR L0_957C             ; print "Nazev"
+                JMP hook_tsave      ; askdevice + "Nazev" prompt
+                NOP                 ; padding (original: LDA #$03 / JSR L0_957C)
+                NOP
+hook_tsave_ret:
                 BCS L0_87D6
                 LDY #$01
                 JSR L0_9297              ; set file prameter and open
@@ -1339,7 +1340,7 @@ L0_87A3:
                 LDA #$4C                ; 'L'
                 JSR CBM_CHROUT
 ; === Write layout data length ===
-                LDA $1700               ; Number of layout bytes (n × 5)
+                LDA $1700               ; Number of layout bytes (n Ã— 5)
                 JSR CBM_CHROUT
 ; === Write layout data (frames + images) ===
 ; Format of record:
@@ -1373,8 +1374,10 @@ L0_87D6:
 ; Text command C= L
 ;==========================================================
 L0_87DF:
-                LDA #$00
-                JSR L0_915D             ;read dir
+                JMP hook_tload      ; askdevice + read dir
+                NOP                 ; padding (original: LDA #$00 / JSR L0_915D)
+                NOP
+hook_tload_ret:
                 BCS L0_882C
                 LDY #$02
                 JSR L0_9297             ; Open file for reading
@@ -1631,8 +1634,10 @@ L0_897C:
 ; Text command C= D
 ;==========================================================
 L0_898A:
-                LDA #$02
-                JSR L0_957C
+                JMP hook_dcmd       ; askdevice + "Prikaz" prompt
+                NOP                 ; padding (original: LDA #$02 / JSR L0_957C)
+                NOP
+hook_dcmd_ret:
                 BCS L0_8994
                 JSR L0_9258
 L0_8994:
@@ -2588,7 +2593,7 @@ L0_8F6D:
                 INY
                 BNE L0_8F6D
                 LDY #$1F
-; copy KERNAL ROM to RAM: $FD30..$FD4F → $0314..$0333
+; copy KERNAL ROM to RAM: $FD30..$FD4F â†’ $0314..$0333
 L0_8F7B:
                 LDA $FD30,Y
                 STA $0314,Y
@@ -2597,7 +2602,7 @@ L0_8F7B:
 ; set colors and sprites
                 LDA #$04
                 STA $0288
-                JSR $FF5B
+                JSR dev_init_wrapper ; init $BA, trampoline, then CINT
 ; border color
                 LDA #.COLOR_BORDER
                 STA $D020
@@ -2818,7 +2823,7 @@ L0_9122:
                 LDX #$00
                 LDA #$00
                 JSR L0_974D
-                JSR L0_973E
+                JSR dev_header_init ; show_dev_header + L0_973E
                 LDY #$27
                 LDA #$1E
 -               STA $0450,Y
@@ -2998,7 +3003,7 @@ L0_9258:
                 JSR CBM_SETNAM
                 LDA #$0F
                 TAY
-                LDX #.device
+                LDX $BA             ; device number from KERNAL variable
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 BCS L0_928C
@@ -3024,12 +3029,11 @@ L0_928C:
                 PLP
                 RTS
 L0_9297:
-                TYA
-                AND #$01
-                PHA
-                ;LDA #$08
-                ;TAX
-                JSR L0_dev_number
+                !by $98
+                !by $29
+                !by $01
+                !by $48
+                JSR $0334           ; trampoline: LDA #$08, LDX $BA, RTS
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
@@ -3843,13 +3847,13 @@ pf_menu_rowdef_ptr_table:               ; pointer table (little-endian)
 ; msg $15 on row $0A: "Auto-Linefeed  Linefeed" (2 items)
                 !by $15,$0A,$02
                 !by $00,$16,$28
-; msg $16 on row $0C: "Vlevo  Střed  Vpravo" (3 items)
+; msg $16 on row $0C: "Vlevo  StÅ™ed  Vpravo" (3 items)
                 !by $16,$0C,$03
                 !by $00,$10,$17,$28
 ; msg $20 on row $0E: "Standard  Tabela..." (2 items)
                 !by $20,$0E,$02
                 !by $00,$12,$28
-; msg $17 on row $10: "Start  Stránka  Skupina" (3 items)
+; msg $17 on row $10: "Start  StrÃ¡nka  Skupina" (3 items)
                 !by $17,$10,$03
                 +InsertPrinterMenuMod1
 ; msg $1C on row $01: "Pokracovat Zrusit" (2 items)
@@ -4349,10 +4353,201 @@ VIZA_CS_IN:
 VIZA_CS_OUT:
 +InsertVizaOut
 
-L0_dev_number:
-                LDA #$08                ; logical file number
-                LDX #.device             ; device number
+;==========================================================
+; Device number selection routines
+; Located in ROML free space ($9C39+)
+;==========================================================
+
+; ==========================================================
+; dev_init_wrapper – cold start: init device + call CINT
+; Replaces: JSR $FF5B in L0_8F6A (same 3 bytes)
+; ==========================================================
+dev_init_wrapper:
+                JSR dev_init        ; init $BA and trampoline
+                JMP $FF5B           ; CBM_CINT – original call
+
+; ==========================================================
+; dev_init – cold start initialization
+; Sets $BA=8 and writes trampoline to $0334
+; ==========================================================
+dev_init:
+                LDA #$08            ; default device 8
+                STA $BA             ; store as current device
+                ; write trampoline code to $0334
+                LDA #$A9            ; opcode LDA #imm
+                STA $0334
+                LDA #$08            ; logical file# = 8
+                STA $0335
+                LDA #$A6            ; opcode LDX zp
+                STA $0336
+                LDA #$BA            ; zeropage address $BA
+                STA $0337
+                LDA #$60            ; opcode RTS
+                STA $0338
                 RTS
+
+; ==========================================================
+; dev_header_init – show device in header + restore msg line
+; Replaces: JSR L0_973E in L0_9122 (same 3 bytes)
+; ==========================================================
+dev_header_init:
+                JSR show_dev_header ; display "LW:XX" in header bar
+                JMP L0_973E         ; original: clear/restore msg line
+
+; ==========================================================
+; chk_dev – test if IEC device exists
+; Input:  X = device number to test
+; Output: $90 bit 7 = 1 if not present
+; Clobbers: A
+; ==========================================================
+chk_dev:
+                LDA #$00
+                STA $90             ; clear ST
+                TXA                 ; A = device number
+                JSR $FFB1           ; CBM_LISTN – LISTEN
+                LDA #$FF
+                JSR $FF93           ; CBM_SECND – send SA
+                JSR $FFAE           ; CBM_UNLSN – UNLISTEN
+                LDA $90             ; check ST (bit 7 = not present)
+                RTS
+
+; ==========================================================
+; askdevice – UI prompt for device number 8-19
+; Shows msg #$1F on line 1, reads input, validates
+; If valid device found, stores to $BA and updates header
+; Preserves carry from L0_94DB on exit
+; Clobbers: A, X, Y
+; ==========================================================
+askdevice:
+                LDA #$1F            ; msg "cislo|"
+                JSR L0_9747         ; print on line 1
+                LDA #$FF
+                JSR L0_9437         ; enable CAPS mode (digits need SHIFT)
+                JSR show_devnum     ; display current $BA value at $0430
+                JSR L0_94DB         ; wait for input (RETURN/STOP)
+                PHP                 ; save carry flag
+                PHA                 ; save A (input length)
+                LDA #$00
+                JSR L0_9437         ; restore CAPS mode off
+                PLA                 ; restore A
+                PLP                 ; restore carry
+                BCS .ad_done        ; C=1 → STOP pressed, no change
+                ; parse input from screen RAM $0430 (line 1, column 8)
+                LDA $0430           ; 1st char
+                CMP #$31            ; '1'?
+                BNE .ad_single      ; no → single digit
+                ; two-digit: 10-19
+                LDA $0431           ; 2nd char
+                CMP #$3A            ; > '9'?
+                BCS .ad_done
+                CMP #$30            ; < '0'?
+                BCC .ad_done
+                SEC
+                SBC #$26            ; $30→$0A .. $39→$13
+                JMP .ad_test
+.ad_single:
+                CMP #$3A            ; > '9'?
+                BCS .ad_done
+                CMP #$38            ; < '8'?
+                BCC .ad_done
+                SEC
+                SBC #$30            ; $38→$08, $39→$09
+.ad_test:
+                TAX                 ; X = new device number
+                JSR chk_dev         ; test if device present
+                LDA $90
+                BMI .ad_done        ; not present → skip
+                STX $BA             ; store new device number
+                JSR show_dev_header ; update header display
+.ad_done:
+                RTS
+
+; ==========================================================
+; show_devnum – display current $BA on input line
+; Position: screen $0430 (line 1, column 8, after "cislo|" msg)
+; Clobbers: A, X
+; ==========================================================
+show_devnum:
+                LDA $BA
+                CMP #$0A            ; >= 10?
+                BCC .sd_one
+                LDX #$31            ; '1'
+                STX $0430
+                SEC
+                SBC #$0A
+                ORA #$30
+                STA $0431
+                RTS
+.sd_one:
+                ORA #$30
+                STA $0430
+                LDA #$20            ; space
+                STA $0431
+                RTS
+
+; ==========================================================
+; show_dev_header – display "LW:XX" on header bar (line 0)
+; Columns 34-38 of screen ($0400+34 = $0422)
+; Clobbers: A
+; ==========================================================
+show_dev_header:
+                LDA #$1C            ; '<' screencode
+                STA $0421
+                LDA #$44            ; 'D' screencode
+                STA $0422
+                LDA #$7C            ; ':' screencode
+                STA $0423
+                LDA $BA
+                CMP #$0A
+                BCC .dh_one
+                LDA #$31            ; '1' screencode
+                STA $0424
+                LDA $BA
+                SEC
+                SBC #$0A
+                ORA #$30
+                STA $0425
+                LDA #$1D           
+                STA $0426
+                RTS
+.dh_one:
+                ORA #$30
+                STA $0424
+                LDA #$1D            
+                STA $0425
+                LDA #$1E           
+                STA $0426
+                RTS
+
+; ==========================================================
+; hook_tsave – wrapper for C=S text save
+; Original: LDA #$03 / JSR L0_957C
+; ==========================================================
+hook_tsave:
+                JSR askdevice       ; ask for device number
+                LDA #$03            ; msg "Nazev"
+                JSR L0_957C         ; print "Nazev" prompt
+                JMP hook_tsave_ret  ; back to BCS L0_87D6
+
+; ==========================================================
+; hook_tload – wrapper for C=L text load
+; Original: LDA #$00 / JSR L0_915D
+; ==========================================================
+hook_tload:
+                JSR askdevice       ; ask for device number
+                LDA #$00
+                JSR L0_915D         ; read dir
+                JMP hook_tload_ret  ; back to BCS L0_882C
+
+; ==========================================================
+; hook_dcmd – wrapper for C=D disk command
+; Original: LDA #$02 / JSR L0_957C
+; ==========================================================
+hook_dcmd:
+                JSR askdevice       ; ask for device number
+                LDA #$02            ; msg "Prikaz"
+                JSR L0_957C         ; print "Prikaz" prompt
+                JMP hook_dcmd_ret   ; back to BCS L0_8994
 
 }
 
@@ -4608,8 +4803,8 @@ MSG_TABLE:
 ; - 180 chars x 8 bit = 1440 bits (lenght = 05A0)
 ; - bank switch routines
 ; - printer routines
-; Author’s note: 
-; This space would be a better place for the “pg24 mod”, 
+; Authorâ€™s note: 
+; This space would be a better place for the â€œpg24 modâ€, 
 ; because it would load directly into RAM.
 ;==========================================================
 
@@ -5427,7 +5622,7 @@ L0_BB2E:                                ; read from ZS LO or HI
                 STA $42
                 STA $DE80
                 LDY #$77
-L0_BB40:                                ; map 120 chars from ZS
+L0_BB40:                                 ; map 120 chars from ZS
                 LDA ($02),Y
                 STA $3C00,Y
                 DEY
@@ -10594,10 +10789,10 @@ L2_9E9A:
                 JSR $9E74
                 PLA
                 TAX
-                LDY L2_9EBA,X
+                LDY $9EBA,X
                 LDX #$00
 L2_9EA8:
-                LDA L2_9EBD,Y
+                LDA $9EBD,Y
                 STA $1800,X
                 BEQ L2_9EB4
                 INY
@@ -10606,75 +10801,74 @@ L2_9EA8:
 L2_9EB4:
                 STX $1700
                 JMP $A073
-L2_9EBA:
-                !by $00                     ; Layout 1 → offset 0
-                !by $06                     ; Layout 2 → offset 6
-                !by $11                     ; Layout 3 → offset 17
-L2_9EBD:
-; --- Layout 1: single frame ---
-                !by $40,$0A,$06,$96,$C3
-                !by $00
-; --- Layout 2: two frames (two columns) ---
-                !by $40,$09,$06,$4E,$C3
-                !by $40,$52,$06,$97,$C3
-                !by $00
-; --- Layout 3: three frames (three columns) ---
-                !by $40,$08,$06,$36,$C3 
-                !by $40,$39,$06,$67,$C3
-                !by $40,$6A,$06,$98,$C3
-                !by $00
 
-; ==========================================================
-; Reset layout flags and set default work area
-; ==========================================================
-L2_9EDE:
-                LDA $29                 ; load layout flags
-                AND #$76                ; clear bits 0,3,7
+;==========================================================
+                BRK
+                ASL $11
+                RTI
+                !by $0A
+                !by $06
+                STX $C3,Y
+                !by $00
+                !by $40
+                !by $09
+                !by $06
+                !by $4E
+                !by $C3
+                !by $40
+                !by $52
+                !by $06
+                !by $97
+                !by $C3
+                BRK
+                RTI
+                PHP
+                ASL $36
+                !by $C3
+                RTI
+                AND $6706,Y
+                !by $C3
+                RTI
+                ROR
+                ASL $98
+                !by $C3
+                BRK
+                LDA $29
+                AND #$76
                 STA $29
-                LDA $38                 ; load mode flags
-                AND #$EF                ; clear bit 4
+                LDA $38
+                AND #$EF
                 STA $38
-                LDX #$07                ; copy 8 bytes
+                LDX #$07
 L2_9EEC:
-                LDA L2_9F00,X           ; default work area coords
-                STA $0B,X               ; store to ZP $0B-$12
+                LDA $9F00,X
+                STA $0B,X
                 DEX
                 BPL L2_9EEC
-                JSR $8D70               ; draw frame
-                LDA #$B8                ; 184 (dec)
-                STA $0B                 ; X1 = $B8
-                STA $0F                 ; X2 = $B8
-                JMP $8D70               ; draw second frame
-
-; ==========================================================
-; Default work area coordinates
-; Copied to $0B-$12 by L2_9EDE
-; $0B=X1, $0C=Y1, $0D=X2, $0E=Y2,
-; $0F=X1', $10=Y1', $11=X2', $12=Y2'
-; ==========================================================
-L2_9F00:
-                !by $17,$00,$C7,$00
-                !by $17,$00,$00,$00
-
-; ==========================================================
-; Layout editor init - set cursor mode
-; Entry at $9F08: A=0, X=0 (no cursor)
-; Entry at $9F0D: A=$80 (cursor enabled)
-; Entry at $9F11: A=0, X=$FF
-; ==========================================================
-L2_9F08:
+                JSR $8D70
+                LDA #$B8
+                STA $0B
+                STA $0F
+                JMP $8D70
+                !by $17
+                BRK
+                !by $C7
+                BRK
+                !by $17
+                BRK
+                BRK
+                BRK
                 LDA #$00
                 TAX
-                BEQ L2_9F15         ; always taken
-L2_9F0D:
+                BEQ L2_9F15
                 LDA #$80
-                BNE L2_9F13         ; always taken
+                BNE L2_9F13
                 LDA #$00
 L2_9F13:
                 LDX #$FF
 L2_9F15:
-                STA $1F             ; cursor mode flag
-                STX $24             ; cursor state
+                STA $1F
+                STX $24
                 LDX #$17
                 LDY #$60
                 STX $02
@@ -10780,21 +10974,41 @@ L2_9F8D:
                 TAX
                 JMP ($0E41)
                 LDA $9FE4,X
-                JMP $99C3
+                !by $4C
+                !by $C3
+                !by $99
 L2_9FD4:
-                LDA $0D                 ; load Y coordinate (low)
-                CMP #$B8                ; compare with 184 (dec)
-                BCC L2_9FE3             ; if < 184, skip
-                LDA $0B                 ; load X coordinate (low)
-                CMP #$68                ; compare with 104 (dec)
-                BCC L2_9FE3             ; if < 104, skip
-                JSR $8AB8               ; handle out-of-bounds
+                !by $A5
+                !by $0D
+                !by $C9
+                !by $B8
+                !by $90
+                !by $09
+                !by $A5
+                !by $0B
+                !by $C9
+                !by $68
+                !by $90
+                !by $03
+                !by $20
+                !by $B8
+                !by $8A
 L2_9FE3:
-                RTS
-L2_9FE4:
-                !by $C3,$B9,$76,$66,$B7,$62,$B5,$65
-                !by $73,$74,$61,$61,$61,$00,$C1,$5F
-                !by $31,$32,$33
+                !by $60
+                !by $C3
+                !by $B9
+                !by $76
+                !by $66
+                !by $B7
+                !by $62
+                LDA $65,X
+                !by $73
+                !by $74
+                ADC ($61,X)
+                ADC ($00,X)
+                CMP ($5F,X)
+                AND ($32),Y
+                !by $33
                 CLV
                 LDX #$00
                 LDY #$60
@@ -10888,8 +11102,8 @@ L2_A09B:
 ; $A0A7 - Layout editor: F = full preview (requires double press)
 ;==========================================================
 L2_A0A7:
-                ASL $0340               ; shift preview flag left, bit 7 → carry
-                BCS L2_A0B2             ; carry set = 2nd press → do full preview
+                ASL $0340               ; shift preview flag left, bit 7 â†’ carry
+                BCS L2_A0B2             ; carry set = 2nd press â†’ do full preview
                 LDA #$40                ; 1st press: set "F pressed once" flag
                 STA $0340               ; store in flag byte
                 RTS                     ; return to layout editor refresh
@@ -10898,7 +11112,7 @@ L2_A0B2:
                 STA $72
                 LDA #$40                ; preview type $40 = full page
                 JSR $A107               ; call preview render routine
-                BNE L2_A0C0             ; if non-zero result → skip text refresh
+                BNE L2_A0C0             ; if non-zero result â†’ skip text refresh
                 JSR L0_837B             ; refresh text editor screen
 L2_A0C0:
                 JMP $A076               ; return to layout editor refresh
@@ -13499,9 +13713,7 @@ L2_B203:
                 RTS
                 TYA
                 PHA
-                ;LDA #$08
-                ;TAX
-                JSR L2_dev_number
+                JSR $0334           ; trampoline: LDA #$08, LDX $BA, RTS
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
@@ -13796,7 +14008,7 @@ L2_B3E2:
                 !by $10
                 !by $E9
                 !by $60
-; data - grafika nabídek (grafické ikony)
+; data - grafika nabÃ­dek (grafickÃ© ikony)
 ; menu 1 line 1
                 !by $FF,$80,$E6,$E6,$E6,$E6,$BE,$80
                 !by $FF,$00,$7C,$66,$66,$66,$66,$00
@@ -14129,11 +14341,6 @@ L2_B3E2:
                 !by $00,$00,$00,$00,$E0,$00,$FC,$00
                 !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
                 !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
-
-L2_dev_number:
-                LDA #$08                ; logical file number
-                LDX #.device             ; device number
-                RTS
 }
 * = $8000
 
