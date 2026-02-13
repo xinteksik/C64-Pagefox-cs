@@ -6,9 +6,12 @@
 This repository contains the **Czech translation of Pagefox** for the **Commodore 64 and Commodore 128**.  
 Included are:
 
-- The translated **user manual**  
-- **Font tools** for creating and editing custom fonts  
-- A **basic text editor** adapted for Pagefox  
+- source files for **Czech** and **German** version, partially commented
+- **24-pin dot matrix printer** support configurable in the source code
+- default **device number** configurable in the source code
+- the translated **user manual** to Czech 
+- **font tools** for creating and editing custom fonts  
+- a **basic text editor** adapted for Pagefox  
 
 Pagefox is a classic desktop publishing (DTP) cartridge for the C64/128, originally released in the 1980s.  
 This project makes it more accessible for Czech users, while keeping compatibility with the original software.
