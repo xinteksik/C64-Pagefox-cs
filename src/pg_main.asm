@@ -37,6 +37,7 @@
 ;==========================================================
 .language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
 .pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
+.device         = $08                  ; 08, 09, 0A, 0B
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -2997,7 +2998,7 @@ L0_9258:
                 JSR CBM_SETNAM
                 LDA #$0F
                 TAY
-                LDX #$08
+                LDX #.device
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 BCS L0_928C
@@ -3023,12 +3024,12 @@ L0_928C:
                 PLP
                 RTS
 L0_9297:
-                !by $98
-                !by $29
-                !by $01
-                !by $48
-                LDA #$08
-                TAX
+                TYA
+                AND #$01
+                PHA
+                ;LDA #$08
+                ;TAX
+                JSR L0_dev_number
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
@@ -4347,6 +4348,12 @@ VIZA_CS_IN:
 
 VIZA_CS_OUT:
 +InsertVizaOut
+
+L0_dev_number:
+                LDA #$08                ; logical file number
+                LDX #.device             ; device number
+                RTS
+
 }
 
 * = $2000
@@ -13492,8 +13499,9 @@ L2_B203:
                 RTS
                 TYA
                 PHA
-                LDA #$08
-                TAX
+                ;LDA #$08
+                ;TAX
+                JSR L2_dev_number
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
@@ -14121,6 +14129,11 @@ L2_B3E2:
                 !by $00,$00,$00,$00,$E0,$00,$FC,$00
                 !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
                 !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
+
+L2_dev_number:
+                LDA #$08                ; logical file number
+                LDX #.device             ; device number
+                RTS
 }
 * = $8000
 
