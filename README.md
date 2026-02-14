@@ -13,7 +13,7 @@ Included are:
 - **font tools** for creating and editing custom fonts  
 - a **basic text editor** adapted for Pagefox  
 
-Pagefox is a classic desktop publishing (DTP) cartridge for the C64/128, originally released in the 1980s.  
+Pagefox is a classic desktop publishing (DTP) cartridge for the C64/128, originally released in the 1987.  
 This project makes it more accessible for Czech users, while keeping compatibility with the original software.
 
 The project is based on Pagefox by scanntronik.de
