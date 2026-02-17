@@ -31,13 +31,16 @@
 !source "pg_kernal.asm"
 !source "pg_colors.asm"
 !source "pg_24.asm"
+!source "pg_sd2iec.asm"
 
 ;==========================================================
-; build options (language, 9pin/24pin printer mod)        ;
+; build options (language, 9pin/24pin printer mod,        ;
+; default device number)                                  ;
 ;==========================================================
 .language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
 .pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 .device         = $08                   ; 08, 09, 0A, 0B, ...
+.sd2iec         = 0                     ; 1 = enable, 0 = disable SD2IEC patch
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -2896,8 +2899,13 @@ L0_91AA:
                 DEC $27
                 BCS L0_9192
 L0_91B6:
+!if .sd2iec = 1 {
+                JMP dir_key_ext
+                NOP
+} else {
                 CMP #$AD
                 BNE L0_91D9
+}
                 LDY #$28
                 JSR L0_96FB
                 TXA
@@ -4597,6 +4605,10 @@ MSG_TABLE:
 
 !if .pg24 = 1 {
 +InsertModPG24
+}
+
+!if .sd2iec = 1 {
++InsertSD2IEC .device
 }
 
 }
