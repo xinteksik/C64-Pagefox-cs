@@ -18,7 +18,7 @@
 SD2IEC_BUF     = $C000              ; "CD:" + foldername (max 32 B)
 SD2IEC_LEN     = $C020              ; command length
 
-!macro InsertSD2IEC .device {
+!macro InsertSD2IEC {
 
 ; ==========================================================
 ; dir_key_ext - extended key handler for directory browser
@@ -197,7 +197,7 @@ send_cd_cmd:
 
                 LDA #$0F
                 TAY
-                LDX #.device
+                LDX $BA
                 JSR CBM_SETLFS
 
                 JSR CBM_OPEN

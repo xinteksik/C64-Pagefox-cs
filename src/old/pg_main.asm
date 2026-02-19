@@ -1,6 +1,6 @@
 ;==========================================================
 ;  PAGEFOX SOURCE CODE
-;  Version 2.6 (2026.02.19)
+;  Version 2.5 (2026.02.06)
 ;  Copyright (c) 2026 Tomas Kakulizek
 ;
 ;  This source code is based on the Pagefox v1.0
@@ -35,13 +35,12 @@
 
 ;==========================================================
 ; build options (language, 9pin/24pin printer mod,        ;
-; default device number, C= T to change device, sd2iec)   ;
+; default device number)                                  ;
 ;==========================================================
 .language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
 .pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 .device         = $08                   ; 08, 09, 0A, 0B, ...
-.change_device  = 1                     ; 1 = enable, 0 = disable C= T in Text editor to change device number
-.sd2iec         = 1                     ; 1 = enable, 0 = disable SD2IEC patch
+.sd2iec         = 0                     ; 1 = enable, 0 = disable SD2IEC patch
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -195,11 +194,7 @@ L0_8094:
                 !wo L0_8B83-1          ; C= CLR/HOME
 L0_80BC:
                 !wo L0_8B9B-1          ; C= V
-!if .change_device = 1 {
-                !wo toggle_drive-1     ; C= T - change device number
-                } else {
-                !wo L0_8077-1          ; C= T - RTS
-                }
+                !wo L0_8077-1          ; C= T
                 CMP #$20
                 BCC L0_80E6
                 LDY $23
@@ -3011,7 +3006,7 @@ L0_9258:
                 JSR CBM_SETNAM
                 LDA #$0F
                 TAY
-                LDX $BA                 ;change device number
+                LDX #.device
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 BCS L0_928C
@@ -4363,100 +4358,9 @@ VIZA_CS_OUT:
 +InsertVizaOut
 
 L0_dev_number:
-                LDA #$08                ; Logical file number (remains unchanged)
-                LDX $BA                 ; Read last used device from the KERNAL
-                CPX #$08                ; Is it a drive (device number 8 or higher)?
-                BCS +                   ; If yes, jump directly to RTS (end)
-                LDX #.device            ; If not, load default constant (from your setting above)
-                STX $BA                 ; Store it to $BA so the system knows next time
-+               RTS                     ; Return from subroutine
-
-
-!if .change_device = 1 {
-; ----------------------------------------------------------
-; toggle_drive + skip missing IEC devices (8..12)
-; uses ST ($90) bit7 = device not present
-; ----------------------------------------------------------
-
-LOGFN_CMD = $0F        ; 
-SA_CMD    = $0F        ; secondary addr 15 (command channel)
-
-toggle_drive:
-                LDA $BA
-                CMP #$08
-                BCC .init
-                CMP #$0D
-                BCS .init
-                CLC
-                ADC #$01
-                CMP #$0D
-                BCC .have_candidate
-                LDA #$08
-.have_candidate:
-                LDX #$05                ; max 5 devices (8..12)
-.try_next:
-                JSR probe_iec_device    ; C=0 OK, C=1 ERROR
-                BCC .save               ; if C=0 
-                CLC                     ; if C=1, try next device
-                ADC #$01
-                CMP #$0D
-                BCC .dec_count
-                LDA #$08
-.dec_count:
-                DEX
-                BNE .try_next
-.init:          
-                LDA #.device            ; tvoje výchozí
-
-.save:          STA $BA
-                LDX #$1E                ; text printing
-                CMP #$0A
-                BCC .units
-                LDX #$31
-                SBC #$0A
-
-.units:         ORA #$30
-                STX $0426
-                STA $0427
-                LDA #$01
-                STA $D826
-                STA $D827
+                LDA #$08                ; logical file number
+                LDX #.device             ; device number
                 RTS
-
-DEV_TMP = $FB        ; change to free ZP byte
-
-; ----------------------------------------------------------
-; probe_iec_device_listen
-; in:  A = device number (8..12)
-; out: C=0 device present, C=1 device missing
-; keeps: A = device number (return it)
-; trashes: X,Y
-; ----------------------------------------------------------
-probe_iec_device:
-                STA DEV_TMP
-                LDA #$00
-                STA $90                 ; ST=0
-
-                ; IEC "ping": LISTEN dev, SECOND (SA=15), UNLISTEN
-                LDA DEV_TMP
-                JSR $FFB1               ; LISTEN (device in A)
-
-                LDA #$6F                ; SECOND for SA=15  => $60 + 15 = $6F
-                JSR $FF93               ; SECOND
-
-                JSR $FFAE               ; UNLISTEN
-
-                LDA $90
-                BMI .missing            ; bit7 => device not present
-
-                LDA DEV_TMP
-                CLC
-                RTS
-.missing:
-                LDA DEV_TMP
-                SEC
-                RTS    
-}            
 
 }
 
@@ -4704,7 +4608,7 @@ MSG_TABLE:
 }
 
 !if .sd2iec = 1 {
-+InsertSD2IEC
++InsertSD2IEC .device
 }
 
 }
@@ -14239,13 +14143,9 @@ L2_B3E2:
                 !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
 
 L2_dev_number:
-                LDA #$08        
-                LDX $BA         
-                CPX #$08        
-                BCS +           
-                LDX #.device    
-                STX $BA         
-+               RTS
+                LDA #$08                ; logical file number
+                LDX #.device             ; device number
+                RTS
 }
 * = $8000
 
