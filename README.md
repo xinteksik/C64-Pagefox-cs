@@ -9,6 +9,7 @@ Included are:
 - source files for **Czech** and **German** version, partially commented
 - **24-pin dot matrix printer** support configurable in the source code
 - default **device number** configurable in the source code
+- support for **changing the device number** (Text editor with C= T) configurable in the source code
 - support **sd2iec/softiec** configurable in the source code
 - the translated **user manual** to Czech 
 - **font tools** for creating and editing custom fonts  
