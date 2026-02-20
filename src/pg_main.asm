@@ -4363,14 +4363,21 @@ VIZA_CS_OUT:
 +InsertVizaOut
 
 L0_dev_number:
-                LDA #$08                ; Logical file number (remains unchanged)
-                LDX $BA                 ; Read last used device from the KERNAL
-                CPX #$08                ; Is it a drive (device number 8 or higher)?
-                BCS +                   ; If yes, jump directly to RTS (end)
-                LDX #.device            ; If not, load default constant (from your setting above)
-                STX $BA                 ; Store it to $BA so the system knows next time
-+               RTS                     ; Return from subroutine
-
+                LDA #$08                ; logical file number for SETLFS
+                LDX $BA
+                CPX #$08
+                BCS +               
+                LDX $17FF
+                CPX #$08
+                BCC ++                  ; <8
+                CPX #$0D
+                BCS ++                  ; >=13
+                STX $BA
+                RTS
+++              LDX #.device            ; fallback
+                STX $17FF
+                STX $BA
++               RTS
 
 !if .change_device = 1 {
 ; ----------------------------------------------------------
@@ -4408,7 +4415,9 @@ toggle_drive:
 .init:          
                 LDA #.device            ; tvoje výchozí
 
-.save:          STA $BA
+.save:          
+                STA $BA
+                STA $17FF               ;$BA
                 LDX #$1E                ; text printing
                 CMP #$0A
                 BCC .units
@@ -4716,6 +4725,7 @@ MSG_TABLE:
 ; - 180 chars x 8 bit = 1440 bits (lenght = 05A0)
 ; - bank switch routines
 ; - printer routines
+; - free RAM $1740 to $17FF (512 bytes) ???
 ; Author’s note: 
 ; This space would be a better place for the “pg24 mod”, 
 ; because it would load directly into RAM.
@@ -14239,13 +14249,22 @@ L2_B3E2:
                 !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
 
 L2_dev_number:
-                LDA #$08        
-                LDX $BA         
-                CPX #$08        
-                BCS +           
-                LDX #.device    
-                STX $BA         
+                LDA #$08                ; logical file number for SETLFS
+                LDX $BA
+                CPX #$08
+                BCS +               
+                LDX $17FF
+                CPX #$08
+                BCC ++                  ; <8
+                CPX #$0D
+                BCS ++                  ; >=13
+                STX $BA
+                RTS
+++              LDX #.device            ; fallback
+                STX $17FF
+                STX $BA
 +               RTS
+
 }
 * = $8000
 
