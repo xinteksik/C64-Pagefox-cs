@@ -4362,23 +4362,6 @@ VIZA_CS_IN:
 VIZA_CS_OUT:
 +InsertVizaOut
 
-L0_dev_number:
-                LDA #$08                ; logical file number for SETLFS
-                LDX $BA
-                CPX #$08
-                BCS +               
-                LDX $17FF
-                CPX #$08
-                BCC ++                  ; <8
-                CPX #$0D
-                BCS ++                  ; >=13
-                STX $BA
-                RTS
-++              LDX #.device            ; fallback
-                STX $17FF
-                STX $BA
-+               RTS
-
 !if .change_device = 1 {
 ; ----------------------------------------------------------
 ; toggle_drive + skip missing IEC devices (8..12)
@@ -4725,7 +4708,7 @@ MSG_TABLE:
 ; - 180 chars x 8 bit = 1440 bits (lenght = 05A0)
 ; - bank switch routines
 ; - printer routines
-; - free RAM $1740 to $17FF (512 bytes) ???
+; - free RAM $1740 to $17FF ???
 ; Author’s note: 
 ; This space would be a better place for the “pg24 mod”, 
 ; because it would load directly into RAM.
@@ -6211,6 +6194,27 @@ L0_BE02:
                 !by $1B
                 !by $43
                 !by $FF
+L_RAM_1740:
+                LDA #$08                ; logical file number for SETLFS
+                LDX $BA
+                CPX #$08
+                BCS +               
+                LDX $17FF
+                CPX #$08
+                BCC ++                  ; <8
+                CPX #$0D
+                BCS ++                  ; >=13
+                STX $BA
+                RTS
+++              LDX #.device            ; fallback
+                STX $17FF
+                STX $BA
++               RTS
+
+* = $BFFF
+
+L_RAM_17FF:
+                !BY .device
 }
 
 * = $4000
@@ -13619,7 +13623,7 @@ L2_B203:
                 PHA
                 ;LDA #$08
                 ;TAX
-                JSR L2_dev_number
+                JSR $1740
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
@@ -14247,23 +14251,6 @@ L2_B3E2:
                 !by $00,$00,$00,$00,$E0,$00,$FC,$00
                 !by $9F,$80,$9F,$80,$9F,$80,$9F,$80
                 !by $FC,$00,$FC,$00,$FC,$00,$FC,$00
-
-L2_dev_number:
-                LDA #$08                ; logical file number for SETLFS
-                LDX $BA
-                CPX #$08
-                BCS +               
-                LDX $17FF
-                CPX #$08
-                BCC ++                  ; <8
-                CPX #$0D
-                BCS ++                  ; >=13
-                STX $BA
-                RTS
-++              LDX #.device            ; fallback
-                STX $17FF
-                STX $BA
-+               RTS
 
 }
 * = $8000
