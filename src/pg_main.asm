@@ -3042,7 +3042,7 @@ L0_9297:
                 PHA
                 ;LDA #$08
                 ;TAX
-                JSR L0_dev_number
+                JSR $1740
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
