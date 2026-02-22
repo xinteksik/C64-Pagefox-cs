@@ -3042,7 +3042,7 @@ L0_9297:
                 PHA
                 ;LDA #$08
                 ;TAX
-                JSR $1740
+                JSR $1790
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
@@ -4396,7 +4396,7 @@ toggle_drive:
                 DEX
                 BNE .try_next
 .init:          
-                LDA #.device            ; tvoje výchozí
+                LDA #.device            ; default value
 
 .save:          
                 STA $BA
@@ -4708,7 +4708,7 @@ MSG_TABLE:
 ; - 180 chars x 8 bit = 1440 bits (lenght = 05A0)
 ; - bank switch routines
 ; - printer routines
-; - free RAM $1740 to $17FF ???
+; - free RAM $1790 to $17FF ???
 ; Author’s note: 
 ; This space would be a better place for the “pg24 mod”, 
 ; because it would load directly into RAM.
@@ -6194,7 +6194,8 @@ L0_BE02:
                 !by $1B
                 !by $43
                 !by $FF
-L_RAM_1740:
+L_RAM_1790:
+* = $BF90
                 LDA #$08                ; logical file number for SETLFS
                 LDX $BA
                 CPX #$08
@@ -6210,10 +6211,10 @@ L_RAM_1740:
                 STX $17FF
                 STX $BA
 +               RTS
-
-* = $BFFF
+L_RAM_17AE:
 
 L_RAM_17FF:
+* = $BFFF
                 !BY .device
 }
 
@@ -13623,7 +13624,7 @@ L2_B203:
                 PHA
                 ;LDA #$08
                 ;TAX
-                JSR $1740
+                JSR $1790
                 JSR CBM_SETLFS
                 JSR CBM_OPEN
                 LDX #$08
