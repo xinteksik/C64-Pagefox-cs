@@ -1,4 +1,4 @@
-!macro InsertModPG24 {
+!macro InsertModPG24 .strobe_fix {
 ;==========================================================
 ; Native PG-24 (24-pin) patch stub + data
 ; Free space: $9C39-$9FFF  (ROML visible at $8000-$9FFF)
@@ -201,8 +201,14 @@ pg24_blk_148e:
                 !by $E3,$FC,$FF,$00,$18,$E0,$F8,$2C
                 !by $0F,$17,$10,$03,$4C,$D2,$FF,$48
                 !by $8D,$01,$DD,$AD,$0D,$DD,$AD,$00
-                !by $DD,$29,$FB,$8D,$00,$DD,$09,$04
-                !by $8D,$00,$DD,$AD,$0D,$DD,$29,$10
+                !by $DD,$29,$FB,$8D,$00,$DD
+                
+!if .strobe_fix = 1 {
+                !by $20,$AE,$17,$EA,$EA
+                    } else {
+                !by $09,$04,$8D,$00,$DD
+                    }
+                !by $AD,$0D,$DD,$29,$10
                 !by $F0,$F9,$68,$60,$C6,$25,$F0,$07
                 !by $20,$CC,$9B,$C6,$25,$D0,$F9,$60
                 !by $20,$20,$20,$20,$20,$20,$20,$20

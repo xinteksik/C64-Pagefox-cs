@@ -37,11 +37,12 @@
 ; build options (language, 9pin/24pin printer mod,        ;
 ; default device number, C= T to change device, sd2iec)   ;
 ;==========================================================
-.language       = 0                     ; 0 = cs, 1 = de, 2 = en (not implemented)
-.pg24           = 0                     ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
-.device         = $08                   ; 08, 09, 0A, 0B, ...
-.change_device  = 1                     ; 1 = enable, 0 = disable C= T in Text editor to change device number
-.sd2iec         = 1                     ; 1 = enable, 0 = disable SD2IEC patch
+.language           = 0                 ; 0 = cs, 1 = de, 2 = en (not implemented)
+.pg24               = 0                 ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
+.device             = $08               ; 08, 09, 0A, 0B, ...
+.change_device      = 1                 ; 1 = enable, 0 = disable C= T in Text editor to change device number
+.sd2iec             = 1                 ; 1 = enable, 0 = disable SD2IEC patch
+.strobe_fix         = 1                 ; 1 = enable U64 turbo support, 0 = off; fix for real printer on UserPort (Centronics)
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -4282,8 +4283,15 @@ L0_9B78:
                 LDA $DD00
                 AND #$FB
                 STA $DD00
+
+!if .strobe_fix  = 1 {
+                JSR $17AE
+                NOP
+                NOP
+} else {
                 ORA #$04
                 STA $DD00
+}
 L0_9B89:
                 LDA $DD0D
                 AND #$10
@@ -4692,7 +4700,7 @@ MSG_TABLE:
 +InsertMsgTable
 
 !if .pg24 = 1 {
-+InsertModPG24
++InsertModPG24 .strobe_fix
 }
 
 !if .sd2iec = 1 {
@@ -6211,11 +6219,36 @@ L_RAM_1790:
                 STX $17FF
                 STX $BA
 +               RTS
-L_RAM_17AE:
-
+L_RAM_17AC:
+!if .strobe_fix = 1 {
+; ==========================================================
+; strobe_delay
+; Generates ~10us STROBE high pulse, CPU-speed independent
+; Uses CIA2 Timer B (normally unused)
+; In:  $DD00 = STROBE low already asserted
+; Out: $DD00 = STROBE high, Timer B stopped
+; Destroys: A
+; ==========================================================
+strobe_delay:
+                LDA #$00            ; stop Timer B
+                STA $DD0F           ; CIA2 CRB: stop
+                LDA #$0A            ; 10us @ 1MHz
+                STA $DD06           ; Timer B lo
+                LDA #$00            ; Timer B hi = 0
+                STA $DD07           ; CIA2 Timer B hi
+                LDA #$19            ; one-shot, count PHI2
+                STA $DD0F           ; CIA2 CRB: start
+-               LDA $DD0F           ; read CRB
+                AND #$01            ; bit 0 = running
+                BNE -               ; wait until done
+                LDA $DD00           ; read Port B
+                ORA #$04            ; STROBE high
+                STA $DD00           ; release STROBE
+                RTS                 ; 20 bytes
+}
 L_RAM_17FF:
 * = $BFFF
-                !BY .device
+                !by .device
 }
 
 * = $4000
