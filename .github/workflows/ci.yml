@@ -76,7 +76,7 @@ jobs:
           # Build BIN temporarily, publish only CRT
           TMPBIN="build/tmp.bin"
 
-          acme --I src \
+          acme -I src \
                --format plain \
                --outfile "$TMPBIN" \
                -DLANG=${{ matrix.lang_def }} \
