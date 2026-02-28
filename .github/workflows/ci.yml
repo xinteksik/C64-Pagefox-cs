@@ -1,0 +1,120 @@
+name: Build Pagefox Cartridge
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lang_code: cs
+            lang_def: 0
+            p24: 0
+          - lang_code: cs
+            lang_def: 0
+            p24: 1
+          - lang_code: de
+            lang_def: 1
+            p24: 0
+          - lang_code: de
+            lang_def: 1
+            p24: 1
+
+    steps:
+      - name: Checkout (full history for tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Install toolchain (ACME + VICE cartconv)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y acme vice
+
+      - name: Build variant (.crt only)
+        shell: bash
+        run: |
+          mkdir -p build
+
+          # Version from git:
+          # - tag v2.6.1      -> 2.6.1
+          # - commits after   -> 2.6.1-5-gabc1234
+          DESC=$(git describe --tags --always --match "v[0-9]*" || true)
+          [ -n "$DESC" ] || DESC="v0.0.0-0-g$(git rev-parse --short HEAD)"
+          VER="${DESC#v}"
+
+          # Naming:
+          # 9pin:  Pagefox-<lang>-<ver>.crt
+          # 24pin: Pagefox-<lang>-<ver>-24pin.crt
+          OUTBASE="Pagefox-${{ matrix.lang_code }}-${VER}"
+          if [ "${{ matrix.p24 }}" = "1" ]; then
+            OUTBASE="${OUTBASE}-24pin"
+          fi
+
+          echo "OUTBASE=$OUTBASE" >> "$GITHUB_ENV"
+          echo "Building: $OUTBASE"
+
+          # Build BIN temporarily, publish only CRT
+          TMPBIN="build/tmp.bin"
+
+          acme --format plain \
+               --outfile "$TMPBIN" \
+               -D LANG=${{ matrix.lang_def }} \
+               -D P24=${{ matrix.p24 }} \
+               src/pg_main.asm
+
+          cartconv -t pf -i "$TMPBIN" -o "build/${OUTBASE}.crt"
+          rm -f "$TMPBIN"
+
+          test -s "build/${OUTBASE}.crt"
+          ls -la build
+
+      - name: Upload CRT artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.OUTBASE }}"
+          path: "build/${{ env.OUTBASE }}.crt"
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: List downloaded files
+        run: |
+          find dist -type f -maxdepth 4 -print
+
+      - name: Create GitHub Release and upload CRTs
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            dist/**/*.crt
