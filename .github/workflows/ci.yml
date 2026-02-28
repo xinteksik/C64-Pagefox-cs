@@ -53,6 +53,7 @@ jobs:
       - name: Build variant (.crt only)
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p build
 
           # Version from git:
