@@ -78,8 +78,8 @@ jobs:
 
           acme --format plain \
                --outfile "$TMPBIN" \
-               -D LANG=${{ matrix.lang_def }} \
-               -D P24=${{ matrix.p24 }} \
+               -DLANG=${{ matrix.lang_def }} \
+               -DP24=${{ matrix.p24 }} \
                src/pg_main.asm
 
           cartconv -t pf -i "$TMPBIN" -o "build/${OUTBASE}.crt"
