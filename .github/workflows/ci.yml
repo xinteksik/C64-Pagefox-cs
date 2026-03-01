@@ -105,6 +105,7 @@ jobs:
           xvfb-run -a x64sc \
             -kernal ci/roms/kernal-901227-03.bin \
             -basic ci/roms/basic-901226-01.bin \
+            -chargen ci/roms/chargen-901225-01.bin \
             -limitcycles 1024 \
             -exitscreenshot "$OUTPNG"
 
