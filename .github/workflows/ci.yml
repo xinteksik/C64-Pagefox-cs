@@ -90,6 +90,10 @@ jobs:
           test -s "build/${OUTBASE}.crt"
           ls -la build
 
+      - name: Debug VICE options
+        run: |
+          x64sc -help || true
+
       - name: Screenshot after 5s (real time)
         shell: bash
         run: |
