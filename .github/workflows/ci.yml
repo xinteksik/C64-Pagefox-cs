@@ -90,10 +90,6 @@ jobs:
           test -s "build/${OUTBASE}.crt"
           ls -la build
 
-      - name: Debug VICE options
-        run: |
-          x64sc -help || true
-
       - name: Screenshot after 5s (real time)
         shell: bash
         run: |
@@ -102,15 +98,11 @@ jobs:
           CRT="build/${OUTBASE}.crt"
           OUTPNG="build/${OUTBASE}.png"
 
-          (
-            sleep 5
-            echo "screenshot \"$OUTPNG\""
-            echo "quit"
-          ) | xvfb-run -a x64sc \
-                -speed 100 \
-                -warp 0 \
-                -remotemonitor \
-                -autostart "$CRT"
+          xvfb-run -a x64sc \
+            -speed 100 \
+            -warp 0 \
+            -limitcycles 4926240 \
+            -exitscreenshot "$OUTPNG"
 
           test -s "$OUTPNG"
           ls -la "$OUTPNG"
