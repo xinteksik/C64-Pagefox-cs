@@ -44,6 +44,9 @@
 .sd2iec             = 1                 ; 1 = enable, 0 = disable SD2IEC patch
 .strobe_fix         = 1                 ; 1 = enable U64 turbo support, 0 = off; fix for real printer on UserPort (Centronics)
 
+!ifdef LANG .language = LANG
+!ifdef P24 .pg24 = P24
+
 !if .language = 0 {
     !source "pg_cs.asm"
     !to "build/pagefox-cs-2.5.bin", plain
