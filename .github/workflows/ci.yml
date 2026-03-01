@@ -107,7 +107,7 @@ jobs:
             -kernal ci/roms/kernal-901227-03.bin \
             -basic ci/roms/basic-901226-01.bin \
             -chargen ci/roms/chargen-901225-01.bin \
-            -limitcycles 1024 \
+            -limitcycles 4926240 \
             -exitscreenshot "$OUTPNG"
           rc=$?
           set -e
