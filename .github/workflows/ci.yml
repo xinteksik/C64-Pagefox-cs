@@ -103,10 +103,10 @@ jobs:
             echo "screenshot \"$OUTPNG\""
             echo "quit"
           ) | xvfb-run -a x64sc \
-                -cartcrt "$CRT" \
                 -speed 100 \
                 -warp 0 \
-                -remotemonitor
+                -remotemonitor \
+                "$CRT"
 
           test -s "$OUTPNG"
           ls -la "$OUTPNG"
