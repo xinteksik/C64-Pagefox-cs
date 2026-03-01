@@ -44,8 +44,8 @@
 .pg24               = 0                 ; 1 = enable, 2 = disable 24 pin mod (native pg-24.prg)
 }
 .device             = $08               ; 08, 09, 0A, 0B, ...
-.change_device      = 0                 ; 1 = enable, 0 = disable C= T in Text editor to change device number
-.sd2iec             = 0                 ; 1 = enable, 0 = disable SD2IEC patch
+.change_device      = 1                 ; 1 = enable, 0 = disable C= T in Text editor to change device number
+.sd2iec             = 1                 ; 1 = enable, 0 = disable SD2IEC patch
 .strobe_fix         = 0                 ; 1 = enable U64 turbo support, 0 = off; fix for real printer on UserPort (Centronics)
 .u64turbobit        = 0                 ; 0 = disable, 1 = enable U64 turbo bit on boot
 
