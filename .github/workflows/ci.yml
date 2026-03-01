@@ -92,22 +92,21 @@ jobs:
 
       - name: Screenshot after 5s (real time)
         shell: bash
-        env:
-          SDL_VIDEODRIVER: dummy
-          SDL_AUDIODRIVER: dummy
         run: |
           set -euo pipefail
 
           CRT="build/${OUTBASE}.crt"
           OUTPNG="build/${OUTBASE}.png"
 
-          # PAL timing: 985248 Hz * 5 s = 4 926 240 cycles
-          xvfb-run -a x64sc \
-            -cartcrt "$CRT" \
-            -speed 100 \
-            -warp 0 \
-            -limitcycles 4926240 \
-            -exitscreenshot "$OUTPNG"
+          (
+            sleep 5
+            echo "screenshot \"$OUTPNG\""
+            echo "quit"
+          ) | xvfb-run -a x64sc \
+                -cartcrt "$CRT" \
+                -speed 100 \
+                -warp 0 \
+                -monitor
 
           test -s "$OUTPNG"
           ls -la "$OUTPNG"
