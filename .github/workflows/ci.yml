@@ -90,11 +90,39 @@ jobs:
           test -s "build/${OUTBASE}.crt"
           ls -la build
 
+      - name: Screenshot after 5s (real time)
+        shell: bash
+        env:
+          SDL_VIDEODRIVER: dummy
+          SDL_AUDIODRIVER: dummy
+        run: |
+          set -euo pipefail
+
+          CRT="build/${OUTBASE}.crt"
+          OUTPNG="build/${OUTBASE}.png"
+
+          # PAL timing: 985248 Hz * 5 s = 4 926 240 cycles
+          x64sc \
+            -cartcrt "$CRT" \
+            -speed 100 \
+            -warp 0 \
+            -limitcycles 4926240 \
+            -exitscreenshot "$OUTPNG"
+
+          test -s "$OUTPNG"
+          ls -la "$OUTPNG"
+
       - name: Upload CRT artifact
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.OUTBASE }}"
           path: "build/${{ env.OUTBASE }}.crt"
+
+      - name: Upload PNG screenshot artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.OUTBASE }}-screenshot"
+          path: "build/${{ env.OUTBASE }}.png"
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
