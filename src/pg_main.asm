@@ -5,8 +5,9 @@
 ;
 ;  This source code is based on the Pagefox v1.0
 ;
-;  Ppagefox was programmed by Hans Haberl in 1987
-;  (c) 1987 by SCANNTRONIK
+;  Pagefox was programmed by Hans Haberl in 1987
+;  (c) 1987 by SCANNTRONIK 
+;  https://www.scanntronik.de/
 ;
 ;  More information about Pagefox can be found at:
 ;  https://www.c64-wiki.de/wiki/Pagefox
@@ -26,7 +27,6 @@
 ;==========================================================
 ; sources
 ;==========================================================
-
 !initmem $FF
 !source "pg_kernal.asm"
 !source "pg_colors.asm"
@@ -43,6 +43,7 @@
 .change_device      = 1                 ; 1 = enable, 0 = disable C= T in Text editor to change device number
 .sd2iec             = 1                 ; 1 = enable, 0 = disable SD2IEC patch
 .strobe_fix         = 1                 ; 1 = enable U64 turbo support, 0 = off; fix for real printer on UserPort (Centronics)
+.u64turbobit        = 1                 ; 0 = disable, 1 = enable U64 turbo bit on boot
 
 !if .language = 0 {
     !source "pg_cs.asm"
@@ -96,7 +97,13 @@ L0_8031:
                 LDA $DC01               ; CIA1 port B
                 AND #$10
                 BEQ L0_8042             ; jump to disable cartridge (by holding SPACE on start)
+
+!if .u64turbobit = 1 {
+                JSR u64_turbo_init
+} else {
                 JSR L0_8F6A             ; cold start init, copy data to RAM
+}
+      
 !if .pg24 = 1 {
                 JMP pg24_boot
 } else {
@@ -4457,6 +4464,29 @@ probe_iec_device:
                 SEC
                 RTS    
 }            
+
+!if .u64turbobit = 1 {
+; ==========================================================
+; u64_turbo_init
+; Called once on cold start. Enables U64 turbo via $D030.
+; Uses speed/badline settings from U64 menu.
+; Detection: $D030 reads $FF if not available – skip.
+; In:  nothing
+; Out: nothing
+; Destroys: A
+; ==========================================================
+
+u64_turbo_init:
+                LDA $D030           ; read turbo enable bit
+                CMP #$FF            ; $FF = not available (standard C64)
+                BEQ .u64_done       ; skip if no U64
+                LDA #$01            ; enable turbo (use menu settings)
+                STA $D030           ; turbo enable bit on
+.u64_done:
+                JSR L0_8F6A         ; cold start init
+                RTS                 ; return to L0_8031
+}
+
 
 }
 
