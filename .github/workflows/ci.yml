@@ -49,23 +49,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y acme vice xvfb
-
-      - name: Install toolchain (ACME + VICE + Xvfb)
-        shell: bash
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y acme vice xvfb
-      
-          echo "VICE version:"
-          x64sc -version || true
-      
-          echo "Searching for ROM/data packages:"
-          apt-cache search -n 'vice.*data|vice.*rom|vice.*emu.*data' || true
-      
-          echo "List installed VICE packages:"
-          dpkg -l | grep -i vice || true
-      
+   
       - name: Build variant (.crt only)
         shell: bash
         run: |
@@ -113,8 +97,13 @@ jobs:
 
           CRT="build/${OUTBASE}.crt"
           OUTPNG="build/${OUTBASE}.png"
-
+          
+          mkdir -p ci/roms
+          curl -o ci/roms/kernal-901227-03.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/kernal.901227-03.bin
+          curl -o ci/roms/basic-901226-01.bin   https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/basic.901226-01.bin
+          curl -o ci/roms/chargen-901225-01.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/characters.901225-01.bin
           xvfb-run -a x64sc \
+            -rompath ci/roms \
             -limitcycles 1024 \
             -exitscreenshot "$OUTPNG"
 
