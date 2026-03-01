@@ -125,17 +125,13 @@ jobs:
           test -s "$OUTPNG"
           ls -la "$OUTPNG"
 
-      - name: Upload CRT artifact
+      - name: Upload CRT + PNG artifact
         uses: actions/upload-artifact@v4
         with:
           name: "${{ env.OUTBASE }}"
-          path: "build/${{ env.OUTBASE }}.crt"
-
-      - name: Upload PNG screenshot artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: "${{ env.OUTBASE }}-screenshot"
-          path: "build/${{ env.OUTBASE }}.png"
+          path: |
+            build/${{ env.OUTBASE }}.crt
+            build/${{ env.OUTBASE }}.png
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
