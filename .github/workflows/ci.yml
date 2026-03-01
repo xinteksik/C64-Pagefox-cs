@@ -103,7 +103,7 @@ jobs:
           curl -o ci/roms/basic-901226-01.bin   https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/basic.901226-01.bin
           curl -o ci/roms/chargen-901225-01.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/characters.901225-01.bin
           xvfb-run -a x64sc \
-            -default \
+            -directory ci/roms \
             -limitcycles 1024 \
             -exitscreenshot "$OUTPNG"
 
