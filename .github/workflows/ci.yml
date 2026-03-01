@@ -89,6 +89,14 @@ jobs:
 
           test -s "build/${OUTBASE}.crt"
           ls -la build
+      - name: Download ROMs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ci/roms
+          curl -o ci/roms/kernal-901227-03.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/kernal.901227-03.bin
+          curl -o ci/roms/basic-901226-01.bin   https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/basic.901226-01.bin
+          curl -o ci/roms/chargen-901225-01.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/characters.901225-01.bin
 
       - name: Screenshot after 5s (real time)
         shell: bash
@@ -98,10 +106,6 @@ jobs:
           CRT="build/${OUTBASE}.crt"
           OUTPNG="build/${OUTBASE}.png"
           
-          mkdir -p ci/roms
-          curl -o ci/roms/kernal-901227-03.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/kernal.901227-03.bin
-          curl -o ci/roms/basic-901226-01.bin   https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/basic.901226-01.bin
-          curl -o ci/roms/chargen-901225-01.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/characters.901225-01.bin
           set +e
           xvfb-run -a x64sc \
             -kernal ci/roms/kernal-901227-03.bin \
@@ -157,3 +161,4 @@ jobs:
           generate_release_notes: true
           files: |
             dist/**/*.crt
+            dist/**/*.png
