@@ -48,8 +48,24 @@ jobs:
       - name: Install toolchain (ACME + VICE cartconv)
         run: |
           sudo apt-get update
-          sudo apt-get install -y acme vice xvfb vice-emu-data
+          sudo apt-get install -y acme vice xvfb
 
+      - name: Install toolchain (ACME + VICE + Xvfb)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y acme vice xvfb
+      
+          echo "VICE version:"
+          x64sc -version || true
+      
+          echo "Searching for ROM/data packages:"
+          apt-cache search -n 'vice.*data|vice.*rom|vice.*emu.*data' || true
+      
+          echo "List installed VICE packages:"
+          dpkg -l | grep -i vice || true
+      
       - name: Build variant (.crt only)
         shell: bash
         run: |
