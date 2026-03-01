@@ -108,7 +108,8 @@ jobs:
             -basic ci/roms/basic-901226-01.bin \
             -chargen ci/roms/chargen-901225-01.bin \
             -limitcycles 4926240 \
-            -exitscreenshot "$OUTPNG"
+            -exitscreenshot "$OUTPNG" \
+            -cartcrt "build/${OUTBASE}.crt"
           rc=$?
           set -e
 
