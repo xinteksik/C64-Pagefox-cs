@@ -99,9 +99,7 @@ jobs:
           OUTPNG="build/${OUTBASE}.png"
 
           xvfb-run -a x64sc \
-            -speed 100 \
-            -warp 0 \
-            -limitcycles 4926240 \
+            -limitcycles 1024 \
             -exitscreenshot "$OUTPNG"
 
           test -s "$OUTPNG"
