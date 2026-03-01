@@ -48,7 +48,7 @@ jobs:
       - name: Install toolchain (ACME + VICE cartconv)
         run: |
           sudo apt-get update
-          sudo apt-get install -y acme vice
+          sudo apt-get install -y acme vice xvfb
 
       - name: Build variant (.crt only)
         shell: bash
@@ -102,7 +102,7 @@ jobs:
           OUTPNG="build/${OUTBASE}.png"
 
           # PAL timing: 985248 Hz * 5 s = 4 926 240 cycles
-          x64sc \
+          xvfb-run -a x64sc \
             -cartcrt "$CRT" \
             -speed 100 \
             -warp 0 \
