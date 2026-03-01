@@ -106,7 +106,7 @@ jobs:
                 -speed 100 \
                 -warp 0 \
                 -remotemonitor \
-                "$CRT"
+                -autostart "$CRT"
 
           test -s "$OUTPNG"
           ls -la "$OUTPNG"
