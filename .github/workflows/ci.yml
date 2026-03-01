@@ -1,0 +1,168 @@
+name: Build Pagefox Cartridge
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/**'
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lang_code: cs
+            lang_def: 0
+            p24: 0
+          - lang_code: cs
+            lang_def: 0
+            p24: 1
+          - lang_code: de
+            lang_def: 1
+            p24: 0
+          - lang_code: de
+            lang_def: 1
+            p24: 1
+
+    steps:
+      - name: Checkout (full history for tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Install toolchain (ACME + VICE)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y acme vice xvfb
+   
+      - name: Build variant (.crt only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build
+
+          # Version from git:
+          # - tag v2.6.1      -> 2.6.1
+          # - commits after   -> 2.6.1-5-gabc1234
+          DESC=$(git describe --tags --always --match "v[0-9]*" || true)
+          [ -n "$DESC" ] || DESC="v0.0.0-0-g$(git rev-parse --short HEAD)"
+          VER="${DESC#v}"
+
+          # Naming:
+          # 9pin:  Pagefox-<lang>-<ver>.crt
+          # 24pin: Pagefox-<lang>-<ver>-24pin.crt
+          OUTBASE="Pagefox-${{ matrix.lang_code }}-${VER}"
+          if [ "${{ matrix.p24 }}" = "1" ]; then
+            OUTBASE="${OUTBASE}-24pin"
+          fi
+
+          echo "OUTBASE=$OUTBASE" >> "$GITHUB_ENV"
+          echo "Building: $OUTBASE"
+
+          # Build BIN temporarily, publish only CRT
+          TMPBIN="build/tmp.bin"
+
+          acme -I src \
+               --format plain \
+               --outfile "$TMPBIN" \
+               -DLANG=${{ matrix.lang_def }} \
+               -DP24=${{ matrix.p24 }} \
+               src/pg_main.asm
+
+          cartconv -t pf -i "$TMPBIN" -o "build/${OUTBASE}.crt"
+          rm -f "$TMPBIN"
+
+          test -s "build/${OUTBASE}.crt"
+          ls -la build
+          
+      - name: Download VICE ROMs (if not cached)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ci/roms
+          if [ ! -s ci/roms/kernal-901227-03.bin ]; then
+            curl -L -o ci/roms/kernal-901227-03.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/kernal.901227-03.bin
+          fi
+          if [ ! -s ci/roms/basic-901226-01.bin ]; then
+            curl -L -o ci/roms/basic-901226-01.bin  https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/basic.901226-01.bin
+          fi
+          if [ ! -s ci/roms/chargen-901225-01.bin ]; then
+            curl -L -o ci/roms/chargen-901225-01.bin https://zimmers.net/anonftp/pub/cbm/firmware/computers/c64/characters.901225-01.bin
+          fi
+          ls -la ci/roms
+          
+      - name: Screenshot after 5s (real time)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CRT="build/${OUTBASE}.crt"
+          OUTPNG="build/${OUTBASE}.png"
+          
+          set +e
+          xvfb-run -a x64sc \
+            -kernal ci/roms/kernal-901227-03.bin \
+            -basic ci/roms/basic-901226-01.bin \
+            -chargen ci/roms/chargen-901225-01.bin \
+            -limitcycles 4926240 \
+            -exitscreenshot "$OUTPNG" \
+            -cartcrt "build/${OUTBASE}.crt"
+          rc=$?
+          set -e
+
+          # 0 or 1 is OK
+          if [ "$rc" -ne 0 ] && [ "$rc" -ne 1 ]; then
+            echo "VICE failed with exit code $rc"
+            exit "$rc"
+          fi
+          test -s "$OUTPNG"
+          ls -la "$OUTPNG"
+
+      - name: Upload CRT + PNG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ env.OUTBASE }}"
+          path: |
+            build/${{ env.OUTBASE }}.crt
+            build/${{ env.OUTBASE }}.png
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: List downloaded files
+        run: |
+          find dist -type f -maxdepth 4 -print
+
+      - name: Create GitHub Release and upload CRTs
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            dist/**/*.crt
+            dist/**/*.png
