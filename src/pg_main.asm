@@ -1,6 +1,6 @@
 ;==========================================================
 ;  PAGEFOX SOURCE CODE
-;  Version 2.6 (2026.02.19)
+;  Version 2.6 (2026.03.01)
 ;  Copyright (c) 2026 Tomas Kakulizek
 ;
 ;  This source code is based on the Pagefox v1.0

@@ -47,7 +47,11 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 - přeložené texty
 - mapování české klávesnice
 - zmapován výpis textů na úvodní stránce
- 
+
+**Download:**  
+https://github.com/xinteksik/C64-Pagefox-cs/releases/latest
+
+
 <img width="640" height="541" alt="pagefox2" src="https://github.com/user-attachments/assets/befc33b9-fcfd-4a07-821d-9ac510798604" />
 
 <img width="640" height="541" alt="pagefox1" src="https://github.com/user-attachments/assets/dc9d6947-837f-4979-86d1-44bbc7f7ebe8" />
@@ -55,7 +59,7 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 ## Návod / Manual
 *(English: A draft Czech translation of the full Pagefox manual.)*
 
-[pagefox-cs-2.2.pdf](pagefox-cs-2.2.pdf)
+[pagefox-cs-2.2.pdf](docs/pagefox-cs-2.2.pdf)
 
 ## Písma / Fonts
 *(English:Fonts with preview.)*
