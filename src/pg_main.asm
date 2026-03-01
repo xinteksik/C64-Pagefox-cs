@@ -51,7 +51,7 @@
 
 !if .language = 0 {
     !source "pg_cs.asm"
-    !to "build/pagefox-cs-2.5.bin", plain
+    !to "build/pagefox.bin", plain
 	VIZA_LEN = (VIZA_CS_OUT - VIZA_CS_IN)
 	VIZA_IN = VIZA_CS_IN
 	VIZA_OUT = VIZA_CS_OUT
@@ -59,7 +59,7 @@
 
 !if .language = 1 {
     !source "pg_de.asm"
-    !to "build/pagefox-de-1.0.bin", plain
+    !to "build/pagefox.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
 	VIZA_IN = VIZA_DE_IN
 	VIZA_OUT = VIZA_DE_OUT
@@ -67,7 +67,7 @@
 
 !if .language = 2 {
     !source "pg_en.asm"
-    !to "build/pagefox-en-1.0.bin", plain
+    !to "build/pagefox.bin", plain
 	VIZA_LEN = (VIZA_DE_OUT - VIZA_DE_IN)
 	VIZA_IN = VIZA_DE_IN
 	VIZA_OUT = VIZA_DE_OUT
