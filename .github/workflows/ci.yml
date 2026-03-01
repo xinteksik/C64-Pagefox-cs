@@ -48,7 +48,7 @@ jobs:
       - name: Install toolchain (ACME + VICE cartconv)
         run: |
           sudo apt-get update
-          sudo apt-get install -y acme vice xvfb
+          sudo apt-get install -y acme vice xvfb vice-data
 
       - name: Build variant (.crt only)
         shell: bash
