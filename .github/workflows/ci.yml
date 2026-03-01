@@ -106,7 +106,7 @@ jobs:
                 -cartcrt "$CRT" \
                 -speed 100 \
                 -warp 0 \
-                -monitor
+                -remotemonitor
 
           test -s "$OUTPNG"
           ls -la "$OUTPNG"
