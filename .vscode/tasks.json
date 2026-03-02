@@ -1,0 +1,95 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "clean",
+            "type": "shell",
+            "osx": {
+                "command": "mkdir -p build && rm -rf build/*"
+            },
+            "linux": {
+                "command": "mkdir -p build && rm -rf build/*"
+            },
+            "windows": {
+                "command": "if (Test-Path build) { Remove-Item build\\* -Recurse -Force } else { New-Item -ItemType Directory build | Out-Null }"
+            },
+            "presentation": {
+                "reveal": "never", "close": true
+            }
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "windows": {
+                "command": "bin\\win\\acme --msvc --vicelabels build/labels -I code src/${fileBasename}"
+            },
+            "linux": {
+                "command": "acme --msvc --vicelabels build/labels -I src -r build/report src/${fileBasename}"
+            },
+            "presentation": {  "reveal": "always", "close": false },
+            "problemMatcher": {
+                "owner": "acme",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                "regexp": "^(Error - File\\s+(.*), line (\\d+) (\\(Zone .*\\))?:\\s+(.*))$",
+                "file": 2,
+                "location": 3,
+                "message": 1
+                }
+            }
+        },
+        {
+        "label": "verify",
+        "type": "shell",
+        "windows": {
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"fc.exe /b build\\pagefox-cs-2.5.bin ref\\pagefox-cs-2.5.bin; if ($LASTEXITCODE -eq 0) { Write-Host 'OK: BIN je binarne shodny s ref.' -ForegroundColor Green } elseif ($LASTEXITCODE -eq 1) { Write-Host 'DIFF: BIN se lisi od ref!' -ForegroundColor Yellow; $ans = Read-Host 'Stiskni C pro pokracovani, Enter = stop'; if ($ans.ToLower() -ne 'c') { Write-Host 'STOP: preruseno uzivatelem.' -ForegroundColor Red; exit 1 } } else { Write-Host ('CHYBA: fc.exe selhalo, exitcode=' + $LASTEXITCODE) -ForegroundColor Red; exit $LASTEXITCODE }\""
+        },
+        "linux": {
+            "command": "cmp -l build/pagefox.bin ref/pagefox.bin | awk '{printf \"%08X: %02X → %02X\\n\", $1-1, strtonum(\"0\"$2), strtonum(\"0\"$3)}'"
+        }
+        ,
+        "presentation": { "reveal": "always","close": false }
+        },
+        {
+        "label": "convert",
+        "type": "shell",
+        "windows": {
+            "command": "powershell",
+            "args": [
+            "-NoProfile",
+            "-Command",
+            "bin\\win\\cartconv.exe -t pf -i build\\pagefox-cs-2.5.bin -o build\\pagefox-cs-2.5.crt; if ($LASTEXITCODE -ne 0) { Write-Host ('CHYBA: cartconv selhalo, exitcode=' + $LASTEXITCODE) -ForegroundColor Red; exit $LASTEXITCODE } else { Write-Host 'OK: CRT vytvoreno cartconv.' -ForegroundColor Green }"
+            ]
+        },
+        "linux": {
+            "command": "cartconv -t pf -i build/pagefox.bin -o build//pagefox.crt"
+            
+        },
+        "presentation": {
+            "reveal": "never",
+            "close": true
+        }
+        },
+        {
+            "label": "clean -> build -> verify -> convert",
+            "type": "shell",
+            "dependsOn": ["clean", "build", "verify","convert"],
+            "dependsOrder": "sequence",
+              
+  "group": {
+    "kind": "build",
+    "isDefault": true
+  },
+  "presentation": {
+    "reveal": "never",
+    "close": true
+  }
+},
+
+        
+        
+        
+    ]
+}

@@ -1,12 +1,79 @@
-.gitignore
-.github
-.vscode
-src/*.ref
-src/*.exe
-src/*.py
-src/*.report
-src/*.bat
-ref/*
-build/*
+# ============================================================
+# C64-Pagefox-cs .gitignore
+# ============================================================
 
+# ----- Build output -----
+build/
+dist/
+*.bin
+*.crt
+*.report
+
+# ----- ACME assembler temporaries -----
+*.ref
+*.lst
+
+# ----- Editor / IDE -----
+.vscode/settings.json
+.vscode/*.log
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+*.egg
+.eggs/
+venv/
+.venv/
+pip-selfcheck.json
+.python-version
+
+# ----- OS metadata -----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ----- Secrets / credentials -----
+*.env
+.env
+.env.*
+secrets.*
+*.key
+*.pem
+
+# ----- CI ROMs (downloaded at runtime, never committed) -----
+ci/roms/
+
+# ----- Temporary / scratch files -----
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+\#*\#
+.#*
+tmp/
+temp/
+
+# ----- Windows-only toolchain binaries (already tracked intentionally) -----
+# tools/ACME.exe  ← committed intentionally
+# tools/python39.dll  ← committed intentionally
+# If you want to un-track them: git rm --cached tools/ACME.exe
+
+# ----- Pagefox document files (user data, not source) -----
+*.pt
+*.prg.bak
 src/pom.txt
+
+# ----- Old / archived sources -----
+src/old/
+ref/
