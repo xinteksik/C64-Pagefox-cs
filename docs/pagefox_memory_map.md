@@ -243,6 +243,21 @@ Layout editor (L2_, bank upper, $DE80=$02)
 | `$42`   | Shadow of current $DE80 value (register is write-only) |
 | `$43`   | Saved $DE80 value for restore (thunk $0FD0)            |
 | `$45`   | Saved $01 value for restore (thunk $0FD0)              |
+| `$22` | Current line number in view (row) |
+| `$23` | Column / cursor position within line |
+| `$26` | Page counter / scroll helper variable |
+| `$55` | Bit flags (tested via `BIT $55`) |
+| `$56/$57` | Pointer to top of page (scroll origin) |
+| `$58/$59` | Pointer to start of current line |
+| `$5A/$5B` | Pointer to end of text buffer |
+| `$5C` | Block flag (`$80` = block marked) |
+| `$5D/$5E` | Start of marked block |
+| `$5F/$60` | End of marked block |
+| `$61` | Scratch byte (temporary character storage) |
+| `$66` | Current line length in characters |
+| `$6A` | Position of last word-wrap break (space/hyphen) |
+| `$6C/$6D` | Length of marked block (used by Copy/Move) |
+| `$1F` | Bit flags (tested via `BIT $1F`) |
 
 ---
 

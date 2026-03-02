@@ -88,6 +88,8 @@ Label prefixes used in this project:
 3. When adding new strings/messages, follow the existing format in `pg_cs.asm`
    (PETSCII bytes, terminated with `$00`).
 4. Do not re-order `!source` lines in `pg_main.asm`.
+5. **All comments inside `.asm` files must be written in English.**
+   Explanations and discussion with the user may be in Czech.
 
 ### Python tools
 
