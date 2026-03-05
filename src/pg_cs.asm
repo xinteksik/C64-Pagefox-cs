@@ -376,18 +376,6 @@ L_A5F2:
                 !by $01,$00,$00,$00,$01,$00,$01,$01,$01,$00
 
 ; ==========================================================
-; Consonant cluster table ($A610..$A673) - 100 bytes
-; 21 indivisible onset clusters (Czech language)
-; Format: $00 + ASCII chars of cluster, no trailing terminator
-; Searched backwards: LDY #$63, LDA $A610,Y (Y = 99..0)
-; Padding $00 bytes at start are harmless (no-match, skipped)
-; ST excluded - causes incorrect splits (kost-ka, ost-rava)
-; ==========================================================
-; ==========================================================
-; Czech consonant cluster table ($A610..$A673)
-; minimal safe set
-; ==========================================================
-; ==========================================================
 ; Czech consonant cluster table ($A610..$A673) - EXACT 100 bytes
 ; Format: $00 + ASCII cluster (no trailing $00)
 ; Search: backwards from Y=99 (LDY #$63)
@@ -408,27 +396,16 @@ L_A5F2:
                 !tx $00,"QV"
                 !tx $00,"VQ"
                 !tx $00,"XQ"
-
-                ; real CZ clusters (kept)
-     ;           !tx $00,"PR"
-    ;            !tx $00,"BR"
-   ;             !tx $00,"KR"
-  ;              !tx $00,"GR"
- ;               !tx $00,"DR"
-;                !tx $00,"FR"
-
                 !tx $00,"JZ"
                 !tx $00,"ZJ"
                 !tx $00,"QK"
                 !tx $00,"QG"
                 !tx $00,"WZ"
-                !tx $00,"ZW"    ; klidně ponech jako filler
-
+                !tx $00,"ZW"
 ; --- 3x 3-letter clusters (3 * 4 = 12 bytes) ---
                 !tx $00,"QXZ"
                 !tx $00,"QWJ"
                 !tx $00,"JQX"
-
 ; --- 5x 4-letter clusters (5 * 5 = 25 bytes) ---
                 !tx $00,"QWZX"
                 !tx $00,"JQXZ"
