@@ -281,3 +281,57 @@ L_93DA:
                 !by $12,$02,$D8,$23
                 !by $13,$02,$C4,$2E
 }
+
+!macro Inserthyphenation {
+; ==========================================================
+; Vowel flag table ($A5F2..$A60F) - 30 bytes
+; Indexed by: char AND $1F  (A=1, B=2, ... Z=26)
+; Bit 0: 1 = vowel, 0 = consonant/other
+; Index 0 = RTS opcode ($60) above, bit0=0 (non-letter)
+; Umlauts: Ä=27, Ö=28, Ü=29
+; Last byte ($A610) = $00, doubles as prefix of first cluster
+; ==========================================================
+; idx:  1    2    3    4    5    6    7    8    9   10   11   12   13   14   15  16   17   18   19   20   21   22   23   24   25   26   27   28   29   30
+;       A    B    C    D    E    F    G    H    I    J    K    L    M    N    O   P    Q    R    S    T    U    V    W    X    Y    Z    Ä    Ö    Ü    ^
+
+L_A5F2:
+                !by $01,$00,$00,$00,$01,$00,$00,$00,$01,$00
+                !by $00,$00,$00,$00,$01,$00,$00,$00,$00,$00
+                !by $01,$00,$00,$00,$01,$00,$01,$01,$01,$00
+
+; ==========================================================
+; Consonant cluster table ($A610..$A673) - 100 bytes
+; 29 indivisible onset clusters (German language)
+; Format: $00 + ASCII chars of cluster, no trailing terminator
+; Searched backwards: LDY #$63, LDA $A610,Y (Y = 99..0)
+; ==========================================================
+                !tx $00,"CK"
+                !tx $00,"BL"
+                !tx $00,"BR"
+                !tx $00,"CH"
+                !tx $00,"DR"
+                !tx $00,"FL"
+                !tx $00,"FR"
+                !tx $00,"GL"
+                !tx $00,"GR"
+                !tx $00,"KL"
+                !tx $00,"KN"
+                !tx $00,"KR"
+                !tx $00,"PH"
+                !tx $00,"PF"
+                !tx $00,"PL"
+                !tx $00,"PR"
+                !tx $00,"SP"
+                !tx $00,"ST"
+                !tx $00,"TH"
+                !tx $00,"TR"
+                !tx $00,"ZW"
+                !tx $00,"SCH"
+                !tx $00,"SPR"
+                !tx $00,"STR"
+                !tx $00,"SCHL"
+                !tx $00,"SCHN"
+                !tx $00,"SCHW"
+                !tx $00,"SCHM"
+                !tx $00,"SCHR"
+}

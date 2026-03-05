@@ -357,3 +357,55 @@ L_93DA:                                ;CTRL
                 !by $12,$02,$C0,$23
                 !by $13,$02,$C4,$2F
 }
+
+!macro Inserthyphenation {
+; ==========================================================
+; Vowel flag table ($A5F2..$A60F) - 30 bytes
+; Indexed by: char AND $1F  (A=1, B=2, ... Z=26)
+; Bit 0: 1 = vowel, 0 = consonant/other
+; Index 0 = RTS opcode ($60) above, bit0=0 (non-letter)
+; Umlauts: Ä=27, Ö=28, Ü=29
+; Last byte ($A610) = $00, doubles as prefix of first cluster
+; ==========================================================
+; idx:  1    2    3    4    5    6    7    8    9   10   11   12   13   14   15  16   17   18   19   20   21   22   23   24   25   26   27   28   29   30
+;       A    B    C    D    E    F    G    H    I    J    K    L    M    N    O   P    Q    R    S    T    U    V    W    X    Y    Z    Ä    Ö    Ü    ^
+
+L_A5F2:
+                !by $01,$00,$00,$00,$01,$00,$00,$00,$01,$00
+                !by $00,$00,$00,$00,$01,$00,$00,$00,$00,$00
+                !by $01,$00,$00,$00,$01,$00,$01,$01,$01,$00
+
+; ==========================================================
+; Consonant cluster table ($A610..$A673) - 100 bytes
+; 21 indivisible onset clusters (Czech language)
+; Format: $00 + ASCII chars of cluster, no trailing terminator
+; Searched backwards: LDY #$63, LDA $A610,Y (Y = 99..0)
+; Padding $00 bytes at start are harmless (no-match, skipped)
+; ST excluded - causes incorrect splits (kost-ka, ost-rava)
+; ==========================================================
+                !by $00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ; padding
+                !by $00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ; padding
+                !by $00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ; padding
+                !by $00,$00,$00,$00,$00,$00,$00              ; padding
+                !tx $00,"SP"
+                !tx $00,"SL"
+                !tx $00,"SM"
+                !tx $00,"SN"
+                !tx $00,"SV"
+                !tx $00,"BL"
+                !tx $00,"FL"
+                !tx $00,"GL"
+                !tx $00,"KL"
+                !tx $00,"PL"
+                !tx $00,"VL"
+                !tx $00,"BR"
+                !tx $00,"DR"
+                !tx $00,"FR"
+                !tx $00,"GR"
+                !tx $00,"KR"
+                !tx $00,"PR"
+                !tx $00,"TR"
+                !tx $00,"VR"
+                !tx $00,"KV"
+                !tx $00,"TV"
+}

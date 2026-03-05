@@ -11852,126 +11852,10 @@ L2_A5EA:
                 INX
                 STX $8A
                 RTS
-                ORA ($00,X)
-                BRK
-                BRK
-                ORA ($00,X)
-                BRK
-                BRK
-                ORA ($00,X)
-                BRK
-                BRK
-                BRK
-                BRK
-                ORA ($00,X)
-                BRK
-                BRK
-                !by $00
-                !by $00
-                !by $01
-                !by $00
-                !by $00
-                !by $00
-                !by $01
-                !by $00
-                !by $01
-                !by $01
-                !by $01
-                !by $00
-                !by $00
-                !by $43
-                !by $4B
-                !by $00
-                !by $42
-                !by $4C
-                !by $00
-                !by $42
-                !by $52
-                !by $00
-                !by $43
-                !by $48
-                !by $00
-                !by $44
-                !by $52
-                !by $00
-                !by $46
-                !by $4C
-                !by $00
-                !by $46
-                !by $52
-                !by $00
-                !by $47
-                JMP $4700
-                !by $52
-                BRK
-                !by $4B
-                JMP $4B00
-                !by $4E
-                !by $00
-                !by $4B
-                !by $52
-                !by $00
-                !by $50
-                !by $48
-                !by $00
-                !by $50
-                !by $46
-                !by $00
-                !by $50
-                !by $4C
-                !by $00
-                !by $50
-                !by $52
-                !by $00
-                !by $53
-                !by $50
-                !by $00
-                !by $53
-                !by $54
-                !by $00
-                !by $54
-                !by $48
-                !by $00
-                !by $54
-                !by $52
-                !by $00
-                !by $5A
-                !by $57
-                !by $00
-                !by $53
-                !by $43
-                !by $48
-                !by $00
-                !by $53
-                !by $50
-                !by $52
-                !by $00
-                !by $53
-                !by $54
-                !by $52
-                !by $00
-                !by $53
-                !by $43
-                !by $48
-                !by $4C
-                !by $00
-                !by $53
-                !by $43
-                !by $48
-                !by $4E
-                !by $00
-                !by $53
-                !by $43
-                !by $48
-                !by $57
-                !by $00
-                !by $53
-                !by $43
-                PHA
-                EOR $5300
-                !by $43
-                PHA
-                !by $52
+
++Inserthyphenation
+
+L2_A674:
                 LDA $66
                 SEC
                 SBC $68
@@ -12127,10 +12011,13 @@ L2_A757:
                 BEQ L2_A798
                 JSR $B296
                 LDX #$08
+;==========================================================
+; Format line parser
+;==========================================================
 L2_A76B:
                 DEX
                 BMI L2_A757
-                CMP $A7A7,X
+                CMP L2_A7A7,X
                 BNE L2_A76B
                 TXA
                 PHA
@@ -12142,9 +12029,9 @@ L2_A76B:
                 TAY
                 ASL
                 TAX
-                LDA $A7AE,X
+                LDA L2_A7AD+1,X
                 PHA
-                LDA $A7AD,X
+                LDA L2_A7AD,X
                 PHA
                 LDA $1A
                 RTS
@@ -12170,14 +12057,16 @@ L2_A798:
                 !by $59
                 !by $38
                 !by $60
-                !by $48
-                !by $56
-                !by $4B
-                !by $5A
-                !by $2D
-                !by $4E
-                !by $B8
-                !by $A7
+L2_A7A7:
+                !by $48                 ;H
+                !by $56                 ;V
+                !by $4B                 ;K
+                !by $5A                 ;Z
+                !by $2D                 ;-
+                !by $4E                 ;N
+L2_A7AD:
+                !by $B8                 ;$A7AD
+                !by $A7                 ;$A7AE
                 !by $B8
                 !by $A7
                 !by $B8
@@ -12626,13 +12515,15 @@ L2_AA87:
                 STY $69
 L2_AA9A:
                 RTS
+L2_AA9B:
                 LDA $61
-                JSR $AAA7
+                JSR L2_AAA7
                 BCS L2_AAA6
                 STX $68
                 STY $69
 L2_AAA6:
                 RTS
+L2_AAA7:
                 TAX
                 LDA $3BE4,X
                 CLC
