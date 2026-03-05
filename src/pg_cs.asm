@@ -410,12 +410,19 @@ L_A5F2:
                 !tx $00,"XQ"
 
                 ; real CZ clusters (kept)
-                !tx $00,"PR"
-                !tx $00,"BR"
-                !tx $00,"KR"
-                !tx $00,"GR"
-                !tx $00,"DR"
-                !tx $00,"FR"
+     ;           !tx $00,"PR"
+    ;            !tx $00,"BR"
+   ;             !tx $00,"KR"
+  ;              !tx $00,"GR"
+ ;               !tx $00,"DR"
+;                !tx $00,"FR"
+
+                !tx $00,"JZ"
+                !tx $00,"ZJ"
+                !tx $00,"QK"
+                !tx $00,"QG"
+                !tx $00,"WZ"
+                !tx $00,"ZW"    ; klidně ponech jako filler
 
 ; --- 3x 3-letter clusters (3 * 4 = 12 bytes) ---
                 !tx $00,"QXZ"
