@@ -6579,9 +6579,8 @@ L2_81DF:
                 JSR L0_89B3
                 JMP $B285
                 EOR $2800
-                BRK
-                ORA ($FF,X)
-                ORA ($FF,X)
+L2_81E8_raw:
+                !by $00,$01,$FF,$01,$FF
                 JSR $0EE7
                 LDA #$50
                 STA $40
@@ -6595,26 +6594,16 @@ L2_81DF:
                 AND #$0F
                 TAX
                 DEX
+                ; Lookup uses bytes from code area around $8217/$821F (intentional code-as-data).
                 LDA $8217,X
                 STA $2A
                 LDA L0_821F,X
                 STA $2B
                 JSR $0F03
                 JMP L0_89B3
-                BRK
-                BRK
-                ORA $3219,Y
-                !by $32
-                !by $4B
-                !by $4B
-                BRK
-                PLP
-                BRK
-                PLP
-                BRK
-                PLP
-                BRK
-                PLP
+L2_8217_raw:
+                !by $00,$00,$19,$19,$32,$32,$4B,$4B
+                !by $00,$28,$00,$28,$00,$28,$00,$28
                 JSR $0EE7
                 LDX $2A
                 LDY $2B
@@ -7055,11 +7044,8 @@ L2_853D:
                 JSR L0_8658
 L2_8540:
                 JMP $AEEC
-                !by $32
-                ORA $2850,Y
-                !by $47
-                !by $42
-                BVC $850A
+L2_8543_raw:
+                !by $32,$19,$50,$28,$47,$42,$50,$BF
                 JSR L0_9B00
                 BRK
                 BRK
@@ -8035,20 +8021,10 @@ L2_8BEF:
                 JSR $95BE
 L2_8C04:
                 RTS
-                !by $32
-                STY L0_8C55
-                ROL
-                STA $8D2A
-                ROL
-                STA $8F9E
-                AND ($8F),Y
-                !by $9C
-                STA ($73),Y
-                STA ($DE,X)
-                STY L0_8C97
-                STY $8C,X
-                !by $9B
-                STY L0_9643
+L2_8C05_dispatch_table:
+                !wo $8C32,$8C55,$8D2A,$8D2A,$8D2A,$8F9E,$8F31
+L2_8C13_dispatch_table:
+                !wo $919C,$8173,$8CDE,$8C97,$8C94,$8C9B,$9643
                 LDX #$02
 L2_8C23:
                 LDA $0B,X
@@ -8078,9 +8054,8 @@ L2_8C4F:
                 STA ($02),Y
 L2_8C51:
                 RTS
-                RTI
-                ORA ($B8,X)
-                BRK
+L2_8C52_raw:
+                !by $40,$01,$B8,$00
                 LDA #$03
                 STA $27
                 DEC $0D
