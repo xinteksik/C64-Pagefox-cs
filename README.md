@@ -18,7 +18,7 @@ Included are:
 Pagefox is a classic desktop publishing (DTP) cartridge for the C64/128, originally released in the 1987.  
 This project makes it more accessible for Czech users, while keeping compatibility with the original software.
 
-The project is based on Pagefox by scanntronik.de
+The project is based on Pagefox by Scanntronik (https://www.scanntronik.de)
 
 ---
 
