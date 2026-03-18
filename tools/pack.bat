@@ -1,0 +1,1 @@
+joinzs_fix.py zs-cs.bin zs1.prg zs161.prg zs2.prg zs3.prg zs4.prg zs30.prg zs111.prg zs5.prg zs10.prg zs40.prg --first-start $0031 > log.txt
