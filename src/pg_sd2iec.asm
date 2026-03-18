@@ -15,8 +15,8 @@
 ; ==========================================================
 
 ; --- RAM buffer at $C000 (free RAM, always visible) ---
-SD2IEC_BUF     = $C000              ; "CD:" + foldername (max 32 B)
-SD2IEC_LEN     = $C020              ; command length
+SD2IEC_BUF     = $17C0              ; "CD:" + foldername (max 32 B)
+SD2IEC_LEN     = $17E0              ; command length
 
 !macro InsertSD2IEC {
 

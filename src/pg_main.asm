@@ -6280,6 +6280,19 @@ strobe_delay:
                 STA $DD00           ; release STROBE
                 RTS                 ; 20 bytes
 }
+
+
+!if .sd2iec = 1 {
+L_RAM_17C0:
+* = $BFC0
+		!by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+		!by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+		!by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+		!by $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+L_RAM_17E0:
+		!by $FF
+}
+
 L_RAM_17FF:
 * = $BFFF
                 !by .device

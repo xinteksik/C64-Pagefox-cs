@@ -293,6 +293,37 @@ loop            LDA ($02),Y         ; read from ROM
 
 ---
 
+
+## 8.5 RAM dump comparison – Pagefox graphic workspace
+
+Comparison of two full 64 KB C64 RAM dumps (`memoryfree.bin` = empty graphic memory, `memoryfull.bin` = full graphic memory) shows three large contiguous regions that change in a systematic way:
+
+| Range | Size | Observation |
+|------|------:|-------------|
+| `$6000-$7CBF` | 7360 B (`$1CC0`) | `memoryfree` = all `00`, `memoryfull` = all `FF` |
+| `$8000-$BE7F` | 16000 B (`$3E80`) | `memoryfree` = all `00`, `memoryfull` = all `FF` |
+| `$C000-$FE7F` | 16000 B (`$3E80`) | `memoryfree` = all `00`, `memoryfull` = all `FF` |
+
+**Total affected space:** **39360 B** (`$99C0`)
+
+This strongly suggests that Pagefox uses these regions as the main **graphic working buffers / page image workspace**. In the “empty” state they are cleared to zero; in the “full” state they are completely filled. This is not random runtime noise, but a structured allocation pattern.
+
+Smaller differences also exist in Zero Page and around `$7DE9-$7F36`, but these appear to be helper variables or state structures rather than the main graphic buffer.
+
+### Practical implication
+
+To avoid collisions with Pagefox graphic data, user-loaded code or auxiliary buffers should avoid at least these ranges when the graphic subsystem is active:
+
+```text
+$6000-$7CBF   7360 B
+$8000-$BE7F  16000 B
+$C000-$FE7F  16000 B
+-------------------
+Total         39360 B
+```
+
+For documentation wording, it is safest to describe these areas as **graphic working RAM / graphic buffers**, because the RAM dump comparison proves active use, but not by itself the exact internal rendering layout.
+
 ## 9. Bankswitching overview diagram
 
 ```
