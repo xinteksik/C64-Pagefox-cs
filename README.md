@@ -27,20 +27,19 @@ This repository provides a Czech translation of the Pagefox desktop publishing c
 
 ---
 
-## Pagefox CS - verze 2.6
-*(English: Same as version 2.4 and improved punctuation handling, diacritic corrections, and application translated into Czech. Partially completed disassembly, which makes it easier to edit the known sections.)*
+## Pagefox CS/DE
+*(English: Improved punctuation handling, diacritic corrections, and application translated into Czech. Partially completed disassembly, which makes it easier to edit the known sections.)*
 
 - !!! Pagefox umí otevřít české texty ve formátu Vizawrite !!!
-- !!! Pagefox pagefox-cs-2.5-24pin.crt s nativní podporou pro 24 jehličkové tiskárny (integrován pg-24.prg) - experimental!!!
+- !!! Pagefox verze s nativní podporou pro 24 jehličkové tiskárny (integrován pg-24.prg) !!!
 - !!! Pagefox s podporou změny čísla jednotky (Text editor pomocí C= T)
 - !!! Pagefox s podporou sd2iec/softiec
 - obsahuje češtinu a nové rozložení kláves např.: 8 = á, SHIFT + 8 = 8, CBM + 8 = (
-- součástí jsou české fonty ZS1, ZS161, ZS2, ZS3, ZS4, ZS30, ZS111, ZS5, ZS10 a ZS40 (ZS1 až ZS4 jsou počeštěné podle originál Pagefox písma, ZS5 je ZS3 z verze 2.0 a ZS161)
-- odebráno písmo ZS105 ze zabudované banky `zs-cs.bin` (soubor `fonts/prg/zs105.prg` zůstává dostupný pro ruční přidání)
+- součástí jsou české fonty ZS1, ZS161, ZS2, ZS3, ZS4, ZS30, ZS111, ZS5, ZS10 a ZS40 (ZS1 až ZS4 jsou počeštěné podle originál Pagefox písma, ZS5 je ZS3 z verze 2.0)
 - přidáno písmo ZS161, což je stejné jako ZS1, jen obsahuje pouze velká písmena, ale včetně diakritiky (Tomáš napíše jako TOMÁŠ)
 - oprava dvojteček (> na :)
 - oprava fontů (například háčky u ď, ť a ľ, pak třeba vrácena tvrdá mezera SHIFT+SPACE) 
-- částečně dissassemblovaný zdroják ve složce [src](src/)
+- dissassemblovaný zdroják ve složce [src](src/)
 - díky popisu asm v ACME formátu lze lépe řešit modifikace
 - zdokumentovány sekce pro výchozí změnu barev aplikace 
 - popsané písma
