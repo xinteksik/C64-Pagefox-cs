@@ -13244,18 +13244,91 @@ L2_AF71:
                 RTS
 L2_AF72:
 ;==========================================================
-                !by $00,$00,$15,$2B,$22,$58,$08,$00
+; Original cursor sprite data (RLE-compressed 24x21 sprites)
+;==========================================================
+;                !by $00,$00,$15,$2B,$22,$58,$08,$00
+;                !by $20,$00,$02,$00,$00,$00,$01,$FF
+;                !by $07,$F8,$02,$00,$00,$00,$08,$00
+;                !by $20,$00,$00,$01,$FF,$FF,$FF,$13
+;                !by $80,$00,$01,$01,$FF,$FF,$FF,$00
+;                !by $01,$FF,$FF,$FF,$14,$80,$00,$00
+;                !by $00,$0A,$00,$00,$00,$01,$00,$3F
+;                !by $00,$01,$00,$3E,$00,$01,$00,$3C
+;                !by $00,$01,$00,$3E,$00,$01,$00,$37
+;                !by $00,$01,$00,$23,$80,$01,$00,$01
+;                !by $C0,$01,$00,$00,$E0,$01,$00,$00
+;                !by $40,$02,$00,$00,$00,$00,$14,$00
+;                !by $00,$01,$01,$FF,$FF,$FF,$00
+
+;==========================================================
+; Cursor sprite descriptor table (RLE-compressed 24x21 sprites)
+;
+; Format:
+;   First 6 bytes = offset table for 6 cursor streams.
+;   Each offset is relative to the payload start
+;   (i.e. to the byte immediately after the 6-byte offset table).
+;
+; Payload format:
+;   count, b0, b1, b2
+;
+; Meaning:
+;   Output one sprite row (24 pixels = 3 bytes) with bytes
+;   b0,b1,b2 repeated 'count' times.
+;
+; Terminator:
+;   count = $00 ends the current stream.
+;
+; Decoded size:
+;   21 rows * 3 bytes = 63 bytes
+;   (= standard C64 sprite payload without the final pad byte)
+;
+; Important:
+;   - Some streams may share the same offset, i.e. they reference
+;     identical payload data instead of storing a duplicate copy.
+;   - Re-encoding may shorten the block, but must not enlarge it
+;     unless following data/layout is adjusted accordingly.
+;   - End of each stream is determined by count=$00, not by a fixed size.
+;
+; Known streams in this table:
+;   0 = cross
+;   1 = cross copy   (same offset as stream 0)
+;   2 = box / rect
+;   3 = arrow
+;   4 = left bar
+;   5 = right bar
+;
+; Example:
+;   !by $03,$00,$3F,$00
+; means:
+;   output 3 identical rows: 00 3F 00
+;
+; Arrow stream decodes to rows containing:
+;   00 3F 00
+;   00 3E 00
+;   00 3C 00
+;   00 3E 00
+;   00 37 00
+;   00 23 80
+;   00 01 C0
+;   00 00 E0
+;   00 00 40
+; surrounded by zero rows above/below.
+
+;==========================================================
+; New cursor sprite data (RLE-compressed 24x21 sprites)
+;==========================================================
+                !by $00,$00,$15,$22,$4F,$58,$08,$00
                 !by $20,$00,$02,$00,$00,$00,$01,$FF
                 !by $07,$F8,$02,$00,$00,$00,$08,$00
                 !by $20,$00,$00,$01,$FF,$FF,$FF,$13
                 !by $80,$00,$01,$01,$FF,$FF,$FF,$00
-                !by $01,$FF,$FF,$FF,$14,$80,$00,$00
-                !by $00,$0A,$00,$00,$00,$01,$00,$3F
-                !by $00,$01,$00,$3E,$00,$01,$00,$3C
-                !by $00,$01,$00,$3E,$00,$01,$00,$37
-                !by $00,$01,$00,$23,$80,$01,$00,$01
-                !by $C0,$01,$00,$00,$E0,$01,$00,$00
-                !by $40,$02,$00,$00,$00,$00,$14,$00
+                !by $0A,$00,$00,$00,$01,$00,$20,$00
+                !by $01,$00,$30,$00,$01,$00,$38,$00
+                !by $01,$00,$3C,$00,$01,$00,$3E,$00
+                !by $01,$00,$3F,$00,$01,$00,$3C,$00
+                !by $01,$00,$2E,$00,$01,$00,$06,$00
+                !by $02,$00,$00,$00,$00,$01,$FF,$FF
+                !by $FF,$14,$80,$00,$00,$00,$14,$00
                 !by $00,$01,$01,$FF,$FF,$FF,$00
 L2_AFD9:
                 LDA #$00
