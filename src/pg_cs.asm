@@ -155,7 +155,7 @@ L_93DA:                                ;CTRL
                 !tx "Stop", $0D
                 !tx "Pokra", $8A, "ovat", $1F, $1F, "Zru", $90, "it", $1F, $0D
                 !tx $1F, "ASCII", $1F, $1F, "CBM-ASCII", $1F, $1F, "Bildschirmcode", $1F, $1F, "Viza", $0D
-                !tx "Pagefox-cs", $1F, "v2.6", $1F, "(02/2026)", $0D
+                !tx "Pagefox-cs", $1F, "v2.7", $1F, "(03/2026)", $0D
                 !tx $8A, $84, "slo|", $1F, $0D
                 !tx $1F, $1F, $1F, $1F, $1F, $1F, $1F, $1F, $1F, "Standard", $1F, $1F, $1F, "Tabela", $8A, "n", $84, $1F, $1F, $0D
                 !tx $8F, $82, "dky|", $1F, $0D
