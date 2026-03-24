@@ -2,6 +2,7 @@
 ![Profile Views](https://github-vistors-counter.onrender.com/github?username=xinteksik)
 ![GitHub last commit](https://img.shields.io/github/last-commit/xinteksik/C64-Pagefox-cs)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/xinteksik/C64-Pagefox-cs/total)
+[![Hypercommit](https://img.shields.io/badge/Hypercommit-DB2475)](https://hypercommit.com/c64-pagefox-cs)
 
 This repository contains the **Czech translation of Pagefox** for the **Commodore 64 and Commodore 128**.  
 Included are:
